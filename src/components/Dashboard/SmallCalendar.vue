@@ -1,5 +1,5 @@
 <script setup>
-import TimelineObject from './TimelineObject.vue'
+import TimelineObject from './TimelineObject.vue';
 </script>
 
 <template>

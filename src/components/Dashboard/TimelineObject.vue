@@ -4,7 +4,7 @@ defineProps({
   subject: String,
   room: String,
   color: String,
-})
+});
 </script>
 
 <template>

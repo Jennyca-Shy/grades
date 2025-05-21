@@ -1,5 +1,5 @@
 <script setup>
-import Task from './Task.vue'
+import Task from './Task.vue';
 </script>
 
 <template>
@@ -29,7 +29,7 @@ import Task from './Task.vue'
       </div>
     </div>
     <div class="col-span-2 row-span-2 bg-white rounded-md m-2 p-2">
-      <h1 class="ml-2">
+      <h1 class="ml-1">
         Upcoming Exams
         <hr />
       </h1>

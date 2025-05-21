@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive } from 'vue';
 
 const calculateCircle = (radius: number) => {
-  const strokeWidth = 35
-  const koordinateSize = radius * 2 + 2 * strokeWidth
-  const center = radius + strokeWidth
-  const perimeter = 2 * Math.PI * radius
+  const strokeWidth = 35;
+  const koordinateSize = radius * 2 + 2 * strokeWidth;
+  const center = radius + strokeWidth;
+  const perimeter = 2 * Math.PI * radius;
 
   return {
     radius,
@@ -13,9 +13,9 @@ const calculateCircle = (radius: number) => {
     koordinateSize,
     center,
     perimeter,
-  }
-}
-const circle = reactive(calculateCircle(80))
+  };
+};
+const circle = reactive(calculateCircle(80));
 </script>
 
 <template>

@@ -1,13 +1,13 @@
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 const props = defineProps({
   subject: String,
   task: String,
   date: String,
   color: String,
-})
-const borderColorClass = computed(() => `border-${props.color}`)
-const textColorClass = computed(() => `text-${props.color}`)
+});
+const borderColorClass = computed(() => `border-${props.color}`);
+const textColorClass = computed(() => `text-${props.color}`);
 </script>
 
 <template>

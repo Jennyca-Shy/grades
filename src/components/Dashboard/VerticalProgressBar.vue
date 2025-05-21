@@ -3,7 +3,7 @@ defineProps({
   progress: Number,
   lost: Number,
   subject: String,
-})
+});
 </script>
 
 <template>

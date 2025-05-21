@@ -1,6 +1,6 @@
 <script setup>
-import CircleProgressHalf from './CircleProgressHalf.vue'
-import VerticalProgressBar from './VerticalProgressBar.vue'
+import CircleProgressHalf from './CircleProgressHalf.vue';
+import VerticalProgressBar from './VerticalProgressBar.vue';
 </script>
 
 <template>
