@@ -24,4 +24,4 @@ export default {
   safelist: {
     pattern: /after:.*/,
   },
-}
+};

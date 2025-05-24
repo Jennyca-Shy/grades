@@ -68,9 +68,7 @@ import TimelineObject from './TimelineObject.vue';
       </div>
     </section>
     <!-- Overview of the day -->
-    <section
-      class="mt-2 ml-2 overflow-y-auto flex-grow pl-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
-    >
+    <section class="mt-2 ml-2 flex-grow pl-1 overflowy-scrolly">
       <ol class="relative border-s border-gray-200 mr-2">
         <TimelineObject duration="8:30-9:15" subject="Latin" room="140" color="bg-yellow-100" />
         <TimelineObject duration="9:15-10:00" subject="Physics" room="026" color="bg-purple-100" />

@@ -14,9 +14,7 @@ import Task from './Task.vue';
           <p>Today</p>
           <div class="text-sm ml-1.5 text-gray-600">(4)</div>
         </div>
-        <div
-          class="pr-2 overflow-y-auto h-[220px] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
-        >
+        <div class="pr-2 h-[220px] overflowy-scrolly">
           <Task
             subject="Latein"
             color="yellow-500"
@@ -33,9 +31,7 @@ import Task from './Task.vue';
         Upcoming Exams
         <hr />
       </h1>
-      <div
-        class="ml-2 mt-3 pr-2 overflow-y-auto h-[220px] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
-      >
+      <div class="ml-2 mt-3 pr-2 h-[220px] overflowy-scrolly">
         <Task subject="Mathe" color="blue-500" task="Erste Ableitung" date="20.05.2025" />
       </div>
     </div>
