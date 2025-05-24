@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import WeeklySchedule from '@/components/Schedule/WeeklySchedule.vue';
+import MonthlySchedule from '@/components/Schedule/MonthlySchedule.vue';
 
 const activeView = ref('week');
 </script>
@@ -21,7 +22,7 @@ const activeView = ref('week');
         </div>
         <div class="inline-flex rounded-lg shadow-2xs">
           <button
-            v-for="view in ['day', 'week', 'month']"
+            v-for="view in ['week', 'month']"
             :key="view"
             @click="activeView = view"
             type="button"
@@ -35,7 +36,7 @@ const activeView = ref('week');
         </div>
       </div>
       <WeeklySchedule v-if="activeView === 'week'" />
-      <DailySchedule />
+      <MonthlySchedule v-if="activeView === 'month'" />
     </div>
   </section>
 </template>

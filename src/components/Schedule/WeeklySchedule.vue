@@ -3,25 +3,18 @@ import ScheduleEvent from './ScheduleEvent.vue';
 </script>
 <template>
   <div
-    class="border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[40px_repeat(108,5px)] h-full text-center overflow-y-auto flex-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+    class="border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(108,5px)] h-full text-center overflow-y-auto flex-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
   >
     <!-- Left column with time -->
-    <div class="col-start-1 row-start-1">Time</div>
-    <div
-      v-for="i in 9"
-      :class="[
-        `col-start-1 row-start-[${(i - 1) * 12 + 2}] row-span-12`,
-        i === 1 ? 'border-t-2' : '',
-        i < 9 ? 'border-b-2' : '',
-      ]"
-    >
+    <div class="col-start-1 row-start-1 border-b-2">Time</div>
+    <div v-for="i in 9" :class="[`col-start-1 row-start-[${(i - 1) * 12 + 2}] row-span-12`]">
       {{ i + 6 }}:00
     </div>
 
     <!-- Right colums with weekdays -->
     <div
       v-for="(value, index) in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"
-      :class="`col-start-[${index + 2}] row-start-1 row-span-1 col-span-1`"
+      :class="`col-start-[${index + 2}] row-start-1 row-span-1 col-span-1 border-b-2`"
     >
       {{ value }}
     </div>
