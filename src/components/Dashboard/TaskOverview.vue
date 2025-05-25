@@ -1,14 +1,22 @@
 <script setup>
+import { ref } from 'vue';
 import Task from './Task.vue';
+import AddHomeworkModal from './AddHomeworkModal.vue';
+
+const isModalOpen = ref(false);
 </script>
 
 <template>
   <div class="grid grid-cols-5 grid-rows-2 flex-grow h-[300px]">
     <div class="col-span-3 row-span-2 bg-white rounded-md m-2 p-2">
-      <h1 class="ml-1">
-        Homework
-        <hr />
-      </h1>
+      <div class="flex justify-between items-center">
+        <h1 class="ml-1">
+          Homework
+          <hr />
+        </h1>
+        <button @click="isModalOpen = true" class="mr-1">Add</button>
+        <AddHomeworkModal v-if="isModalOpen" @close="isModalOpen = false" />
+      </div>
       <div class="ml-2 mt-2">
         <div class="flex items-center mt-2">
           <p>Today</p>
