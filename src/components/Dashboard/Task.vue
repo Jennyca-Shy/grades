@@ -8,6 +8,40 @@ const props = defineProps({
 });
 const borderColorClass = computed(() => `border-${props.color}`);
 const textColorClass = computed(() => `text-${props.color}`);
+
+function parseDate() {
+  const [day, month, year] = props.date.split('.');
+  return new Date(year, month - 1, day);
+}
+
+const dateExam = computed(() => parseDate());
+
+function calculateDays() {
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+  const today = new Date();
+  console.log(today);
+
+  //diffTime is the difference in ms
+  const diffTime = dateExam.value - today;
+  console.log(diffTime);
+  const diffDays = Math.ceil(diffTime / MS_PER_DAY);
+
+  let output = '';
+  if (diffDays > 1) {
+    output = 'in ' + diffDays + ' days';
+  } else if (diffDays === 1) {
+    output = 'in ' + diffDays + ' day';
+  } else if (diffDays === 0) {
+    output = 'today';
+  } else if (diffDays === -1) {
+    output = 'yesterday';
+  } else {
+    output = diffDays * -1 + ' days ago';
+  }
+
+  return output;
+}
 </script>
 
 <template>
@@ -15,7 +49,10 @@ const textColorClass = computed(() => `text-${props.color}`);
     :class="`bg-gray-100 p-2 rounded-md flex items-center my-1 border-l-[3px] ${borderColorClass}`"
   >
     <div class="">
-      <div class="text-xs">{{ subject }}</div>
+      <div class="text-xs flex">
+        {{ subject }}
+        <div v-if="date" class="">, {{ calculateDays() }}</div>
+      </div>
       <div class="">{{ task }}</div>
     </div>
     <div

@@ -40,7 +40,7 @@ const isModalOpen = ref(false);
         <hr />
       </h1>
       <div class="ml-2 mt-3 pr-2 h-[220px] overflowy-scrolly">
-        <Task subject="Mathe" color="blue-500" task="Erste Ableitung" date="20.05.2025" />
+        <Task subject="Mathe" color="blue-500" task="Erste Ableitung" date="30.10.2025" />
       </div>
     </div>
   </div>
