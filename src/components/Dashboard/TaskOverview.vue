@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import Task from './Task.vue';
-import AddHomeworkModal from './AddHomeworkModal.vue';
+import Task from '../Task.vue';
+import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
+import AddExamsModal from '../Modal/AddExamsModal.vue';
 
-const isModalOpen = ref(false);
+const homeworkOpen = ref(false);
+const examsOpen = ref(false);
 </script>
 
 <template>
@@ -14,15 +16,15 @@ const isModalOpen = ref(false);
           Homework
           <hr />
         </h1>
-        <button @click="isModalOpen = true" class="mr-1">Add</button>
-        <AddHomeworkModal v-if="isModalOpen" @close="isModalOpen = false" />
+        <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
+        <AddHomeworkModal v-if="homeworkOpen" @close="homeworkOpen = false" />
       </div>
       <div class="ml-2 mt-2">
         <div class="flex items-center mt-2">
           <p>Today</p>
           <div class="text-sm ml-1.5 text-gray-600">(4)</div>
         </div>
-        <div class="pr-2 h-[220px] overflowy-scrolly">
+        <div class="pr-2 h-[220px] overflowy-scrolly space-y-2">
           <Task
             subject="Latein"
             color="yellow-500"
@@ -35,10 +37,14 @@ const isModalOpen = ref(false);
       </div>
     </div>
     <div class="col-span-2 row-span-2 bg-white rounded-md m-2 p-2">
-      <h1 class="ml-1">
-        Upcoming Exams
-        <hr />
-      </h1>
+      <div class="flex justify-between items-center">
+        <h1 class="ml-1">
+          Upcoming Exams
+          <hr />
+        </h1>
+        <button @click="examsOpen = true" class="modal mr-1">Add</button>
+      </div>
+      <AddExamsModal v-if="examsOpen" @close="examsOpen = false" />
       <div class="ml-2 mt-3 pr-2 h-[220px] overflowy-scrolly">
         <Task subject="Mathe" color="blue-500" task="Erste Ableitung" date="30.10.2025" />
       </div>

@@ -3,6 +3,8 @@ import DashboardView from '@/views/DashboardView.vue';
 import ScheduleView from '@/views/ScheduleView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import SubjectsView from '@/views/SubjectsView.vue';
+import HomeworkView from '@/views/HomeworkView.vue';
+import SubjectView from '@/views/SubjectView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +31,16 @@ const router = createRouter({
       path: '/subjects',
       name: 'subjects',
       component: SubjectsView,
+    },
+    {
+      path: '/subjects/Mathe',
+      name: 'subject',
+      component: SubjectView,
+    },
+    {
+      path: '/homework',
+      name: 'homework',
+      component: HomeworkView,
     },
     {
       path: '/:catchAll(.*)',

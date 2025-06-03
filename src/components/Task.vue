@@ -45,9 +45,7 @@ function calculateDays() {
 </script>
 
 <template>
-  <div
-    :class="`bg-gray-100 p-2 rounded-md flex items-center my-1 border-l-[3px] ${borderColorClass}`"
-  >
+  <div :class="`bg-gray-100 p-2 rounded-md flex items-center border-l-[3px] ${borderColorClass}`">
     <div class="">
       <div class="text-xs flex">
         {{ subject }}
