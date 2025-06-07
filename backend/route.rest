@@ -1,0 +1,14 @@
+GET http://localhost:3000/subject
+
+###
+POST http://localhost:3000/subject
+Content-Type: application/json
+
+{
+    "name": "Computer Science",
+    "teacher": "Mr. Informatics",
+    "room": "131",
+    "color": "#d7b1ec",
+    "notes": "codeeeeeeeee",
+    "type": "GK"
+}

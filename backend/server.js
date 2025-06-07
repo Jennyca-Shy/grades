@@ -1,0 +1,20 @@
+require('dotenv').config();
+
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.DATABASE_URL);
+const db = mongoose.connection;
+db.on('error', (error) => console.error(error));
+db.once('open', () => console.log('connected to database'));
+
+app.use(express.json());
+
+app.listen(3000, () => console.log('Server started'));
+
+const homeworkRouter = require('./routers/homework');
+app.use('/homework', homeworkRouter);
+
+const subjectRouter = require('./routers/subject');
+app.use('/subject', subjectRouter);
