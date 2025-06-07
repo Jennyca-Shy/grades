@@ -12,6 +12,11 @@ router.get('/', async (req, res) => {
   }
 });
 
+//Getting one
+router.get('/:id', getSubject, (req, res) => {
+  res.send(res.subject);
+});
+
 //Create one
 router.post('/', async (req, res) => {
   const subject = new Subject({

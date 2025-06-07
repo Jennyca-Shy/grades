@@ -1,6 +1,9 @@
 GET http://localhost:3000/subject
 
 ###
+Get http://localhost:3000/subject/6843df34cfc1de52fa1ed2e6
+
+###
 POST http://localhost:3000/subject
 Content-Type: application/json
 
