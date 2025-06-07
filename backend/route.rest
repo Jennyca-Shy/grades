@@ -5,12 +5,12 @@ POST http://localhost:3000/subject
 Content-Type: application/json
 
 {
-    "name": "Computer Science",
-    "teacher": "Mr. Informatics",
-    "room": "131",
+    "name": "Maths",
+    "teacher": "Mr. Maths",
+    "room": "140",
     "color": "#d7b1ec",
-    "notes": "codeeeeeeeee",
-    "type": "GK"
+    "notes": "new maths",
+    "type": "LK"
 }
 
 ### 
@@ -20,3 +20,6 @@ Content-Type: application/json
 {
     "notes": "changed notes to math"
 }
+
+### 
+DELETE  http://localhost:3000/subject/6841d4982b92d985230b004d

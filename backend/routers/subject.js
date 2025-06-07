@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Subject = require('../models/subject');
-const { findOneAndUpdate } = require('../models/subject');
 
 //Get all
 router.get('/', async (req, res) => {
@@ -58,6 +57,16 @@ router.patch('/:id', getSubject, async (req, res) => {
     res.json(updatedSubject);
   } catch (error) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+//Delete one
+router.delete('/:id', getSubject, async (req, res) => {
+  try {
+    await res.subject.deleteOne();
+    res.json({ message: 'deleted subscriber' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
