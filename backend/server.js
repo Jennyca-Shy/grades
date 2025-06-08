@@ -18,3 +18,6 @@ app.use('/homework', homeworkRouter);
 
 const subjectRouter = require('./routers/subject');
 app.use('/subject', subjectRouter);
+
+const gradeRouter = require('./routers/grade');
+app.use('/grade', gradeRouter);

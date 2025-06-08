@@ -1,0 +1,27 @@
+GET http://localhost:3000/grade
+
+###
+
+GET http://localhost:3000/grade/6845da61c459203f47ec39ad
+
+###
+POST http://localhost:3000/grade
+Content-Type: application/json
+
+{
+    "title": "Grade for maths2",
+    "date": "09.06.2025",
+    "subject": "684494dc1aa468fa5a3d454e",
+    "result": "result"
+}
+
+###
+PATCH http://localhost:3000/grade/6845da61c459203f47ec39ad
+Content-Type: application/json
+
+{
+    "title": "changed title"
+}
+
+###
+DELETE http://localhost:3000/grade/6845da61c459203f47ec39ad
