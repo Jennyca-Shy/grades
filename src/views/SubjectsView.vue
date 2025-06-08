@@ -2,10 +2,31 @@
 import Subjects from '@/components/Subjects/Subject.vue';
 import AddLkModal from '@/components/Modal/AddLkModal.vue';
 import AddGkModal from '@/components/Modal/AddGkModal.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const lkOpen = ref(false);
 const gkOpen = ref(false);
+const lkSubjects = ref();
+const gkSubjects = ref();
+
+async function getLK() {
+  const response = await fetch('http://localhost:3000/subject/type/LK');
+  const data = await response.json();
+  lkSubjects.value = data;
+  console.log(data);
+}
+
+async function getGK() {
+  const response = await fetch('http://localhost:3000/subject/type/GK');
+  const data = await response.json();
+  gkSubjects.value = data;
+  console.log(data);
+}
+
+onMounted(() => {
+  getLK();
+  getGK();
+});
 </script>
 
 <template>
@@ -17,14 +38,16 @@ const gkOpen = ref(false);
           <hr />
         </h1>
         <button @click="lkOpen = true" class="modal">Add</button>
-        <AddLkModal v-if="lkOpen" @close="lkOpen = false" />
+        <AddLkModal v-if="lkOpen" @close="lkOpen = false" @added="getLK" />
       </div>
       <div class="grid grid-cols-3 mt-3 gap-2">
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
+        <Subjects
+          v-for="subject in lkSubjects"
+          :subject="subject.name"
+          :teacher="subject.teacher"
+          average="14.3P"
+          :color="subject.color"
+        />
       </div>
 
       <div class="flex justify-between mt-4">
@@ -33,16 +56,16 @@ const gkOpen = ref(false);
           <hr />
         </h1>
         <button @click="gkOpen = true" class="modal">Add</button>
-        <AddLkModal v-if="gkOpen" @close="gkOpen = false" />
+        <AddGkModal v-if="gkOpen" @close="gkOpen = false" @added="getGK" />
       </div>
       <div class="grid grid-cols-3 mt-3 gap-2">
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
-        <Subjects subject="Mathe" teacher="Mr. Maths" average="14.3P" color="#bfd8ff" />
+        <Subjects
+          v-for="subject in gkSubjects"
+          :subject="subject.name"
+          :teacher="subject.teacher"
+          average="14.3P"
+          :color="subject.color"
+        />
       </div>
     </div>
   </section>

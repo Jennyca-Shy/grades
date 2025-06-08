@@ -19,7 +19,8 @@ const subjectSchema = new mongoose.Schema({
   },
   notes: {
     type: String,
-    required: true,
+    required: false,
+    default: '',
   },
   type: {
     type: String,

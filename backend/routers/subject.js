@@ -13,8 +13,18 @@ router.get('/', async (req, res) => {
 });
 
 //Getting one
-router.get('/:id', getSubject, (req, res) => {
+router.get('/id/:id', getSubject, (req, res) => {
   res.send(res.subject);
+});
+
+//Get by type
+router.get('/type/:type', async (req, res) => {
+  try {
+    const subjects = await Subject.find({ type: req.params.type });
+    res.json(subjects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 //Create one
