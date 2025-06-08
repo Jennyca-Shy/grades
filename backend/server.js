@@ -9,10 +9,15 @@ const db = mongoose.connection;
 db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('connected to database'));
 
+//CORS
+const cors = require('cors');
+app.use(cors());
+
 app.use(express.json());
 
 app.listen(3000, () => console.log('Server started'));
 
+//ROUTER
 const homeworkRouter = require('./routers/homework');
 app.use('/homework', homeworkRouter);
 
