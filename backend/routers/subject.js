@@ -29,16 +29,20 @@ router.get('/type/:type', async (req, res) => {
 
 //Create one
 router.post('/', async (req, res) => {
-  const subject = new Subject({
-    name: req.body.name,
-    teacher: req.body.teacher,
-    room: req.body.room,
-    color: req.body.color,
-    notes: req.body.notes,
-    type: req.body.type,
-  });
-
   try {
+    const existing = await Subject.findOne({ name: req.body.name.trim() });
+    if (existing) {
+      return res.status(400).json({ message: 'duplicate' });
+    }
+
+    const subject = new Subject({
+      name: req.body.name,
+      teacher: req.body.teacher,
+      room: req.body.room,
+      color: req.body.color,
+      notes: req.body.notes,
+      type: req.body.type,
+    });
     const newSubject = await subject.save();
     res.status(201).json(newSubject);
   } catch (error) {

@@ -4,6 +4,8 @@ const subjectSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
+    dropDups: true,
   },
   teacher: {
     type: String,
@@ -28,4 +30,4 @@ const subjectSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('subject', subjectSchema);
+module.exports = mongoose.model('Subject', subjectSchema);

@@ -1,11 +1,15 @@
 <script setup>
 import Modal from './Modal.vue';
 import { ref } from 'vue';
+import { useToast } from 'vue-toastification';
 
 const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
 }
+
+//Add a new subject
+const toast = useToast();
 
 const lk = ref('');
 const teacher = ref('');
@@ -26,10 +30,17 @@ async function addLK() {
         type: 'LK',
       }),
     });
+
+    const data = await response.json();
+    console.log(data);
     if (response.ok) {
       emit('added');
+      closeModal();
+    } else if (data.message === 'duplicate') {
+      toast.warning('Subject already exists!');
+    } else {
+      toast.error('Something went wrong!');
     }
-    closeModal();
   }
 }
 </script>

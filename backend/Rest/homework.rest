@@ -2,31 +2,29 @@ GET http://localhost:3000/homework
 
 ###
 
-GET http://localhost:3000/homework/6844985ca7cd2113838f722f
+GET http://localhost:3000/homework/id/6846d9c37b61ebacb8429bc2
 
 ###
 POST http://localhost:3000/homework
 Content-Type: application/json
 
 {
-    "title": "Do this and that",
-    "subject": "6843df34cfc1de52fa1e6",
-    "dueDate": "08.06.2025",
-    "notes": "notess, german 3, try",
+    "title": "new date",
+    "subject": "6843df34cfc1de52fa1ed2e6",
+    "dueDate": "2025-06-09",
+    "notes": "notess, german 3, try"
+}
+
+###
+PATCH http://localhost:3000/homework/684687bae2467bb7692582a5
+Content-Type: application/json
+
+{
     "status": "due"
 }
 
 ###
-PATCH http://localhost:3000/homework/6844985ca7cd2113838f722f
-Content-Type: application/json
-
-{
-    "title": "chagne to pyhsics",
-    "subject": "6843e0094372b1b6172ad37a",
-    "dueDate": "05.06.2025",
-    "notes": "notess, german 3, tr2y",
-    "status": "overdue"
-}
+DELETE http://localhost:3000/homework/68449904a5f4660cd3b7cc75
 
 ###
-DELETE http://localhost:3000/homework/68449904a5f4660cd3b7cc75
+PATCH http://localhost:3000/homework/update/overdue

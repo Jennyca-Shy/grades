@@ -3,6 +3,7 @@ import Subjects from '@/components/Subjects/Subject.vue';
 import AddLkModal from '@/components/Modal/AddLkModal.vue';
 import AddGkModal from '@/components/Modal/AddGkModal.vue';
 import { ref, onMounted } from 'vue';
+import { useToast } from 'vue-toastification';
 
 const lkOpen = ref(false);
 const gkOpen = ref(false);
@@ -23,6 +24,21 @@ async function getGK() {
   console.log(data);
 }
 
+let toast = useToast();
+function toastSuccess() {
+  toast.success('Successfully added new subject');
+}
+
+function addedLK() {
+  toastSuccess();
+  getLK();
+}
+
+function addedGK() {
+  toastSuccess();
+  getGK();
+}
+
 onMounted(() => {
   getLK();
   getGK();
@@ -38,7 +54,7 @@ onMounted(() => {
           <hr />
         </h1>
         <button @click="lkOpen = true" class="modal">Add</button>
-        <AddLkModal v-if="lkOpen" @close="lkOpen = false" @added="getLK" />
+        <AddLkModal v-if="lkOpen" @close="lkOpen = false" @added="addedLK" />
       </div>
       <div class="grid grid-cols-3 mt-3 gap-2">
         <Subjects
@@ -56,7 +72,7 @@ onMounted(() => {
           <hr />
         </h1>
         <button @click="gkOpen = true" class="modal">Add</button>
-        <AddGkModal v-if="gkOpen" @close="gkOpen = false" @added="getGK" />
+        <AddGkModal v-if="gkOpen" @close="gkOpen = false" @added="addedGK" />
       </div>
       <div class="grid grid-cols-3 mt-3 gap-2">
         <Subjects

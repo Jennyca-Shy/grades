@@ -5,12 +5,21 @@ const props = defineProps({
   task: String,
   date: String,
   color: String,
+  exam: Boolean,
+  id: String,
 });
-const borderColorClass = computed(() => `border-${props.color}`);
-const textColorClass = computed(() => `text-${props.color}`);
+
+const emit = defineEmits(['finished', 'error']);
+
+const borderColorClass = computed(() => props.color);
+const textColorClass = computed(() => props.color);
 
 function parseDate() {
-  const [day, month, year] = props.date.split('.');
+  const justDate = props.date.split('T')[0];
+  const [year, month, day] = justDate.split('-');
+  console.log(day);
+  console.log(month);
+  console.log();
   return new Date(year, month - 1, day);
 }
 
@@ -42,10 +51,33 @@ function calculateDays() {
 
   return output;
 }
+
+async function finishHomework() {
+  const response = await fetch(`http://localhost:3000/homework/id/${props.id}`, {
+    method: 'GET',
+  });
+  const data = await response.json();
+  let change = 'finished';
+  if (data.status === 'finished') change = 'due';
+  const responsePatch = await fetch(`http://localhost:3000/homework/${props.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      status: change,
+    }),
+  });
+  if (responsePatch.ok) emit('finished');
+  else emit('error');
+}
 </script>
 
 <template>
-  <div :class="`bg-gray-100 p-2 rounded-md flex items-center border-l-[3px] ${borderColorClass}`">
+  <div
+    class="bg-gray-100 p-2 rounded-md flex items-center border-l-[3px]"
+    :style="`border-color: ${borderColorClass}`"
+  >
     <div class="">
       <div class="text-xs flex">
         {{ subject }}
@@ -54,12 +86,15 @@ function calculateDays() {
       <div class="">{{ task }}</div>
     </div>
     <div
-      v-if="date"
-      :class="`pi pi-ellipsis-v ml-auto cursor-pointer mr-1 ${textColorClass}`"
+      v-if="exam"
+      class="pi pi-ellipsis-v ml-auto cursor-pointer mr-1"
+      :style="`text-color: ${textColorClass}`"
     ></div>
     <div
       v-else
-      :class="`cursor-pointer border-[3px] ${borderColorClass} rounded-full size-6 ml-auto mr-2`"
+      class="cursor-pointer border-[3px] rounded-full size-6 ml-auto mr-2"
+      :style="`border-color: ${borderColorClass}`"
+      @click="finishHomework"
     ></div>
   </div>
 </template>

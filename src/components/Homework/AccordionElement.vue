@@ -1,5 +1,6 @@
 <script setup>
 import Task from '../Task.vue';
+import { useToast } from 'vue-toastification';
 
 const props = defineProps({
   title: String,
@@ -7,16 +8,27 @@ const props = defineProps({
   active: String,
 });
 
-const emit = defineEmits(['select']);
+const emit = defineEmits(['select', 'update']);
 function select() {
   if (props.active == props.title) {
     emit('select', 'none');
   } else {
     emit('select', props.title);
   }
+
+  console.log(props.input);
 }
 
-console.log(props.input);
+const toast = useToast();
+function finishedHomework() {
+  if (props.title != 'Finished') toast.success('Wohooo, finished homework!');
+  else toast.info('Changed homework to due');
+  emit('update');
+}
+
+function errorMessage() {
+  toast.error('Ups, something went wrong');
+}
 </script>
 
 <template>
@@ -35,6 +47,16 @@ console.log(props.input);
     <div v-else class="pi pi-minus mr-1"></div>
   </button>
   <div class="grid grid-flow-row grid-cols-2 gap-2 mt-1 mr-1" v-if="active == title">
-    <Task v-for="elem in input" :subject="elem[0]" :task="elem[1]" :color="elem[2]" />
+    <Task
+      v-for="elem in props.input"
+      :subject="elem.subject.name"
+      :task="elem.title"
+      :date="elem.dueDate"
+      :color="elem.subject.color"
+      :exam="false"
+      :id="elem._id"
+      @finished="finishedHomework"
+      @error="errorMessage"
+    />
   </div>
 </template>

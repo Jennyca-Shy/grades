@@ -5,7 +5,7 @@ const Homework = require('../models/homework');
 //Getting all
 router.get('/', async (req, res) => {
   try {
-    const homework = await Homework.find();
+    const homework = await Homework.find().populate('subject');
     res.json(homework);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,12 +13,42 @@ router.get('/', async (req, res) => {
 });
 
 //Getting one
-router.get('/:id', getHomework, (req, res) => {
+router.get('/id/:id', getHomework, (req, res) => {
   res.send(res.homework);
 });
 
+// Get by date
+// router.get('/date/:date', async (req, res) => {
+//   try {
+//     const date = new Date(req.params.date);
+//     let startOfDay = new Date(date);
+//     startOfDay.setUTCHours(0, 0, 0, 0);
+//     let endOfDay = new Date(date);
+//     endOfDay.setUTCHours(23, 59, 59, 999);
+
+//     const homeworks = await Homework.find({
+//       dueDate: {
+//         $gte: startOfDay,
+//         $lte: endOfDay,
+//       },
+//     }).populate('subject');
+//     res.json({ answer: homeworks, start: startOfDay, end: endOfDay });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
 //Creating one
 router.post('/', async (req, res) => {
+  if (req.body.status == null) {
+    const today = new Date().setUTCHours(0, 0, 0, 0);
+    const dueDate = new Date(req.body.dueDate);
+    if (dueDate - today >= 0) {
+      req.body.status = 'due';
+    } else {
+      req.body.status = 'overdue';
+    }
+  }
   const homework = new Homework({
     title: req.body.title,
     subject: req.body.subject,
@@ -61,6 +91,26 @@ router.patch('/:id', getHomework, async (req, res) => {
   }
 });
 
+//Update many
+router.patch('/update/overdue', async (req, res) => {
+  const today = new Date().setUTCHours(0, 0, 0, 0);
+  try {
+    await Homework.updateMany(
+      {
+        dueDate: { $lt: today },
+        status: { $ne: 'finished' },
+      },
+      {
+        $set: {
+          status: 'overdue',
+        },
+      },
+    );
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //Deleting one
 router.delete('/:id', getHomework, async (req, res) => {
   try {
@@ -74,7 +124,7 @@ router.delete('/:id', getHomework, async (req, res) => {
 async function getHomework(req, res, next) {
   let homework;
   try {
-    homework = await Homework.findById(req.params.id);
+    homework = await Homework.findById(req.params.id).populate('subject');
     if (homework == null) {
       res.status(404).json({ message: 'couldnt find homework' });
     }

@@ -12,7 +12,7 @@ const homeworkSchema = new mongoose.Schema({
   },
   dueDate: {
     type: Date,
-    required: true,
+    required: false,
     default: Date.now,
   },
   notes: {

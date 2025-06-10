@@ -26,3 +26,18 @@ app.use('/subject', subjectRouter);
 
 const gradeRouter = require('./routers/grade');
 app.use('/grade', gradeRouter);
+
+//Daily updates
+// const cron = require('node-cron');
+// const Homework = require('./models/homework');
+
+// cron.schedule('0 0 * * *', async () => {
+//   const now = new Date();
+//   await Homework.updateMany(
+//     {
+//       dueDate: { $lt: now },
+//       status: { $ne: 'finished' },
+//     },
+//     { $set: { $status: 'overdue' } },
+//   );
+// });

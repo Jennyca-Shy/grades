@@ -1,11 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Task from '../Task.vue';
 import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
 import AddExamsModal from '../Modal/AddExamsModal.vue';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
+const allHomework = ref();
+let numOfHomework = ref();
+
+async function getHomework() {
+  const today = new Date().toISOString().split('T')[0];
+  const response = await fetch(`http://localhost:3000/homework`);
+  let data = await response.json();
+
+  let filtered = data.filter((hw) => {
+    const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
+    return dueDate === today && hw.status === 'due';
+  });
+
+  filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  allHomework.value = filtered;
+  numOfHomework.value = filtered.length;
+
+  console.log('All homework: ');
+  console.log(allHomework);
+}
+
+onMounted(() => {
+  getHomework();
+});
 </script>
 
 <template>
@@ -17,22 +41,24 @@ const examsOpen = ref(false);
           <hr />
         </h1>
         <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
-        <AddHomeworkModal v-if="homeworkOpen" @close="homeworkOpen = false" />
+        <AddHomeworkModal v-if="homeworkOpen" @close="homeworkOpen = false" @added="getHomework" />
       </div>
       <div class="ml-2 mt-2">
         <div class="flex items-center mt-2">
           <p>Today</p>
-          <div class="text-sm ml-1.5 text-gray-600">(4)</div>
+          <div class="text-sm ml-1.5 text-gray-600">({{ numOfHomework }})</div>
         </div>
         <div class="pr-2 h-[220px] overflowy-scrolly space-y-2">
           <Task
-            subject="Latein"
-            color="yellow-500"
-            task="S.92 Übersetzen + S.145 Vokabeln bis advocare"
+            v-for="homework in allHomework"
+            :subject="homework.subject.name"
+            :color="homework.subject.color"
+            :task="homework.title"
+            :date="homework.dueDate"
+            :id="homework._id"
+            :exam="false"
+            @finished="getHomework"
           />
-          <Task subject="Deutsch" color="red-500" task="S.120 im Buch lesen" />
-          <Task subject="Geographie" color="slate-500" task="Tsunami lernen" />
-          <Task subject="Mathe" color="blue-500" task="S.45/2a)" />
         </div>
       </div>
     </div>
@@ -46,7 +72,13 @@ const examsOpen = ref(false);
       </div>
       <AddExamsModal v-if="examsOpen" @close="examsOpen = false" />
       <div class="ml-2 mt-3 pr-2 h-[220px] overflowy-scrolly">
-        <Task subject="Mathe" color="blue-500" task="Erste Ableitung" date="30.10.2025" />
+        <Task
+          subject="Mathe"
+          color="blue-500"
+          task="Erste Ableitung"
+          date="30.10.2025"
+          :exam="true"
+        />
       </div>
     </div>
   </div>
