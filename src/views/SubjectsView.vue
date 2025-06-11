@@ -63,6 +63,7 @@ onMounted(() => {
           :teacher="subject.teacher"
           average="14.3P"
           :color="subject.color"
+          :id="subject._id"
         />
       </div>
 
@@ -81,6 +82,7 @@ onMounted(() => {
           :teacher="subject.teacher"
           average="14.3P"
           :color="subject.color"
+          :id="subject._id"
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import Task from '../Task.vue';
 import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
 import AddExamsModal from '../Modal/AddExamsModal.vue';
+import { useToast } from 'vue-toastification';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
@@ -25,6 +26,11 @@ async function getHomework() {
 
   console.log('All homework: ');
   console.log(allHomework);
+}
+
+const toast = useToast();
+function finishedHomework() {
+  toast.success('Wohooo, finished homework!');
 }
 
 onMounted(() => {
@@ -57,7 +63,12 @@ onMounted(() => {
             :date="homework.dueDate"
             :id="homework._id"
             :exam="false"
-            @finished="getHomework"
+            @finished="
+              () => {
+                getHomework();
+                finishedHomework();
+              }
+            "
           />
         </div>
       </div>

@@ -33,7 +33,7 @@ const router = createRouter({
       component: SubjectsView,
     },
     {
-      path: '/subjects/Mathe',
+      path: '/subjects/:id',
       name: 'subject',
       component: SubjectView,
     },

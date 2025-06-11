@@ -6,104 +6,82 @@ import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 let activeAccordion = ref('Today');
 const homeworkOpen = ref(false);
 
-const overdueHomework = ref([]);
-const todayHomework = ref([]);
-const tomorrowHomework = ref([]);
-const thisWeekHomework = ref([]);
-const laterHomework = ref([]);
-const finishedHomework = ref([]);
+let overdueHomework = ref([]);
+let todayHomework = ref([]);
+let tomorrowHomework = ref([]);
+let thisWeekHomework = ref([]);
+let laterHomework = ref([]);
+let finishedHomework = ref([]);
 
-const today = new Date().toISOString().split('T')[0];
-let tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
-tomorrow = tomorrow.toISOString().split('T')[0];
-let thisWeek = new Date();
-thisWeek.setDate(thisWeek.getDate() + 7);
-thisWeek = thisWeek.toISOString().split('T')[0];
+async function getData() {
+  //Today and tomorrow and this week
+  const today = new Date().toISOString().split('T')[0];
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow = tomorrow.toISOString().split('T')[0];
+  let thisWeek = new Date();
+  thisWeek.setDate(thisWeek.getDate() + 7);
+  thisWeek = thisWeek.toISOString().split('T')[0];
 
-async function getOverdue() {
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-  let filtered = data.filter((hw) => {
-    return hw.status === 'overdue';
-  });
-  filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  overdueHomework.value = filtered;
-}
-
-async function getToday() {
+  //Fetch all homework
   const response = await fetch('http://localhost:3000/homework');
   const data = await response.json();
 
-  let filtered = data.filter((hw) => {
+  if (!response.ok) console.log(response);
+
+  //Get different homework
+  overdueHomework.value = data
+    .filter((hw) => {
+      return hw.status === 'overdue';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  todayHomework.value = data.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
     return hw.status === 'due' && dueTo === today;
   });
-  todayHomework.value = filtered;
-}
 
-async function getTomorrow() {
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-
-  let filtered = data.filter((hw) => {
+  tomorrowHomework.value = data.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
     return hw.status === 'due' && dueTo === tomorrow;
   });
 
-  tomorrowHomework.value = filtered;
+  thisWeekHomework.value = data
+    .filter((hw) => {
+      const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
+      return dueTo > tomorrow && dueTo <= thisWeek && hw.status === 'due';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  laterHomework.value = data
+    .filter((hw) => {
+      const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
+      return dueTo > thisWeek && hw.status === 'due';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  finishedHomework.value = data
+    .filter((hw) => {
+      return hw.status === 'finished';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 }
 
-async function getThisWeek() {
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
+// async function updateToOverdue() {
+//   const response = await fetch('http://localhost:3000/homework/update/overdue', {
+//     method: 'PATCH',
+//   });
 
-  let filtered = data.filter((hw) => {
-    const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return dueTo > tomorrow && dueTo <= thisWeek && hw.status === 'due';
-  });
-
-  filtered.sort((a, b) => a.dueDate - b.dueDate);
-  thisWeekHomework.value = filtered;
-}
-
-async function getLater() {
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-
-  let filtered = data.filter((hw) => {
-    const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return dueTo > thisWeek && hw.status === 'due';
-  });
-
-  laterHomework.value = filtered;
-}
-
-async function getFinished() {
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-
-  let filtered = data.filter((hw) => {
-    return hw.status === 'finished';
-  });
-  filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  finishedHomework.value = filtered;
-}
-
-async function updateToOverdue() {
-  const response = await fetch('http://localhost:3000/homework/update/overdue', {
-    method: 'PATCH',
-  });
-}
+//   if (!response.ok) {
+//     const message = await response.text();
+//     console.error('Failed to update overdue:', message);
+//     throw new Error('Update to overdue failed: ' + message);
+//   }
+// }
 
 function updateEverything() {
-  updateToOverdue();
-  getOverdue();
-  getToday();
-  getTomorrow();
-  getThisWeek();
-  getLater();
-  getFinished();
+  // updateToOverdue();
+  getData();
 }
 
 onMounted(() => {
@@ -124,7 +102,7 @@ onMounted(() => {
           <AddHomeworkModal
             v-if="homeworkOpen"
             @close="homeworkOpen = false"
-            @added="updateEverything()"
+            @added="updateEverything"
           />
         </div>
 
@@ -169,7 +147,7 @@ onMounted(() => {
             :active="activeAccordion"
             :input="finishedHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything()"
+            @update="updateEverything"
           />
         </div>
       </div>

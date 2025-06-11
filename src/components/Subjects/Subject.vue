@@ -7,13 +7,12 @@ const props = defineProps({
   average: String,
   teacher: String,
   color: String,
+  id: String,
 });
-
-const subjectLink = props.subject.replace(/\s+/g, '');
 </script>
 
 <template>
-  <RouterLink :to="`${route.path}/${subjectLink}`">
+  <RouterLink :to="`${route.path}/${props.id}`">
     <div class="p-2 rounded-md cursor-pointer" :style="`background-color: ${color}`">
       <h2 class="text-lg">{{ subject }}</h2>
       <div class="flex justify-between items-center">

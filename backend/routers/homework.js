@@ -93,7 +93,7 @@ router.patch('/:id', getHomework, async (req, res) => {
 
 //Update many
 router.patch('/update/overdue', async (req, res) => {
-  const today = new Date().setUTCHours(0, 0, 0, 0);
+  const today = new Date().setHours(0, 0, 0, 0);
   try {
     await Homework.updateMany(
       {
@@ -106,6 +106,7 @@ router.patch('/update/overdue', async (req, res) => {
         },
       },
     );
+    res.status(200).json({ message: 'Homework status updated to overdue' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
