@@ -51,7 +51,7 @@ onMounted(() => {
       <div class="flex justify-between">
         <h1>
           Leistungsfächer
-          <hr />
+          <hr class="bg-newBlue" />
         </h1>
         <button @click="lkOpen = true" class="modal">Add</button>
         <AddLkModal v-if="lkOpen" @close="lkOpen = false" @added="addedLK" />
@@ -70,7 +70,7 @@ onMounted(() => {
       <div class="flex justify-between mt-4">
         <h1>
           Grundfächer
-          <hr />
+          <hr class="bg-newBlue" />
         </h1>
         <button @click="gkOpen = true" class="modal">Add</button>
         <AddGkModal v-if="gkOpen" @close="gkOpen = false" @added="addedGK" />

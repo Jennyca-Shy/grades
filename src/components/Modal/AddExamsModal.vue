@@ -31,7 +31,7 @@ function toggleDropdownVisible() {
     <template #title>
       <div class="mx-3">
         Prüfung hinzufügen
-        <hr />
+        <hr class="bg-newBlue" />
       </div>
     </template>
     <template #body>

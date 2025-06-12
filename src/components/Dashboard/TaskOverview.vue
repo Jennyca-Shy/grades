@@ -7,8 +7,7 @@ import { useToast } from 'vue-toastification';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
-const allHomework = ref();
-let numOfHomework = ref();
+let allHomework = ref([]);
 
 async function getHomework() {
   const today = new Date().toISOString().split('T')[0];
@@ -22,7 +21,6 @@ async function getHomework() {
 
   filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
   allHomework.value = filtered;
-  numOfHomework.value = filtered.length;
 
   console.log('All homework: ');
   console.log(allHomework);
@@ -44,7 +42,7 @@ onMounted(() => {
       <div class="flex justify-between items-center">
         <h1 class="ml-1">
           Homework
-          <hr />
+          <hr class="bg-newBlue" />
         </h1>
         <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
         <AddHomeworkModal v-if="homeworkOpen" @close="homeworkOpen = false" @added="getHomework" />
@@ -52,10 +50,11 @@ onMounted(() => {
       <div class="ml-2 mt-2">
         <div class="flex items-center mt-2">
           <p>Today</p>
-          <div class="text-sm ml-1.5 text-gray-600">({{ numOfHomework }})</div>
+          <div class="text-sm ml-1.5 text-gray-600">({{ allHomework.length }})</div>
         </div>
         <div class="pr-2 h-[220px] overflowy-scrolly space-y-2">
           <Task
+            v-if="allHomework.length > 0"
             v-for="homework in allHomework"
             :subject="homework.subject.name"
             :color="homework.subject.color"
@@ -70,6 +69,7 @@ onMounted(() => {
               }
             "
           />
+          <div v-else class="">Wohoo, nothing to do...yet</div>
         </div>
       </div>
     </div>
@@ -77,7 +77,7 @@ onMounted(() => {
       <div class="flex justify-between items-center">
         <h1 class="ml-1">
           Upcoming Exams
-          <hr />
+          <hr class="bg-newBlue" />
         </h1>
         <button @click="examsOpen = true" class="modal mr-1">Add</button>
       </div>

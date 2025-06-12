@@ -48,7 +48,7 @@ async function addGk() {
     <template #title>
       <div class="mx-3">
         Grundkurs hinzufügen
-        <hr />
+        <hr class="bg-newBlue" />
       </div>
     </template>
     <template #body>
@@ -74,7 +74,7 @@ async function addGk() {
             required
           />
         </div>
-        <div class="flex m-auto">
+        <div class="flex ml-auto">
           <button class="modal ml-auto" type="submit">Add</button>
         </div>
       </form>

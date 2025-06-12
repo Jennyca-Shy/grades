@@ -7,7 +7,7 @@ import TimelineObject from './TimelineObject.vue';
     <div class="flex justify-center mt-2 mb-3">
       <h1>
         Schedule
-        <hr />
+        <hr class="bg-newBlue" />
       </h1>
     </div>
 

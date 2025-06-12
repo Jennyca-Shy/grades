@@ -5,6 +5,7 @@ import NotFoundView from '@/views/NotFoundView.vue';
 import SubjectsView from '@/views/SubjectsView.vue';
 import HomeworkView from '@/views/HomeworkView.vue';
 import SubjectView from '@/views/SubjectView.vue';
+import TestView from '@/views/TestView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +42,11 @@ const router = createRouter({
       path: '/homework',
       name: 'homework',
       component: HomeworkView,
+    },
+    {
+      path: '/test/:id',
+      name: 'test',
+      component: TestView,
     },
     {
       path: '/:catchAll(.*)',

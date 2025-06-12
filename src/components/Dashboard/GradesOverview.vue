@@ -10,7 +10,7 @@ import VerticalProgressBar from './VerticalProgressBar.vue';
     <div class="self-stretch mt-2 mb-3">
       <h1 class="mb-3">
         Overview
-        <hr />
+        <hr class="bg-newBlue" />
       </h1>
       <div class="flex flex-row gap-12">
         <!-- vertical progress bars -->

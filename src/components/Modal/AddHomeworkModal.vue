@@ -2,6 +2,17 @@
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
 
+const props = defineProps({
+  subject: {
+    type: String,
+    default: '',
+  },
+  color: {
+    type: String,
+    default: '#44a1a0',
+  },
+});
+
 const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
@@ -23,7 +34,7 @@ onMounted(() => {
 
 //Subject dropdown
 const selectedSubject = ref(null);
-const selectedSubjectName = ref('');
+let selectedSubjectName = ref(props.subject);
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
@@ -73,21 +84,30 @@ async function addHomework() {
 </script>
 
 <template>
-  <Modal @close="closeModal">
+  <Modal @close="closeModal" :color="color">
     <template #title>
       <div class="mx-3">
         Hausaufgaben hinzufügen
-        <hr />
+        <hr :style="`background-color: ${color}`" />
       </div>
     </template>
     <template #body>
       <form @submit.prevent="addHomework" class="mt-4 mx-2 text-sm flex flex-col w-[330px]">
-        <input id="homework" v-model="title" type="text" placeholder="Enter title" />
-        <div class="relative focus:outline-newBlue mb-2">
+        <input
+          id="homework"
+          v-model="title"
+          type="text"
+          placeholder="Enter title"
+          :style="`outline-color: ${color}`"
+          required
+        />
+        <div class="relative mb-2">
           <div class="flex items-center justify-center relative">
             <div class="pi pi-search absolute right-3 top-1/4"></div>
             <input
               class="p-2 mb-1 focus:bg-white w-full pr-8"
+              :style="`outline-color: ${color}`"
+              required
               type="text"
               placeholder="Subject"
               v-model="selectedSubjectName"
@@ -109,11 +129,31 @@ async function addHomework() {
           </div>
         </div>
 
-        <input id="until" v-model="dueDate" type="date" placeholder="Finished by" />
-        <textarea name="notes" v-model="notes" id="notes" placeholder="Add your notes"></textarea>
+        <input
+          :style="`outline-color: ${color}`"
+          id="until"
+          v-model="dueDate"
+          type="date"
+          placeholder="Finished by"
+          required
+        />
+        <textarea
+          :style="`outline-color: ${color}`"
+          name="notes"
+          v-model="notes"
+          id="notes"
+          placeholder="Add your notes"
+          required
+        ></textarea>
 
         <div class="flex justify-end">
-          <button class="modal ml-auto" type="submit">Add</button>
+          <button
+            class="ml-auto px-1 border-2 rounded-md"
+            :style="`border-color: ${color}`"
+            type="submit"
+          >
+            Add
+          </button>
         </div>
       </form>
     </template>

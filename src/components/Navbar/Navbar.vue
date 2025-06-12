@@ -13,7 +13,7 @@ const isActiveLink = (routePath) => {
     <div class="h-12 font-bold flex items-center mb-2 text-newBlue">
       <a href="/" class="flex justify-center w-full text-3xl">Logo</a>
     </div>
-    <hr class="my-2" />
+    <hr class="my-2 bg-newBlue" />
     <div class="text-base font-semibold flex flex-col">
       <RouterLink
         to="/"

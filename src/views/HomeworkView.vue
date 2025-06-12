@@ -96,7 +96,7 @@ onMounted(() => {
         <div class="mb-2 flex justify-between">
           <h1>
             Hausaufgaben
-            <hr />
+            <hr class="bg-newBlue" />
           </h1>
           <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
           <AddHomeworkModal

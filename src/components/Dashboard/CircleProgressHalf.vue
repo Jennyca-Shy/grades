@@ -3,7 +3,7 @@
     <div class="w-full flex justify-center mt-2 mb-3">
       <h1>
         Overall Grade
-        <hr />
+        <hr class="bg-newBlue" />
       </h1>
     </div>
     <div class="relative size-40 m-auto">

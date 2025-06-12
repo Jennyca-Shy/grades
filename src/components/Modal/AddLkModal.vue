@@ -50,7 +50,7 @@ async function addLK() {
     <template #title>
       <div class="mx-3">
         Leistungsfach hinzufügen
-        <hr />
+        <hr class="bg-newBlue" />
       </div>
     </template>
     <template #body>
@@ -76,7 +76,7 @@ async function addLK() {
             required
           />
         </div>
-        <div class="flex m-auto">
+        <div class="flex ml-auto">
           <button class="modal ml-auto" type="submit">Add</button>
         </div>
       </form>

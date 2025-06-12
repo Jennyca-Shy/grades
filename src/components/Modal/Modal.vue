@@ -1,5 +1,13 @@
 <script setup>
 const emit = defineEmits(['close']);
+
+const props = defineProps({
+  color: {
+    type: String,
+    default: '#44a1a0',
+  },
+});
+
 function closeModal() {
   emit('close');
 }
@@ -12,7 +20,11 @@ function closeModal() {
       id="myModal"
       @click="closeModal"
     >
-      <div class="bg-white m-auto py-3 px-2 rounded-md border-2 border-newBlue" @click.stop>
+      <div
+        class="bg-white m-auto py-3 px-2 rounded-md border-2"
+        :style="`border-color: ${color}`"
+        @click.stop
+      >
         <div class="flex items-center justify-between">
           <div v-if="$slots.title" class="title text-lg font-semibold mr-2">
             <slot name="title"></slot>

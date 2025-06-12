@@ -11,7 +11,7 @@ const activeView = ref('week');
     <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col">
       <h1 class="ml-1">
         Your schedule
-        <hr />
+        <hr class="bg-newBlue" />
       </h1>
       <!-- Header with Date and Buttons -->
       <div class="mt-3 flex justify-between items-center mb-2">

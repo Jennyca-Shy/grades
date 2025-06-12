@@ -1,7 +1,7 @@
 GET http://localhost:3000/subject
 
 ###
-Get http://localhost:3000/subject/id/6843df34cfc1de52fa1ed2e6
+Get http://localhost:3000/subject/id/68472a9bc26781d33cee9025
 
 ###
 Get http://localhost:3000/subject/type/LK
