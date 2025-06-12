@@ -55,7 +55,9 @@ async function deleteSubject() {
   const responseSubject = await fetch(`http://localhost:3000/subject/${subject._id}`, {
     method: 'DELETE',
   });
-  const responseHomework = await fetch(`http://localhost:3000/homework/many/${subject._id}`);
+  const responseHomework = await fetch(`http://localhost:3000/homework/many/${subject._id}`, {
+    method: 'DELETE',
+  });
   if (responseSubject.ok && responseHomework.ok) {
     router.push('/subjects');
     toast.success('Successfully deleted the subject');

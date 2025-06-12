@@ -145,62 +145,64 @@ onMounted(() => {
             Homework
             <hr :style="`background-color: ${subject?.color};`" />
           </h1>
-          <button
-            class="px-1 border-2 rounded-md"
-            :style="`border-color: ${subject?.color}`"
-            @click="addHomeworkOpen = true"
-          >
-            Add
-          </button>
-          <AddHomeworkModal
-            v-if="addHomeworkOpen"
-            @close="addHomeworkOpen = false"
-            @added="getHomework()"
-            :color="subject?.color"
-            :subject="subject"
-          />
-          <!-- Homework navbar -->
-          <nav
-            class="flex gap-x-2 border-b justify-end"
-            :style="`border-color: ${subject?.color};`"
-          >
-            <a
-              @click="activeNavHw = 'overdue'"
-              :class="[
-                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
-              ]"
-              :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${subject?.color}`};
+          <div class="flex">
+            <button
+              class="px-1 border-2 rounded-md mr-4"
+              :style="`border-color: ${subject?.color}`"
+              @click="addHomeworkOpen = true"
+            >
+              Add
+            </button>
+            <AddHomeworkModal
+              v-if="addHomeworkOpen"
+              @close="addHomeworkOpen = false"
+              @added="getHomework()"
+              :color="subject?.color"
+              :subject="subject"
+            />
+            <!-- Homework navbar -->
+            <nav
+              class="flex gap-x-2 border-b justify-end"
+              :style="`border-color: ${subject?.color};`"
+            >
+              <a
+                @click="activeNavHw = 'overdue'"
+                :class="[
+                  'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                  activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
+                ]"
+                :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-              >Overdue ({{ overdueHomework.length }})</a
-            >
-            <a
-              @click="activeNavHw = 'due'"
-              :class="[
-                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
-              ]"
-              :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${subject?.color}`};
+                >Overdue ({{ overdueHomework.length }})</a
+              >
+              <a
+                @click="activeNavHw = 'due'"
+                :class="[
+                  'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                  activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
+                ]"
+                :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-              >Due ({{ dueHomework.length }})</a
-            >
-            <a
-              @click="activeNavHw = 'finished'"
-              :class="[
-                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                activeNavHw === 'finished' ? 'bg-white' : 'bg-gray-100',
-              ]"
-              :style="`border-bottom-color: ${activeNavHw === 'finished' ? '#FFFFFF' : `${subject?.color}`};
+                >Due ({{ dueHomework.length }})</a
+              >
+              <a
+                @click="activeNavHw = 'finished'"
+                :class="[
+                  'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                  activeNavHw === 'finished' ? 'bg-white' : 'bg-gray-100',
+                ]"
+                :style="`border-bottom-color: ${activeNavHw === 'finished' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-              >Finished ({{ finishedHomework.length }})</a
-            >
-          </nav>
+                >Finished ({{ finishedHomework.length }})</a
+              >
+            </nav>
+          </div>
         </div>
         <!-- Homework tasks -->
         <div v-if="activeNavHw === 'overdue'" class="space-y-2 overflowy-scrolly">
@@ -253,43 +255,45 @@ onMounted(() => {
             Exams:
             <hr :style="`background-color: ${subject?.color};`" />
           </h1>
-          <button
-            class="px-1 border-2 rounded-md"
-            :style="`border-color: ${subject?.color}`"
-            @click="addHomeworkOpen = true"
-          >
-            Add
-          </button>
-          <!-- Exams navbar -->
-          <nav
-            class="flex gap-x-2 border-b justify-end"
-            :style="`border-color: ${subject?.color};`"
-          >
-            <a
-              @click="activeNavHw = 'overdue'"
-              :class="[
-                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
-              ]"
-              :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${subject?.color}`};
+          <div class="flex">
+            <button
+              class="px-1 border-2 rounded-md mr-4"
+              :style="`border-color: ${subject?.color}`"
+              @click="addHomeworkOpen = true"
+            >
+              Add
+            </button>
+            <!-- Exams navbar -->
+            <nav
+              class="flex gap-x-2 border-b justify-end"
+              :style="`border-color: ${subject?.color};`"
+            >
+              <a
+                @click="activeNavHw = 'overdue'"
+                :class="[
+                  'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                  activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
+                ]"
+                :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-              >Upcoming ({{ overdueHomework.length }})</a
-            >
-            <a
-              @click="activeNavHwHw = 'due'"
-              :class="[
-                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
-              ]"
-              :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${subject?.color}`};
+                >Upcoming ({{ overdueHomework.length }})</a
+              >
+              <a
+                @click="activeNavHwHw = 'due'"
+                :class="[
+                  'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                  activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
+                ]"
+                :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-              >Due ({{ dueHomework.length }})</a
-            >
-          </nav>
+                >Due ({{ dueHomework.length }})</a
+              >
+            </nav>
+          </div>
         </div>
 
         <!-- Exams -->
