@@ -83,7 +83,7 @@ router.patch('/:id', getSubject, async (req, res) => {
 router.delete('/:id', getSubject, async (req, res) => {
   try {
     await res.subject.deleteOne();
-    res.json({ message: 'deleted subscriber' });
+    res.json({ message: 'deleted subject' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

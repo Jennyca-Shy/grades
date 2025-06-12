@@ -24,7 +24,10 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/homework/68449904a5f4660cd3b7cc75
+DELETE http://localhost:3000/homework/single/68449904a5f4660cd3b7cc75
+
+###
+DELETE http://localhost:3000/homework/many/6847332c9dc3396cc8c5670b
 
 ###
 PATCH http://localhost:3000/homework/update/overdue

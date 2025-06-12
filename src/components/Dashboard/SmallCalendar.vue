@@ -1,5 +1,50 @@
 <script setup>
+import { ref, computed } from 'vue';
 import TimelineObject from './TimelineObject.vue';
+
+//listsss
+const MONTH = [
+  'Januar',
+  'Februar',
+  'März',
+  'April',
+  'Mai',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Dezember',
+];
+
+//Get first day of month
+let today = ref(new Date());
+let todayDate = ref(today.value.getDate());
+let firstDay = computed(() => new Date(today.value.getFullYear(), today.value.getMonth(), 1));
+let lastDay = computed(() => new Date(today.value.getFullYear(), today.value.getMonth() + 1, 0));
+let lastMonthDays = computed(() => firstDay.value.getDay());
+let nextMonthDays = computed(() => 6 - lastDay.value.getDay());
+
+function nextMonth() {
+  today.value = new Date(today.value.getFullYear(), today.value.getMonth() + 1, 4);
+  todayDate.value = -1;
+}
+function lastMonth() {
+  today.value = new Date(today.value.getFullYear(), today.value.getMonth() - 1, 4);
+  if (today.value.getMonth() === new Date().getMonth()) {
+    today.value = new Date();
+    todayDate.value = today.value.getDate();
+    console.log('Welcome back!');
+  } else {
+    todayDate.value = -1;
+  }
+}
+
+// console.log('First day: ', firstDay);
+// console.log('Last Day: ', lastDay);
+// console.log('First Day weekday: ', firstDay.getDate());
+// console.log('lastDay.getDay(): ', lastDay.getDate());
 </script>
 
 <template>
@@ -15,55 +60,30 @@ import TimelineObject from './TimelineObject.vue';
     <section class="">
       <!-- Title -->
       <div class="flex justify-between items-center mb-1">
-        <a href=""><span class="pi pi-angle-left"></span></a>
-        <h2 class="font-semibold text-newBlue">May 2025</h2>
-        <a href=""><span class="pi pi-angle-right"></span></a>
+        <span @click="lastMonth" class="pi pi-angle-left cursor-pointer"></span>
+        <h2 class="font-semibold text-newBlue">
+          {{ MONTH[today.getMonth()] }} {{ today.getFullYear() }}
+        </h2>
+        <span @click="nextMonth" class="pi pi-angle-right cursor-pointer"></span>
       </div>
 
       <div class="grid grid-cols-7 p-2 text-center">
+        <div class="text-xs">Sun</div>
         <div class="text-xs">Mon</div>
         <div class="text-xs">Tue</div>
         <div class="text-xs">Wed</div>
         <div class="text-xs">Thu</div>
         <div class="text-xs">Fri</div>
         <div class="text-xs">Sat</div>
-        <div class="text-xs">Sun</div>
         <div class="col-span-7 grid grid-cols-7 mt-1">
-          <div class="text-gray-400">28</div>
-          <div class="text-gray-400">29</div>
-          <div class="text-gray-400">30</div>
-          <div class="">1</div>
-          <div class="">2</div>
-          <div class="">3</div>
-          <div class="">4</div>
-          <div class="">5</div>
-          <div class="">6</div>
-          <div class="">7</div>
-          <div class="">8</div>
-          <div class="">9</div>
-          <div class="">10</div>
-          <div class="">11</div>
-          <div class="">12</div>
-          <div class="">13</div>
-          <div class="">14</div>
-          <div class="">15</div>
-          <div class="">16</div>
-          <div class="text-newWhite bg-newBlue rounded-md">17</div>
-          <div class="">18</div>
-          <div class="">19</div>
-          <div class="">20</div>
-          <div class="">21</div>
-          <div class="">22</div>
-          <div class="">23</div>
-          <div class="">24</div>
-          <div class="">25</div>
-          <div class="">26</div>
-          <div class="">27</div>
-          <div class="">28</div>
-          <div class="">29</div>
-          <div class="">30</div>
-          <div class="">31</div>
-          <div class="text-gray-400">1</div>
+          <div v-for="lastMonth in lastMonthDays" class="text-gray-400">28</div>
+          <div
+            v-for="day in lastDay.getDate()"
+            :class="day === todayDate ? 'text-newWhite bg-newBlue rounded-md' : ''"
+          >
+            {{ day }}
+          </div>
+          <div v-for="nextMonth in nextMonthDays" class="text-gray-400">{{ nextMonth }}</div>
         </div>
       </div>
     </section>

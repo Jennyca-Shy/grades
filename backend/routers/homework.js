@@ -113,10 +113,21 @@ router.patch('/update/overdue', async (req, res) => {
 });
 
 //Deleting one
-router.delete('/:id', getHomework, async (req, res) => {
+router.delete('/single/:id', getHomework, async (req, res) => {
   try {
     await res.homework.deleteOne();
     res.json({ message: 'deleted subscriber' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//Delete many
+router.delete('/many/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Homework.deleteMany({ subject: id });
+    res.json({ message: 'Successfully deleted homework!' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
