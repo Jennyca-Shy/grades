@@ -4,7 +4,7 @@ import Modal from './Modal.vue';
 
 const props = defineProps({
   subject: {
-    type: String,
+    type: Object,
     default: '',
   },
   color: {
@@ -13,6 +13,9 @@ const props = defineProps({
   },
 });
 
+const currentSubject = ref(props.subject);
+const color = props.color;
+console.log(currentSubject);
 const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
@@ -33,8 +36,8 @@ onMounted(() => {
 });
 
 //Subject dropdown
-const selectedSubject = ref(null);
-let selectedSubjectName = ref(props.subject);
+const selectedSubject = ref(currentSubject?.value || '');
+let selectedSubjectName = ref(currentSubject?.value.name || '');
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
@@ -143,7 +146,6 @@ async function addHomework() {
           v-model="notes"
           id="notes"
           placeholder="Add your notes"
-          required
         ></textarea>
 
         <div class="flex justify-end">

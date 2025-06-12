@@ -30,6 +30,9 @@ const toast = useToast();
 function finishedHomework() {
   toast.success('Wohooo, finished homework!');
 }
+function addededHomework() {
+  toast.success('Added homework... more work to do');
+}
 
 onMounted(() => {
   getHomework();
@@ -45,7 +48,16 @@ onMounted(() => {
           <hr class="bg-newBlue" />
         </h1>
         <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
-        <AddHomeworkModal v-if="homeworkOpen" @close="homeworkOpen = false" @added="getHomework" />
+        <AddHomeworkModal
+          v-if="homeworkOpen"
+          @close="homeworkOpen = false"
+          @added="
+            () => {
+              getHomework();
+              addededHomework();
+            }
+          "
+        />
       </div>
       <div class="ml-2 mt-2">
         <div class="flex items-center mt-2">

@@ -1,6 +1,8 @@
 <script setup>
 import Modal from './Modal.vue';
 import { onMounted, ref } from 'vue';
+import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
 
 const props = defineProps(['subject']);
 const subject = props.subject;
@@ -41,6 +43,27 @@ async function updateSubject() {
   closeModal();
 }
 
+function confirmDelete() {
+  if (confirm('Do you really want to delete this subject? This action CAN NOT be reversed!')) {
+    deleteSubject();
+  }
+}
+
+const toast = useToast();
+const router = useRouter();
+async function deleteSubject() {
+  const responseSubject = await fetch(`http://localhost:3000/subject/${subject._id}`, {
+    method: 'DELETE',
+  });
+  const responseHomework = await fetch(`http://localhost:3000/homework/many/${subject._id}`);
+  if (responseSubject.ok && responseHomework.ok) {
+    router.push('/subjects');
+    toast.success('Successfully deleted the subject');
+  } else {
+    toast.warning('Something went wrong');
+  }
+}
+
 onMounted(() => {
   console.log(props.subject);
   console.log(JSON.stringify(props.subject));
@@ -77,9 +100,15 @@ onMounted(() => {
           />
         </div>
       </div>
-      <div class="flex mr-2">
+      <div class="flex justify-between mx-2">
         <button
-          class="ml-auto px-1 border-2 rounded-md hover:text-white"
+          @click="confirmDelete"
+          class="px-1 border-2 rounded-md border-red-600 hover:text-white hover:bg-red-600"
+        >
+          Delete
+        </button>
+        <button
+          class="ml-auto px-1 border-2 rounded-md"
           :style="`border-color: ${color}`"
           @click="
             () => {

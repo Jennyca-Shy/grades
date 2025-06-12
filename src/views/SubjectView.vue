@@ -156,8 +156,8 @@ onMounted(() => {
             v-if="addHomeworkOpen"
             @close="addHomeworkOpen = false"
             @added="getHomework()"
-            :color="color"
-            :subject="subject.name"
+            :color="subject?.color"
+            :subject="subject"
           />
           <!-- Homework navbar -->
           <nav
