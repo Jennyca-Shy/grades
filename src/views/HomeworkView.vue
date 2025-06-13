@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import AccordionElement from '@/components/Homework/AccordionElement.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
+import { useToast } from 'vue-toastification';
 
 let activeAccordion = ref('Today');
 const homeworkOpen = ref(false);
@@ -79,6 +80,11 @@ async function getData() {
 //   }
 // }
 
+const toast = useToast();
+function addedHomeworkToast() {
+  toast.success('Added homework... more work to do');
+}
+
 function updateEverything() {
   // updateToOverdue();
   getData();
@@ -102,7 +108,12 @@ onMounted(() => {
           <AddHomeworkModal
             v-if="homeworkOpen"
             @close="homeworkOpen = false"
-            @added="updateEverything"
+            @added="
+              () => {
+                updateEverything();
+                addedHomeworkToast();
+              }
+            "
           />
         </div>
 

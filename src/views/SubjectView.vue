@@ -80,6 +80,9 @@ function updateView(title) {
 
   console.log('Finished func updateView in SubjectView.vue');
 }
+function addedHomeworkToast() {
+  toast.success('Added homework... more work to do');
+}
 
 onMounted(() => {
   getSubject();
@@ -156,7 +159,12 @@ onMounted(() => {
             <AddHomeworkModal
               v-if="addHomeworkOpen"
               @close="addHomeworkOpen = false"
-              @added="getHomework()"
+              @added="
+                () => {
+                  addedHomeworkToast();
+                  getHomework();
+                }
+              "
               :color="subject?.color"
               :subject="subject"
             />
