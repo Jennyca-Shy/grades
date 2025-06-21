@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import WeeklySchedule from '@/components/Schedule/WeeklySchedule.vue';
 import MonthlySchedule from '@/components/Schedule/MonthlySchedule.vue';
 
@@ -9,10 +10,13 @@ const activeView = ref('week');
 <template>
   <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2">
     <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col">
-      <h1 class="ml-1">
-        Your schedule
-        <hr class="bg-newBlue" />
-      </h1>
+      <div class="flex justify-between">
+        <h1>
+          Schedule
+          <hr class="bg-newBlue" />
+        </h1>
+        <RouterLink to="schedule/edit"><button class="modal">Edit</button></RouterLink>
+      </div>
       <!-- Header with Date and Buttons -->
       <div class="mt-3 flex justify-between items-center mb-2">
         <div class="flex justify-between items-center">

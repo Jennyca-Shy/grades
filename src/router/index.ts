@@ -5,6 +5,7 @@ import NotFoundView from '@/views/NotFoundView.vue';
 import SubjectsView from '@/views/SubjectsView.vue';
 import HomeworkView from '@/views/HomeworkView.vue';
 import SubjectView from '@/views/SubjectView.vue';
+import EditScheduleView from '@/views/EditScheduleView.vue';
 import TestView from '@/views/TestView.vue';
 
 const router = createRouter({
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/test/:id',
       name: 'test',
       component: TestView,
+    },
+    {
+      path: '/schedule/edit',
+      name: 'editSchedule',
+      component: EditScheduleView,
     },
     {
       path: '/:catchAll(.*)',

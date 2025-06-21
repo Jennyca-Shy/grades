@@ -5,7 +5,7 @@ const Grade = require('../models/grade');
 //Get all
 router.get('/', async (req, res) => {
   try {
-    const grades = await Grade.find();
+    const grades = await Grade.find().populate('subject');
     res.json(grades);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -24,6 +24,8 @@ router.post('/', async (req, res) => {
     date: req.body.date,
     subject: req.body.subject,
     result: req.body.result,
+    outOf: req.body.outOf,
+    notes: req.body.notes,
   });
   try {
     const newGrade = await grade.save();
@@ -47,6 +49,12 @@ router.patch('/:id', getGrade, async (req, res) => {
   if (req.body.result != null) {
     res.grade.result = req.body.result;
   }
+  if (req.body.outOf != null) {
+    res.grade.outOf = req.body.outOf;
+  }
+  if (req.body.notes != null) {
+    res.grade.notes = req.body.notes;
+  }
 
   try {
     const updatedGrade = await res.grade.save();
@@ -57,10 +65,21 @@ router.patch('/:id', getGrade, async (req, res) => {
 });
 
 //Delete one
-router.delete('/:id', getGrade, async (req, res) => {
+router.delete('single/:id', getGrade, async (req, res) => {
   try {
     await res.grade.deleteOne();
     res.json({ message: 'grade deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//Delete many
+router.delete('/many/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Grade.deleteMany({ subject: id });
+    res.json({ message: 'Successfully deleted homework!' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

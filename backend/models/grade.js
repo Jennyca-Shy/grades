@@ -17,7 +17,15 @@ const gradeSchema = new mongoose.Schema({
   },
   result: {
     type: String,
-    default: 'ausstehend',
+  },
+  outOf: {
+    type: String,
+    required: true,
+    default: 15,
+  },
+  notes: {
+    type: String,
+    default: '',
   },
 });
 

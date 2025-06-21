@@ -112,6 +112,12 @@ router.patch('/update/overdue', async (req, res) => {
   }
 });
 
+router.patch('/update/status/:id', getHomework, async (req, res) => {
+  const today = new Date().setHours;
+  try {
+  } catch (error) {}
+});
+
 //Deleting one
 router.delete('/single/:id', getHomework, async (req, res) => {
   try {

@@ -1,21 +1,20 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
+import { useToast } from 'vue-toastification';
 
 const props = defineProps({
-  subject: {
-    type: Object,
-    default: '',
-  },
-  color: {
-    type: String,
-    default: '#44a1a0',
-  },
+  exam: Object,
 });
 
-const currentSubject = ref(props.subject);
-const color = props.color;
-console.log(currentSubject);
+const currExam = props.exam;
+console.log('currExam: ', currExam);
+const color = props.exam.subject.color;
+const formattedDate = ref(new Date(currExam.date).toISOString().split('T')[0]);
+const result = ref(props.exam.result);
+
+console.log(formattedDate);
+
 const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
@@ -36,8 +35,9 @@ onMounted(() => {
 });
 
 //Subject dropdown
-const selectedSubject = ref(currentSubject?.value || '');
-let selectedSubjectName = ref(currentSubject?.value.name || '');
+//selectedSubject -> Subject object
+const selectedSubject = ref(currExam?.subject || '');
+let selectedSubjectName = ref(currExam?.subject.name || '');
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
@@ -46,6 +46,7 @@ const filteredSubjects = computed(() =>
   ),
 );
 
+//Select
 function selectSubject(subject) {
   dropdownVisible.value = false;
   selectedSubject.value = subject;
@@ -58,32 +59,52 @@ function toggleDropdownVisible() {
   selectedSubject.value = '';
 }
 
-//Create new homework
-const title = ref('');
-const dueDate = ref('');
-const result = ref('');
-const notes = ref('');
-async function addExam() {
-  const response = await fetch('http://localhost:3000/grade', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      title: title.value,
-      subject: selectedSubject.value._id,
-      date: dueDate.value,
-      result: result.value,
-      notes: notes.value,
-    }),
-  });
+//Edit the exam
+async function editExam() {
+  if (
+    currExam.date != formattedDate.value ||
+    currExam.subject != selectedSubject.value._id ||
+    currExam.result != result.value
+  ) {
+    currExam.date = formattedDate.value;
+    currExam.subject = selectedSubject.value._id;
+    currExam.result = result.value;
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Schulaufgabe:', errorText);
+    console.log('Curr Exam: ', currExam);
+    const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(currExam),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Fehler beim Hinzufügen der Exam:', errorText);
+    } else {
+      emit('added');
+      closeModal();
+      toast.info('Edited exam!');
+    }
+  }
+}
+
+function confirmDelete() {
+  if (confirm('Do you really want to delete this exam? This action CAN NOT be reversed!')) {
+    deleteSubject();
+  }
+}
+
+const toast = useToast();
+async function deleteSubject() {
+  const response = await fetch(`http://localhost:3000/grade/single/${exam_id}`, {
+    method: 'DELETE',
+  });
+  if (response.ok) {
+    toast.success('Successfully deleted the exam');
   } else {
-    emit('added');
-    closeModal();
+    toast.warning('Something went wrong');
   }
 }
 </script>
@@ -92,15 +113,15 @@ async function addExam() {
   <Modal @close="closeModal" :color="color">
     <template #title>
       <div class="mx-3">
-        Exam hinzufügen
+        Edit Exam
         <hr :style="`background-color: ${color}`" />
       </div>
     </template>
     <template #body>
-      <form @submit.prevent="addExam" class="mt-4 mx-2 text-sm flex flex-col w-[330px]">
+      <form @submit.prevent="editExam" class="mt-4 mx-2 text-sm flex flex-col w-[330px]">
         <input
-          id="homework"
-          v-model="title"
+          id="exam"
+          v-model="currExam.title"
           type="text"
           placeholder="Enter title"
           :style="`outline-color: ${color}`"
@@ -125,7 +146,7 @@ async function addExam() {
           >
             <div
               v-for="subject in filteredSubjects"
-              :key="subject.id"
+              :key="exam.subject"
               class="text-black p-2 cursor-pointer hover:text-newBlue"
               @click="selectSubject(subject)"
             >
@@ -137,34 +158,43 @@ async function addExam() {
         <input
           :style="`outline-color: ${color}`"
           id="until"
-          v-model="dueDate"
+          v-model="formattedDate"
           type="date"
           placeholder="Finished by"
           required
         />
-        <input
-          :style="`outline-color: ${color}`"
-          name="result"
-          v-model="result"
-          id="result"
-          placeholder="Add your result"
-        />
-
+        <div class="flex items-center justify-center">
+          <input
+            :style="`outline-color: ${color}`"
+            id="result"
+            v-model="result"
+            type="text"
+            placeholder="Result"
+            class="rounded-l-md rounded-r-none"
+          />
+          <div class="bg-gray-100 whitespace-nowrap mb-3 p-2 rounded-r-md">out of 15 Points</div>
+        </div>
         <textarea
           :style="`outline-color: ${color}`"
           name="notes"
-          v-model="notes"
+          v-model="exam.notes"
           id="notes"
           placeholder="Add your notes"
         ></textarea>
 
-        <div class="flex justify-end">
+        <div class="flex justify-between">
+          <button
+            @click="confirmDelete"
+            class="px-1 border-2 rounded-md border-red-600 hover:text-white hover:bg-red-600"
+          >
+            Delete
+          </button>
           <button
             class="ml-auto px-1 border-2 rounded-md"
             :style="`border-color: ${color}`"
             type="submit"
           >
-            Add
+            Edit
           </button>
         </div>
       </form>

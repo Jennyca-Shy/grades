@@ -31,33 +31,34 @@ async function getData() {
   if (!response.ok) console.log(response);
 
   //Get different homework
+  const splitDueOverdue = new Date().setHours(0, 0, 0, 0);
   overdueHomework.value = data
     .filter((hw) => {
-      return hw.status === 'overdue';
+      return hw.status != 'finished' && new Date(hw.dueDate) < splitDueOverdue;
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
   todayHomework.value = data.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return hw.status === 'due' && dueTo === today;
+    return hw.status != 'finished' && dueTo === today;
   });
 
   tomorrowHomework.value = data.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return hw.status === 'due' && dueTo === tomorrow;
+    return hw.status != 'finished' && dueTo === tomorrow;
   });
 
   thisWeekHomework.value = data
     .filter((hw) => {
       const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-      return dueTo > tomorrow && dueTo <= thisWeek && hw.status === 'due';
+      return dueTo > tomorrow && dueTo <= thisWeek && hw.status != 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
   laterHomework.value = data
     .filter((hw) => {
       const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-      return dueTo > thisWeek && hw.status === 'due';
+      return dueTo > thisWeek && hw.status != 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
@@ -104,7 +105,7 @@ onMounted(() => {
             Hausaufgaben
             <hr class="bg-newBlue" />
           </h1>
-          <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
+          <button @click="homeworkOpen = true" class="modal">Add</button>
           <AddHomeworkModal
             v-if="homeworkOpen"
             @close="homeworkOpen = false"
@@ -123,42 +124,42 @@ onMounted(() => {
             :active="activeAccordion"
             :input="overdueHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
           <AccordionElement
             title="Today"
             :active="activeAccordion"
             :input="todayHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
           <AccordionElement
             title="Tomorrow"
             :active="activeAccordion"
             :input="tomorrowHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
           <AccordionElement
             title="This Week"
             :active="activeAccordion"
             :input="thisWeekHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
           <AccordionElement
             title="Later"
             :active="activeAccordion"
             :input="laterHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
           <AccordionElement
             title="Finished"
             :active="activeAccordion"
             :input="finishedHomework"
             @select="activeAccordion = $event"
-            @update="updateEverything"
+            @updated="updateEverything"
           />
         </div>
       </div>

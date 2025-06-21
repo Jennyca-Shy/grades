@@ -3,20 +3,17 @@ import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
 
 const props = defineProps({
-  subject: {
-    type: Object,
-    default: '',
-  },
-  color: {
-    type: String,
-    default: '#44a1a0',
-  },
+  homework: Object,
 });
 
-const currentSubject = ref(props.subject);
-const color = props.color;
-console.log(currentSubject);
-const emit = defineEmits(['close', 'added']);
+const currHomework = props.homework;
+console.log('currHomework: ', currHomework);
+const color = props.homework.subject.color;
+const formattedDate = ref(new Date(currHomework.dueDate).toISOString().split('T')[0]);
+
+console.log(formattedDate);
+
+const emit = defineEmits(['close', 'updated']);
 function closeModal() {
   emit('close');
 }
@@ -36,8 +33,9 @@ onMounted(() => {
 });
 
 //Subject dropdown
-const selectedSubject = ref(currentSubject?.value || '');
-let selectedSubjectName = ref(currentSubject?.value.name || '');
+//selectedSubject -> Subject object
+const selectedSubject = ref(currHomework?.subject || '');
+let selectedSubjectName = ref(currHomework?.subject.name || '');
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
@@ -46,6 +44,7 @@ const filteredSubjects = computed(() =>
   ),
 );
 
+//Select
 function selectSubject(subject) {
   dropdownVisible.value = false;
   selectedSubject.value = subject;
@@ -58,31 +57,23 @@ function toggleDropdownVisible() {
   selectedSubject.value = '';
 }
 
-//Create new homework
-const title = ref('');
-const dueDate = ref('');
-const result = ref('');
-const notes = ref('');
-async function addExam() {
-  const response = await fetch('http://localhost:3000/grade', {
-    method: 'POST',
+//Edit the homework
+async function editHomework() {
+  currHomework.dueDate = formattedDate.value;
+  currHomework.subject = selectedSubject.value._id;
+  const response = await fetch(`http://localhost:3000/homework/${currHomework._id}`, {
+    method: 'PATCH',
     headers: {
       'Content-type': 'application/json',
     },
-    body: JSON.stringify({
-      title: title.value,
-      subject: selectedSubject.value._id,
-      date: dueDate.value,
-      result: result.value,
-      notes: notes.value,
-    }),
+    body: JSON.stringify(currHomework),
   });
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Schulaufgabe:', errorText);
+    console.error('Fehler beim Hinzufügen der Hausaufgabe:', errorText);
   } else {
-    emit('added');
+    emit('updated');
     closeModal();
   }
 }
@@ -92,15 +83,15 @@ async function addExam() {
   <Modal @close="closeModal" :color="color">
     <template #title>
       <div class="mx-3">
-        Exam hinzufügen
+        Edit homework
         <hr :style="`background-color: ${color}`" />
       </div>
     </template>
     <template #body>
-      <form @submit.prevent="addExam" class="mt-4 mx-2 text-sm flex flex-col w-[330px]">
+      <form @submit.prevent="editHomework" class="mt-4 mx-2 text-sm flex flex-col w-[330px]">
         <input
           id="homework"
-          v-model="title"
+          v-model="currHomework.title"
           type="text"
           placeholder="Enter title"
           :style="`outline-color: ${color}`"
@@ -125,7 +116,7 @@ async function addExam() {
           >
             <div
               v-for="subject in filteredSubjects"
-              :key="subject.id"
+              :key="homework.subject"
               class="text-black p-2 cursor-pointer hover:text-newBlue"
               @click="selectSubject(subject)"
             >
@@ -137,23 +128,15 @@ async function addExam() {
         <input
           :style="`outline-color: ${color}`"
           id="until"
-          v-model="dueDate"
+          v-model="formattedDate"
           type="date"
           placeholder="Finished by"
           required
         />
-        <input
-          :style="`outline-color: ${color}`"
-          name="result"
-          v-model="result"
-          id="result"
-          placeholder="Add your result"
-        />
-
         <textarea
           :style="`outline-color: ${color}`"
           name="notes"
-          v-model="notes"
+          v-model="homework.notes"
           id="notes"
           placeholder="Add your notes"
         ></textarea>
@@ -164,7 +147,7 @@ async function addExam() {
             :style="`border-color: ${color}`"
             type="submit"
           >
-            Add
+            Edit
           </button>
         </div>
       </form>

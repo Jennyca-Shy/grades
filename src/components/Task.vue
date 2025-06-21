@@ -1,11 +1,11 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 const props = defineProps({
-  subject: String,
-  task: String,
-  date: String,
-  color: String,
-  exam: Boolean,
+  //   subject: String,
+  //   task: String,
+  //   date: String,
+  //   color: String,
+  //   exam: Boolean,
   id: String,
 });
 

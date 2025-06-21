@@ -1,6 +1,6 @@
 <script setup>
-import Task from '../Task.vue';
 import { useToast } from 'vue-toastification';
+import Homework from '../Homework.vue';
 
 const props = defineProps({
   title: String,
@@ -29,13 +29,17 @@ function finishedHomework() {
 function errorMessage() {
   toast.error('Ups, something went wrong');
 }
+
+function editedHomework() {
+  toast.success('Edited homework!');
+}
 </script>
 
 <template>
   <button
     @click="select"
     :class="[
-      `hover:bg-newBlue hover:text-white mr-1 flex justify-between items-center rounded-md mt-2 p-2 cursor-pointer`,
+      `hover:bg-newBlue hover:text-white flex justify-between items-center rounded-md mt-2 p-2 cursor-pointer`,
       title === active ? 'bg-newBlue text-white' : 'bg-gray-100',
     ]"
   >
@@ -47,16 +51,17 @@ function errorMessage() {
     <div v-else class="pi pi-minus mr-1"></div>
   </button>
   <div class="grid grid-flow-row grid-cols-2 gap-2 mt-1 mr-1" v-if="active == title">
-    <Task
+    <Homework
       v-for="elem in props.input"
-      :subject="elem.subject.name"
-      :task="elem.title"
-      :date="elem.dueDate"
-      :color="elem.subject.color"
-      :exam="false"
-      :id="elem._id"
+      :homework="elem"
       @finished="finishedHomework"
       @error="errorMessage"
+      @updated="
+        () => {
+          editedHomework();
+          emit('updated');
+        }
+      "
     />
   </div>
 </template>

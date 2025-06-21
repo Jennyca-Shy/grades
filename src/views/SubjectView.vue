@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue';
 import EditSubjectModal from '@/components/Modal/EditSubjectModal.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
-import Task from '@/components/Task.vue';
-import Grade from '@/components/Subject/Grade.vue';
+import AddExamsModal from '@/components/Modal/AddExamsModal.vue';
+import Exam from '@/components/Exam.vue';
+import Homework from '@/components/Homework.vue';
 import { useRoute, RouterLink } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
-const editOpen = ref(false);
+const editSubjectOpen = ref(false);
+const addExamsOpen = ref(false);
 const addHomeworkOpen = ref(false);
 
 //Get homework and subject via api
@@ -27,21 +29,49 @@ async function getSubject() {
 let dueHomework = ref([]);
 let overdueHomework = ref([]);
 let finishedHomework = ref([]);
+let today = new Date().setHours(0, 0, 0, 0);
 async function getHomework() {
   const response = await fetch('http://localhost:3000/homework');
   let data = await response.json();
 
   dueHomework.value = data.filter((hw) => {
-    return hw.subject && hw.subject._id === id && hw.status === 'due';
+    return (
+      hw.subject &&
+      hw.subject._id === id &&
+      hw.status != 'finished' &&
+      new Date(hw.dueDate) >= today
+    );
   });
 
   overdueHomework.value = data.filter((hw) => {
-    return hw.subject && hw.subject._id === id && hw.status === 'overdue';
+    return (
+      hw.subject && hw.subject._id === id && hw.status != 'finished' && new Date(hw.dueDate) < today
+    );
   });
 
   finishedHomework.value = data.filter((hw) => {
     return hw.subject && hw.subject._id === id && hw.status === 'finished';
   });
+}
+
+let upcomingExams = ref([]);
+let pastExams = ref([]);
+async function getExams() {
+  const response = await fetch('http://localhost:3000/grade');
+  const data = await response.json();
+  upcomingExams.value = data.filter((exam) => {
+    return exam.subject._id === id && new Date(exam.date) >= today && exam.result === '';
+  });
+
+  pastExams.value = data.filter((exam) => {
+    return (
+      (exam.subject._id === id && new Date(exam.date) < today) ||
+      (exam.subject._id === id && exam.result != '')
+    );
+  });
+
+  console.log('upcoming: ', upcomingExams);
+  console.log('past: ', pastExams);
 }
 
 // async function getOverdueHomework() {
@@ -69,6 +99,7 @@ async function getHomework() {
 //Navbar for homework
 
 let activeNavHw = ref('due');
+let activeNavExam = ref('upcoming');
 
 let toast = useToast();
 function updateView(title) {
@@ -83,16 +114,24 @@ function updateView(title) {
 function addedHomeworkToast() {
   toast.success('Added homework... more work to do');
 }
+function addedExamToast() {
+  toast.success('Added exam. Now go and learn for that!');
+}
+function editedHomework() {
+  getHomework();
+  toast.success('Edited homework!');
+}
 
 onMounted(() => {
   getSubject();
   getHomework();
+  getExams();
 });
 </script>
 
 <template>
   <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2 flex flex-col">
-    <div class="p-4 bg-white rounded-md">
+    <div class="p-2 bg-white rounded-md">
       <div class="flex justify-between">
         <ol class="flex">
           <li class="flex items-center mr-2">
@@ -111,7 +150,7 @@ onMounted(() => {
           <div class="">Room: {{ subject?.room }}</div>
           <div class="">Teacher: {{ subject?.teacher }}</div>
           <button
-            @click="editOpen = true"
+            @click="editSubjectOpen = true"
             class="mr-1 px-1 border-2 rounded-md"
             :style="`border-color: ${subject?.color}`"
           >
@@ -119,10 +158,10 @@ onMounted(() => {
           </button>
         </div>
         <EditSubjectModal
-          v-if="editOpen"
+          v-if="editSubjectOpen"
           @close="
             () => {
-              editOpen = false;
+              editSubjectOpen = false;
               getSubject();
               getHomework();
             }
@@ -134,13 +173,10 @@ onMounted(() => {
     <div class="grid grid-cols-2 grid-rows-2 mt-3 gap-2 flex-1 overflowy-scrolly">
       <div class="bg-white rounded-md p-2 overflowy-scrolly">
         <h1>
-          Grades
+          Exams
           <hr :style="`background-color: ${subject?.color};`" />
         </h1>
-        <div class="mt-2 pb-2 space-y-2 flex-1">
-          <Grade subject="Mathe" title="Erste Ableitung" date="30.05.2025" grade="14/15" />
-          <Grade subject="Mathe" title="Zweite Ableitung" date="30.05.2025" />
-        </div>
+        <div class="mt-2 pb-2 space-y-2 flex-1">Exams?</div>
       </div>
       <div class="bg-white rounded-md p-2 flex flex-col">
         <div class="mb-2 flex justify-between">
@@ -149,13 +185,6 @@ onMounted(() => {
             <hr :style="`background-color: ${subject?.color};`" />
           </h1>
           <div class="flex">
-            <button
-              class="px-1 border-2 rounded-md mr-4"
-              :style="`border-color: ${subject?.color}`"
-              @click="addHomeworkOpen = true"
-            >
-              Add
-            </button>
             <AddHomeworkModal
               v-if="addHomeworkOpen"
               @close="addHomeworkOpen = false"
@@ -210,49 +239,44 @@ onMounted(() => {
                 >Finished ({{ finishedHomework.length }})</a
               >
             </nav>
+
+            <button
+              class="px-1 border-2 rounded-md ml-4"
+              :style="`border-color: ${subject?.color}`"
+              @click="addHomeworkOpen = true"
+            >
+              Add
+            </button>
           </div>
         </div>
         <!-- Homework tasks -->
         <div v-if="activeNavHw === 'overdue'" class="space-y-2 overflowy-scrolly">
-          <Task
+          <Homework
             v-if="overdueHomework.length > 0"
             v-for="hw in overdueHomework"
-            :subject="hw.subject.name"
-            :task="hw.title"
-            :date="hw.dueDate"
-            :color="hw.subject.color"
-            :exam="false"
-            :id="hw._id"
+            :homework="hw"
             @finished="updateView"
+            @updated="editedHomework()"
           />
           <div v-else class="">Pheew, no overdue homework...yet</div>
         </div>
         <div v-if="activeNavHw === 'due'" class="space-y-2 overflowy-scrolly">
-          <Task
+          <Homework
             v-if="dueHomework.length > 0"
             v-for="hw in dueHomework"
-            :subject="hw.subject.name"
-            :task="hw.title"
-            :date="hw.dueDate"
-            :color="hw.subject.color"
-            :exam="false"
-            :id="hw._id"
+            :homework="hw"
             @finished="updateView"
+            @updated="editedHomework()"
           />
           <div v-else class="">Wohoo, nothing to do...yet</div>
         </div>
-
         <div v-if="activeNavHw === 'finished'" class="space-y-2 overflowy-scrolly">
-          <Task
+          <Homework
             v-if="finishedHomework.length > 0"
             v-for="hw in finishedHomework"
-            :subject="hw.subject.name"
-            :task="hw.title"
-            :date="hw.dueDate"
-            :color="hw.subject.color"
-            :exam="false"
-            :id="hw._id"
+            :homework="hw"
             @finished="updateView('finished')"
+            @updated="editedHomework()"
           />
           <div v-else class="">Hmm, no finished homework?</div>
         </div>
@@ -264,49 +288,79 @@ onMounted(() => {
             <hr :style="`background-color: ${subject?.color};`" />
           </h1>
           <div class="flex">
-            <button
-              class="px-1 border-2 rounded-md mr-4"
-              :style="`border-color: ${subject?.color}`"
-              @click="addHomeworkOpen = true"
-            >
-              Add
-            </button>
+            <AddExamsModal
+              v-if="addExamsOpen"
+              @close="addExamsOpen = false"
+              @added="
+                () => {
+                  addedExamToast();
+                  getExams();
+                }
+              "
+              :color="subject?.color"
+              :subject="subject"
+            />
             <!-- Exams navbar -->
             <nav
               class="flex gap-x-2 border-b justify-end"
               :style="`border-color: ${subject?.color};`"
             >
               <a
-                @click="activeNavHw = 'overdue'"
+                @click="activeNavExam = 'upcoming'"
                 :class="[
                   'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
                   activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
                 ]"
-                :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${subject?.color}`};
+                :style="`border-bottom-color: ${activeNavExam === 'upcoming' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-                >Upcoming ({{ overdueHomework.length }})</a
+                >Upcoming ({{ upcomingExams.length }})</a
               >
               <a
-                @click="activeNavHwHw = 'due'"
+                @click="activeNavExam = 'past'"
                 :class="[
                   'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-                  activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
+                  activeNavExam === 'due' ? 'bg-white' : 'bg-gray-100',
                 ]"
-                :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${subject?.color}`};
+                :style="`border-bottom-color: ${activeNavExam === 'past' ? '#FFFFFF' : `${subject?.color}`};
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-                >Due ({{ dueHomework.length }})</a
+                >Past ({{ pastExams.length }})</a
               >
             </nav>
+
+            <button
+              class="px-1 border-2 rounded-md ml-4"
+              :style="`border-color: ${subject?.color}`"
+              @click="addExamsOpen = true"
+            >
+              Add
+            </button>
           </div>
         </div>
 
         <!-- Exams -->
-        <div class="space-y-2 overflowy-scrolly">
-          <div class="">Pheew, no overdue homework...yet</div>
+        <div v-if="activeNavExam === 'upcoming'" class="space-y-2 overflowy-scrolly">
+          <Exam
+            v-if="upcomingExams.length > 0"
+            v-for="exam in upcomingExams"
+            :exam="exam"
+            @finished="updateView"
+            @added="getExams"
+          />
+          <div v-else class="">Pheew, no upcoming exam...yet</div>
+        </div>
+        <div v-if="activeNavExam === 'past'" class="space-y-2 overflowy-scrolly">
+          <Exam
+            v-if="pastExams.length > 0"
+            v-for="exam in pastExams"
+            :exam="exam"
+            @finished="updateView"
+            @added="getExams"
+          />
+          <div v-else class="">Wohoo, no Exams...yet</div>
         </div>
       </div>
       <div class="bg-white rounded-md p-2 overflowy-scrolly">

@@ -9,10 +9,11 @@ POST http://localhost:3000/grade
 Content-Type: application/json
 
 {
-    "title": "Grade for maths2",
-    "date": "09.06.2025",
-    "subject": "684494dc1aa468fa5a3d454e",
-    "result": "result"
+    "title": "Einstein Physicccc",
+    "date": "2025-06-30",
+    "subject": "6843e0094372b1b6172ad37a",
+    "result": "",
+    "notes": "einsteeeeein"
 }
 
 ###
