@@ -16,7 +16,7 @@ const gradeSchema = new mongoose.Schema({
     default: Date.now,
   },
   result: {
-    type: String,
+    type: Number,
   },
   outOf: {
     type: String,

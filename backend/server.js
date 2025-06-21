@@ -27,6 +27,9 @@ app.use('/subject', subjectRouter);
 const gradeRouter = require('./routers/grade');
 app.use('/grade', gradeRouter);
 
+const scheduleRouter = require('./routers/schedule');
+app.use('/schedule', scheduleRouter);
+
 //Daily updates
 // const cron = require('node-cron');
 // const Homework = require('./models/homework');

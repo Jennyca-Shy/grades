@@ -61,7 +61,6 @@ onMounted(() => {
           v-for="subject in lkSubjects"
           :subject="subject.name"
           :teacher="subject.teacher"
-          average="14.3P"
           :color="subject.color"
           :id="subject._id"
         />
