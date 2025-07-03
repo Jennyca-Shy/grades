@@ -1,5 +1,20 @@
 <script setup>
 import ScheduleEvent from './ScheduleEvent.vue';
+import { onMounted, ref } from 'vue';
+
+//Fetch schedule
+const schedule = ref([]);
+async function getSchedule() {
+  const response = await fetch('http://localhost:3000/schedule');
+  const data = await response.json();
+
+  schedule.value = data;
+  console.log('schedule: ', schedule.value);
+}
+
+onMounted(() => {
+  getSchedule();
+});
 </script>
 <template>
   <div
@@ -20,50 +35,18 @@ import ScheduleEvent from './ScheduleEvent.vue';
     </div>
 
     <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
-    <ScheduleEvent weekday="Mon" startTime="7:45" title="Ethik" :duration="45" />
-    <ScheduleEvent weekday="Mon" startTime="8:30" title="Geographie" :duration="45" />
-    <ScheduleEvent weekday="Mon" startTime="9:15" title="Chemie" :duration="45" />
-    <ScheduleEvent weekday="Mon" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-    <ScheduleEvent weekday="Mon" startTime="10:25" title="Deutsch" :duration="90" />
-    <ScheduleEvent weekday="Mon" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-    <ScheduleEvent weekday="Mon" startTime="12:00" title="Mathe" :duration="45" />
-    <ScheduleEvent weekday="Mon" startTime="13:30" title="Sport" :duration="90" />
-
-    <ScheduleEvent weekday="Tue" startTime="8:30" title="Latein" :duration="45" />
-    <ScheduleEvent weekday="Tue" startTime="9:15" title="Pyhsik" :duration="45" />
-    <ScheduleEvent weekday="Tue" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-    <ScheduleEvent weekday="Tue" startTime="10:25" title="WR" :duration="45" />
-    <ScheduleEvent weekday="Tue" startTime="11:10" title="Mathe" :duration="45" />
-    <ScheduleEvent weekday="Tue" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-    <ScheduleEvent weekday="Tue" startTime="12:00" title="Deutsch" :duration="45" />
-    <ScheduleEvent weekday="Tue" startTime="12:45" title="Englisch" :duration="45" />
-
-    <ScheduleEvent weekday="Wed" startTime="7:45" title="Info" :duration="90" />
-    <ScheduleEvent weekday="Wed" startTime="9:15" title="WR" :duration="45" />
-    <ScheduleEvent weekday="Wed" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-    <ScheduleEvent weekday="Wed" startTime="10:25" title="PuG" :duration="45" />
-    <ScheduleEvent weekday="Wed" startTime="11:10" title="Geo" :duration="45" />
-    <ScheduleEvent weekday="Wed" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-    <ScheduleEvent weekday="Wed" startTime="12:00" title="Physik" :duration="45" />
-    <ScheduleEvent weekday="Wed" startTime="12:45" title="Ethik" :duration="45" />
-
-    <ScheduleEvent weekday="Thu" startTime="7:45" title="Englisch" :duration="45" />
-    <ScheduleEvent weekday="Thu" startTime="8:30" title="Kunst" :duration="90" />
-    <ScheduleEvent weekday="Thu" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-    <ScheduleEvent weekday="Thu" startTime="10:25" title="Latein" :duration="45" />
-    <ScheduleEvent weekday="Thu" startTime="11:10" title="Physik" :duration="45" />
-    <ScheduleEvent weekday="Thu" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-    <ScheduleEvent weekday="Thu" startTime="12:00" title="P-Seminar" :duration="90" />
-
-    <ScheduleEvent weekday="Fri" startTime="7:45" title="Mathe" :duration="45" />
-    <ScheduleEvent weekday="Fri" startTime="8:30" title="Chemie" :duration="45" />
-    <ScheduleEvent weekday="Fri" startTime="9:15" title="Englisch" :duration="45" />
-    <ScheduleEvent weekday="Fri" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-    <ScheduleEvent weekday="Fri" startTime="10:25" title="Geschichte" :duration="45" />
-    <ScheduleEvent weekday="Fri" startTime="11:10" title="PuG" :duration="45" />
-    <ScheduleEvent weekday="Fri" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-    <ScheduleEvent weekday="Fri" startTime="12:00" title="Latein" :duration="45" />
-
+    <ScheduleEvent
+      v-for="sched in schedule"
+      :id="sched._id"
+      :weekday="sched.weekday"
+      :startTime="sched.startTime"
+      :endTime="sched.endTime"
+      :subjectName="sched.subject.name"
+      :subjectColor="sched.subject.color"
+      :room="sched.subject.room"
+      :delete="true"
+      @deleted="getSchedule"
+    />
     <!-- <div class="row-start-[11] col-start-5 row-end-[29] bg-blue-300 rounded text-xs">hello</div> -->
   </div>
 </template>

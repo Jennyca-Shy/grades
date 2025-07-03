@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 router.patch('/:id', getSchedule, async (req, res) => {});
 
 //Delete one
-router.delete('single/:id', getSchedule, async (req, res) => {
+router.delete('/single/:id', getSchedule, async (req, res) => {
   try {
     await res.schedule.deleteOne();
     res.json({ message: 'schedule deleted successfully' });

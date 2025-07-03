@@ -1,6 +1,26 @@
 <script setup>
 import CircleProgressHalf from './CircleProgressHalf.vue';
 import VerticalProgressBar from './VerticalProgressBar.vue';
+import { ref, onMounted } from 'vue';
+
+let lk = ref([]);
+let gk = ref([]);
+async function getSubjects() {
+  const response = await fetch('http:localhost:3000/subject');
+  const data = await response.json();
+
+  lk = data.filter((subject) => {
+    return subject.type == 'LK';
+  });
+
+  gk = data.filter((subject) => {
+    return subject.type == 'GK';
+  });
+}
+
+onMounted(() => {
+  getSubjects();
+});
 </script>
 
 <template>

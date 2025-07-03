@@ -1,49 +1,71 @@
 <script setup>
+import { useToast } from 'vue-toastification';
+
 /*
-weekday in shortform (Mon, Tue, Wed, ...)
+weekday in longform
 startTime in hh:mm
-duration in minutes
 */
 const props = defineProps({
+  id: String,
   weekday: String,
   startTime: String,
-  duration: Number,
-  title: String,
+  endTime: String,
+  subjectName: String,
+  subjectColor: String,
   pause: {
     type: Boolean,
     default: false,
   },
   room: {
-    type: Number,
-    default: 140,
+    type: String,
+    default: '140',
+  },
+  delete: {
+    type: Boolean,
+    default: false,
   },
 });
 
 const weekDayStart = {
-  Sun: 2,
-  Mon: 3,
-  Tue: 4,
-  Wed: 5,
-  Thu: 6,
-  Fri: 7,
-  Sat: 8,
+  Sunday: 2,
+  Monday: 3,
+  Tuesday: 4,
+  Wednesday: 5,
+  Thursday: 6,
+  Friday: 7,
+  Saturday: 8,
 };
 
+const [hourEnd, minuteEnd] = props.endTime.split(':').map(Number);
 const [hour, minute] = props.startTime.split(':').map(Number);
+const duration = (hourEnd - hour) * 60 + (minuteEnd - minute);
+
 const gridRowStart = 2 + (hour - 7) * 12 + Math.floor(minute / 5);
-const gridRowSpan = Math.ceil(props.duration / 5);
+const gridRowSpan = Math.ceil(duration / 5);
 const gridColStart = weekDayStart[props.weekday];
 
 const rowStart = gridRowStart;
 const colStart = gridColStart;
 const rowEnd = gridRowSpan + gridRowStart;
 
-const endHour = hour + Math.floor((minute + props.duration) / 60);
-let endMinute = (minute + props.duration) % 60;
-if (endMinute == 0) {
-  endMinute = '00';
+console.log('Subject name: ', props.subjectName);
+console.log('ID: ', props.id);
+
+const emit = defineEmits(['deleted']);
+
+const toast = useToast();
+async function deleteEvent() {
+  const response = await fetch(`http://localhost:3000/schedule/single/${props.id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    console.error('Something went wrong');
+  } else {
+    toast.success('Deleted');
+    emit('deleted');
+  }
 }
-const endTime = props.startTime + '-' + endHour + ':' + endMinute;
 </script>
 
 <template>
@@ -51,10 +73,24 @@ const endTime = props.startTime + '-' + endHour + ':' + endMinute;
     class="p-px"
     :style="`grid-row-start: ${rowStart}; grid-row-end: ${rowEnd}; grid-column-start:${colStart};`"
   >
-    <div v-if="!pause" class="bg-blue-300 rounded size-full text-left px-1 text-sm">
-      <time class="text-xs font-normal leading-none text-gray-700">{{ endTime }}</time>
+    <div
+      v-if="!pause"
+      class="rounded size-full text-left px-1 text-sm"
+      :style="`background-color: ${subjectColor}`"
+    >
+      <div class="flex items-center justify-between">
+        <time class="text-xs font-normal leading-none text-gray-700"
+          >{{ props.startTime }} - {{ props.endTime }}</time
+        >
+
+        <div class="text-red-700 font-bold cursor-pointer" v-if="delete" @click="deleteEvent">
+          x
+        </div>
+      </div>
       <div class="flex justify-between items-center">
-        <h3 class="">{{ title }}</h3>
+        <h3 class="font-semibold">
+          {{ props.subjectName.slice(0, 3).toUpperCase() }}
+        </h3>
         <p class="text-xs text-gray-700">{{ room }}</p>
       </div>
     </div>

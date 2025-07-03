@@ -1,6 +1,7 @@
 <script setup>
 import ScheduleEvent from './ScheduleEvent.vue';
 import { ref, onMounted, computed } from 'vue';
+import { useToast } from 'vue-toastification';
 
 //Subject dropdown
 //selectedSubject -> Subject object
@@ -10,12 +11,7 @@ async function getSubjects() {
   const data = await response.json();
 
   subjects.value = data;
-  console.log('Subjects: ', subjects);
 }
-
-onMounted(() => {
-  getSubjects();
-});
 
 const selectedSubject = ref('');
 let selectedSubjectName = ref('');
@@ -47,7 +43,7 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 function toggleDropdownVisibleDay() {
   dropdownVisibleDay.value = !dropdownVisibleDay.value;
-  selectedSubject.value = '';
+  selectedDay.value = '';
 }
 
 function selectDay(day) {
@@ -66,6 +62,81 @@ for (let i = 7; i < 17; i++) {
 for (let i = 0; i < 60; i += 5) {
   minutes.push(i);
 }
+
+//Select variables
+const hourStart = ref('7');
+const minuteStart = ref('0');
+const hourEnd = ref('7');
+const minuteEnd = ref('0');
+
+//Fetch schedule
+const schedule = ref([]);
+async function getSchedule() {
+  const response = await fetch('http://localhost:3000/schedule');
+  const data = await response.json();
+
+  schedule.value = data;
+  console.log('schedule: ', schedule.value);
+}
+
+const toast = useToast();
+
+//Add schedule
+function toMinutes(time) {
+  const [hour, minute] = time.split(':').map(Number);
+  return hour * 60 + minute;
+}
+
+function overlapping(aStart, aEnd, bStart, bEnd) {
+  return Math.max(aStart, bStart) > Math.min(aEnd, bEnd);
+}
+function allowed(newStart, newEnd, day) {
+  const newStartMin = toMinutes(newStart);
+  const newEndMin = toMinutes(newEnd);
+
+  return !schedule.value.some((sched) => {
+    if (sched.weekday !== day) return false;
+
+    const existingStart = toMinutes(sched.startTime);
+    const existingEnd = toMinutes(sched.endTime);
+
+    return overlapping(newStartMin, newEndMin, existingStart, existingEnd);
+  });
+}
+async function addSchedule() {
+  console.log('hourStart: ', hourStart.value);
+  const selectStartTime = hourStart.value + ':' + minuteStart.value;
+  const selectEndTime = hourEnd.value + ':' + minuteEnd.value;
+  if (!allowed(selectStartTime, selectEndTime, selectedDay)) {
+    toast.error("Schedules can't overlap!");
+    return 0;
+  }
+  const response = await fetch('http://localhost:3000/schedule', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      weekday: selectedDay.value,
+      subject: selectedSubject.value,
+      startTime: selectStartTime,
+      endTime: selectEndTime,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Fehler beim Hinzufügen: ', errorText);
+  } else {
+    getSchedule();
+    toast.success('Added to schedule!');
+  }
+}
+
+onMounted(() => {
+  getSubjects();
+  getSchedule();
+});
 </script>
 <template>
   <div class="grid grid-cols-4 h-full flex-1 overflowy-scrolly">
@@ -87,55 +158,24 @@ for (let i = 0; i < 60; i += 5) {
       </div>
 
       <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
-      <ScheduleEvent weekday="Mon" startTime="7:45" title="Ethik" :duration="45" />
-      <ScheduleEvent weekday="Mon" startTime="8:30" title="Geographie" :duration="45" />
-      <ScheduleEvent weekday="Mon" startTime="9:15" title="Chemie" :duration="45" />
-      <ScheduleEvent weekday="Mon" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-      <ScheduleEvent weekday="Mon" startTime="10:25" title="Deutsch" :duration="90" />
-      <ScheduleEvent weekday="Mon" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-      <ScheduleEvent weekday="Mon" startTime="12:00" title="Mathe" :duration="45" />
-      <ScheduleEvent weekday="Mon" startTime="13:30" title="Sport" :duration="90" />
-
-      <ScheduleEvent weekday="Tue" startTime="8:30" title="Latein" :duration="45" />
-      <ScheduleEvent weekday="Tue" startTime="9:15" title="Pyhsik" :duration="45" />
-      <ScheduleEvent weekday="Tue" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-      <ScheduleEvent weekday="Tue" startTime="10:25" title="WR" :duration="45" />
-      <ScheduleEvent weekday="Tue" startTime="11:10" title="Mathe" :duration="45" />
-      <ScheduleEvent weekday="Tue" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-      <ScheduleEvent weekday="Tue" startTime="12:00" title="Deutsch" :duration="45" />
-      <ScheduleEvent weekday="Tue" startTime="12:45" title="Englisch" :duration="45" />
-
-      <ScheduleEvent weekday="Wed" startTime="7:45" title="Info" :duration="90" />
-      <ScheduleEvent weekday="Wed" startTime="9:15" title="WR" :duration="45" />
-      <ScheduleEvent weekday="Wed" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-      <ScheduleEvent weekday="Wed" startTime="10:25" title="PuG" :duration="45" />
-      <ScheduleEvent weekday="Wed" startTime="11:10" title="Geo" :duration="45" />
-      <ScheduleEvent weekday="Wed" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-      <ScheduleEvent weekday="Wed" startTime="12:00" title="Physik" :duration="45" />
-      <ScheduleEvent weekday="Wed" startTime="12:45" title="Ethik" :duration="45" />
-
-      <ScheduleEvent weekday="Thu" startTime="7:45" title="Englisch" :duration="45" />
-      <ScheduleEvent weekday="Thu" startTime="8:30" title="Kunst" :duration="90" />
-      <ScheduleEvent weekday="Thu" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-      <ScheduleEvent weekday="Thu" startTime="10:25" title="Latein" :duration="45" />
-      <ScheduleEvent weekday="Thu" startTime="11:10" title="Physik" :duration="45" />
-      <ScheduleEvent weekday="Thu" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-      <ScheduleEvent weekday="Thu" startTime="12:00" title="P-Seminar" :duration="90" />
-
-      <ScheduleEvent weekday="Fri" startTime="7:45" title="Mathe" :duration="45" />
-      <ScheduleEvent weekday="Fri" startTime="8:30" title="Chemie" :duration="45" />
-      <ScheduleEvent weekday="Fri" startTime="9:15" title="Englisch" :duration="45" />
-      <ScheduleEvent weekday="Fri" startTime="10:00" title="Pause" :duration="25" :pause="true" />
-      <ScheduleEvent weekday="Fri" startTime="10:25" title="Geschichte" :duration="45" />
-      <ScheduleEvent weekday="Fri" startTime="11:10" title="PuG" :duration="45" />
-      <ScheduleEvent weekday="Fri" startTime="11:55" title="Pause" :duration="5" :pause="true" />
-      <ScheduleEvent weekday="Fri" startTime="12:00" title="Latein" :duration="45" />
+      <ScheduleEvent
+        v-for="sched in schedule"
+        :id="sched._id"
+        :weekday="sched.weekday"
+        :startTime="sched.startTime"
+        :endTime="sched.endTime"
+        :subjectName="sched.subject.name"
+        :subjectColor="sched.subject.color"
+        :room="sched.subject.room"
+        :delete="true"
+        @deleted="getSchedule"
+      />
 
       <!-- <div class="row-start-[11] col-start-5 row-end-[29] bg-blue-300 rounded text-xs">hello</div> -->
     </div>
     <div class="col-span-1 p-2">
       <div class="mx-2 text-lg font-semibold">Add Schedule</div>
-      <form @submit.prevent="editExam" class="mt-4 mx-2 text-sm flex flex-col w-full">
+      <form @submit.prevent="addSchedule" class="mt-4 mx-2 text-sm flex flex-col w-full">
         <div class="relative mb-2">
           <div class="flex items-center justify-center relative">
             <div class="pi pi-search absolute right-3 top-1/4"></div>
@@ -191,21 +231,25 @@ for (let i = 0; i < 60; i += 5) {
         </div>
         <div for="hours">Start time:</div>
         <div class="flex gap-1">
-          <select name="startHours" id="startHours">
-            <option v-for="hour in hours" :value="hour">{{ hour }}</option>
+          <select name="startHours" id="startHours" v-model="hourStart">
+            <option v-for="hour in hours" :value="hour" :key="hour">{{ hour }}</option>
           </select>
-          <select name="startMinutes" id="startMinutes">
-            <option v-for="minute in minutes" :value="minute">{{ minute }}</option>
+          <select name="startMinutes" id="startMinutes" v-model="minuteStart">
+            <option v-for="minute in minutes" :value="minute" :key="minute">
+              {{ minute }}
+            </option>
           </select>
         </div>
 
         <div for="hours">End time:</div>
         <div class="flex gap-1">
-          <select name="endHours" id="endHours">
-            <option v-for="hour in hours" :value="hour">{{ hour }}</option>
+          <select name="endHours" id="endHours" v-model="hourEnd">
+            <option v-for="hour in hours" :value="hour" :key="hour">{{ hour }}</option>
           </select>
-          <select name="endMinutes" id="endMinutes">
-            <option v-for="minute in minutes" :value="minute">{{ minute }}</option>
+          <select name="endMinutes" id="endMinutes" v-model="minuteEnd">
+            <option v-for="minute in minutes" :value="minute" :key="minute">
+              {{ minute }}
+            </option>
           </select>
         </div>
 

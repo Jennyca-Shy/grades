@@ -6,8 +6,12 @@ POST http://localhost:3000/schedule
 Content-Type: application/json
 
 {
-    "weekday": "Monday",
-    "subject": "6843df34cfc1de52fa1ed2e6",
+    "weekday": "Tuesday",
+    "subject": "6843e0094372b1b6172ad37a",
     "startTime": "7:45",
     "endTime": "8:30"
 }
+
+###
+
+DELETE http://localhost:3000/schedule/single/6856f5c4d16dc5e1dd8c9657
