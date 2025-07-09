@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
+import { useToast } from 'vue-toastification';
 
 const props = defineProps({
   homework: Object,
@@ -75,6 +76,28 @@ async function editHomework() {
   } else {
     emit('updated');
     closeModal();
+    toast.info('Edited homework!');
+  }
+}
+
+//Delete homework
+function confirmDelete() {
+  if (confirm('Do you really want to delete this homework? This action CAN NOT be reversed!')) {
+    deleteHomework();
+  }
+}
+
+const toast = useToast();
+async function deleteHomework() {
+  const response = await fetch(`http://localhost:3000/homework/single/${props.homework._id}`, {
+    method: 'DELETE',
+  });
+  if (response.ok) {
+    toast.success('Successfully deleted the homework');
+    emit('updated');
+    emit('close');
+  } else {
+    toast.warning('Something went wrong');
   }
 }
 </script>
@@ -141,7 +164,14 @@ async function editHomework() {
           placeholder="Add your notes"
         ></textarea>
 
-        <div class="flex justify-end">
+        <div class="flex justify-between">
+          <button
+            type="button"
+            @click="confirmDelete"
+            class="px-1 border-2 rounded-md border-red-600 hover:text-white hover:bg-red-600"
+          >
+            Delete
+          </button>
           <button
             class="ml-auto px-1 border-2 rounded-md"
             :style="`border-color: ${color}`"

@@ -79,7 +79,7 @@ async function finishHomework() {
 //   }
 // }
 
-const emit = defineEmits(['finished', 'error']);
+const emit = defineEmits(['finished', 'error', 'updated']);
 async function finishHW() {
   try {
     await finishHomework();

@@ -118,10 +118,10 @@ function addedHomeworkToast() {
 function addedExamToast() {
   toast.success('Added exam. Now go and learn for that!');
 }
-function editedHomework() {
-  getHomework();
+/*function editedHomework() {
+  //getHomework();
   toast.success('Edited homework!');
-}
+}*/
 
 //Notes
 let editableNotes = ref(false);
@@ -285,7 +285,7 @@ onMounted(() => {
             v-for="hw in overdueHomework"
             :homework="hw"
             @finished="updateView"
-            @updated="editedHomework()"
+            @updated="getHomework()"
           />
           <div v-else class="">Pheew, no overdue homework...yet</div>
         </div>
@@ -295,7 +295,7 @@ onMounted(() => {
             v-for="hw in dueHomework"
             :homework="hw"
             @finished="updateView"
-            @updated="editedHomework()"
+            @updated="getHomework()"
           />
           <div v-else class="">Wohoo, nothing to do...yet</div>
         </div>
@@ -305,7 +305,7 @@ onMounted(() => {
             v-for="hw in finishedHomework"
             :homework="hw"
             @finished="updateView('finished')"
-            @updated="editedHomework()"
+            @updated="getHomework()"
           />
           <div v-else class="">Hmm, no finished homework?</div>
         </div>
