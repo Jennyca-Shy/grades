@@ -65,7 +65,7 @@ router.patch('/:id', getGrade, async (req, res) => {
 });
 
 //Delete one
-router.delete('single/:id', getGrade, async (req, res) => {
+router.delete('/single/:id', getGrade, async (req, res) => {
   try {
     await res.grade.deleteOne();
     res.json({ message: 'grade deleted successfully' });

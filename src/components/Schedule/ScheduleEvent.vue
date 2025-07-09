@@ -20,7 +20,7 @@ const props = defineProps({
     type: String,
     default: '140',
   },
-  delete: {
+  del: {
     type: Boolean,
     default: false,
   },
@@ -79,13 +79,11 @@ async function deleteEvent() {
       :style="`background-color: ${subjectColor}`"
     >
       <div class="flex items-center justify-between">
-        <time class="text-xs font-normal leading-none text-gray-700"
+        <time class="text-xs font-normal text-gray-700 mt-1"
           >{{ props.startTime }} - {{ props.endTime }}</time
         >
 
-        <div class="text-red-700 font-bold cursor-pointer" v-if="delete" @click="deleteEvent">
-          x
-        </div>
+        <div class="text-red-700 font-bold cursor-pointer" v-if="del" @click="deleteEvent">x</div>
       </div>
       <div class="flex justify-between items-center">
         <h3 class="font-semibold">

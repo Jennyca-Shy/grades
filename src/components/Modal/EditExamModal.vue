@@ -15,7 +15,7 @@ const result = ref(props.exam.result);
 
 console.log(formattedDate);
 
-const emit = defineEmits(['close', 'added']);
+const emit = defineEmits(['close', 'added', 'deleted']);
 function closeModal() {
   emit('close');
 }
@@ -98,11 +98,12 @@ function confirmDelete() {
 
 const toast = useToast();
 async function deleteSubject() {
-  const response = await fetch(`http://localhost:3000/grade/single/${exam_id}`, {
+  const response = await fetch(`http://localhost:3000/grade/single/${props.exam._id}`, {
     method: 'DELETE',
   });
   if (response.ok) {
     toast.success('Successfully deleted the exam');
+    emit('added');
   } else {
     toast.warning('Something went wrong');
   }
@@ -184,6 +185,7 @@ async function deleteSubject() {
 
         <div class="flex justify-between">
           <button
+            type="button"
             @click="confirmDelete"
             class="px-1 border-2 rounded-md border-red-600 hover:text-white hover:bg-red-600"
           >

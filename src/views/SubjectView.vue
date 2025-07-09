@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { nextTick } from 'vue';
 import EditSubjectModal from '@/components/Modal/EditSubjectModal.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 import AddExamsModal from '@/components/Modal/AddExamsModal.vue';
@@ -60,13 +61,13 @@ async function getExams() {
   const response = await fetch('http://localhost:3000/grade');
   const data = await response.json();
   upcomingExams.value = data.filter((exam) => {
-    return exam.subject._id === id && new Date(exam.date) >= today && exam.result === '';
+    return exam.subject._id === id && new Date(exam.date) >= today && exam.result === null;
   });
 
   pastExams.value = data.filter((exam) => {
     return (
       (exam.subject._id === id && new Date(exam.date) < today) ||
-      (exam.subject._id === id && exam.result != '')
+      (exam.subject._id === id && exam.result != null)
     );
   });
 
@@ -122,6 +123,38 @@ function editedHomework() {
   toast.success('Edited homework!');
 }
 
+//Notes
+let editableNotes = ref(false);
+const newNotes = ref('');
+
+async function changeEditable() {
+  editableNotes.value = !editableNotes.value;
+  if (editableNotes.value) {
+    newNotes.value = subject.value?.notes || '';
+    console.log('New notes: ', newNotes);
+    nextTick(() => {
+      document.getElementById('notesEdit')?.focus();
+    });
+  } else {
+    const response = await fetch(`http://localhost:3000/subject/${subject.value._id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        notes: newNotes.value,
+      }),
+    });
+    if (response.ok) {
+      getSubject();
+    } else {
+      const data = await response.json();
+      console.log(data.message);
+      alert('Something went wrong!!!');
+    }
+  }
+}
+
 onMounted(() => {
   getSubject();
   getHomework();
@@ -131,6 +164,7 @@ onMounted(() => {
 
 <template>
   <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2 flex flex-col">
+    <!-- Header with subject, room and teacher -->
     <div class="p-2 bg-white rounded-md">
       <div class="flex justify-between">
         <ol class="flex">
@@ -170,14 +204,9 @@ onMounted(() => {
         />
       </div>
     </div>
+    <!-- Main part -->
     <div class="grid grid-cols-2 grid-rows-2 mt-3 gap-2 flex-1 overflowy-scrolly">
-      <div class="bg-white rounded-md p-2 overflowy-scrolly">
-        <h1>
-          Exams
-          <hr :style="`background-color: ${subject?.color};`" />
-        </h1>
-        <div class="mt-2 pb-2 space-y-2 flex-1">Exams?</div>
-      </div>
+      <!-- Top left: Homework -->
       <div class="bg-white rounded-md p-2 flex flex-col">
         <div class="mb-2 flex justify-between">
           <h1>
@@ -281,6 +310,7 @@ onMounted(() => {
           <div v-else class="">Hmm, no finished homework?</div>
         </div>
       </div>
+      <!-- Tope right: Exams -->
       <div class="bg-white rounded-md p-2 overflowy-scrolly">
         <div class="mb-2 flex justify-between">
           <h1>
@@ -363,13 +393,43 @@ onMounted(() => {
           <div v-else class="">Wohoo, no Exams...yet</div>
         </div>
       </div>
+      <!-- Bottom left: Placeholder -->
       <div class="bg-white rounded-md p-2 overflowy-scrolly">
         <h1>
-          Notes:
+          Exams
           <hr :style="`background-color: ${subject?.color};`" />
         </h1>
-        <div class="mt-2">
-          {{ subject?.notes || 'No notes yet...' }}
+        <div class="mt-2 pb-2 space-y-2 flex-1">Exams?</div>
+      </div>
+      <!-- Bottom right: Notes -->
+      <div class="bg-white rounded-md p-2 overflowy-scrolly flex flex-col">
+        <div class="flex justify-between">
+          <h1>
+            Notes:
+            <hr :style="`background-color: ${subject?.color};`" />
+          </h1>
+
+          <button
+            class="px-1 border-2 rounded-md ml-4"
+            :style="`border-color: ${subject?.color}`"
+            @click="changeEditable()"
+          >
+            {{ editableNotes ? 'Save' : 'Edit' }}
+          </button>
+        </div>
+
+        <div id="notes" class="whitespace-pre-wrap h-full">
+          <p v-if="!editableNotes" class="mt-2 h-full">{{ subject?.notes || 'No notes yet...' }}</p>
+          <textarea
+            v-else
+            name="notesEdit"
+            id="notesEdit"
+            class="bg-gray-100 h-full"
+            v-model="newNotes"
+          >
+            {{ newNotes }}
+            </textarea
+          >
         </div>
       </div>
     </div>

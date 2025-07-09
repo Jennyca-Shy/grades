@@ -62,12 +62,14 @@ for (let i = 7; i < 17; i++) {
 for (let i = 0; i < 60; i += 5) {
   minutes.push(i);
 }
+minutes[0] = '00';
+minutes[1] = '05';
 
 //Select variables
 const hourStart = ref('7');
-const minuteStart = ref('0');
+const minuteStart = ref('00');
 const hourEnd = ref('7');
-const minuteEnd = ref('0');
+const minuteEnd = ref('00');
 
 //Fetch schedule
 const schedule = ref([]);
@@ -88,7 +90,8 @@ function toMinutes(time) {
 }
 
 function overlapping(aStart, aEnd, bStart, bEnd) {
-  return Math.max(aStart, bStart) > Math.min(aEnd, bEnd);
+  //return Math.max(aStart, bStart) > Math.min(aEnd, bEnd);
+  return (bStart <= aEnd && bStart >= aStart) || (bEnd <= aEnd && bEnd >= aStart);
 }
 function allowed(newStart, newEnd, day) {
   const newStartMin = toMinutes(newStart);
@@ -109,6 +112,10 @@ async function addSchedule() {
   const selectEndTime = hourEnd.value + ':' + minuteEnd.value;
   if (!allowed(selectStartTime, selectEndTime, selectedDay)) {
     toast.error("Schedules can't overlap!");
+    return 0;
+  }
+  if (toMinutes(selectStartTime) > toMinutes(selectEndTime)) {
+    toast.error('The end time should be after the start time!');
     return 0;
   }
   const response = await fetch('http://localhost:3000/schedule', {
@@ -167,7 +174,7 @@ onMounted(() => {
         :subjectName="sched.subject.name"
         :subjectColor="sched.subject.color"
         :room="sched.subject.room"
-        :delete="true"
+        :del="true"
         @deleted="getSchedule"
       />
 
