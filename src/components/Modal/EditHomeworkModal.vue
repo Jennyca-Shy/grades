@@ -56,6 +56,7 @@ function selectSubject(subject) {
 function toggleDropdownVisible() {
   dropdownVisible.value = !dropdownVisible.value;
   selectedSubject.value = '';
+  selectedSubjectName.value = '';
 }
 
 //Edit the homework

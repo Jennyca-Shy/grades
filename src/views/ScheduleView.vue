@@ -19,10 +19,13 @@ const activeView = ref('week');
       </div>
       <!-- Header with Date and Buttons -->
       <div class="mt-3 flex justify-between items-center mb-2">
-        <div class="flex justify-between items-center">
-          <a href=""><span class="pi pi-angle-left"></span></a>
-          <h2 class="font-semibold text-newBlue py-3 px-4">May 2025</h2>
-          <a href=""><span class="pi pi-angle-right"></span></a>
+        <!-- Month and Year -->
+        <div class="">
+          <div class="flex justify-between items-center" v-if="activeView === 'month'">
+            <a href=""><span class="pi pi-angle-left"></span></a>
+            <h2 class="font-semibold text-newBlue py-3 px-4">May 2025</h2>
+            <a href=""><span class="pi pi-angle-right"></span></a>
+          </div>
         </div>
         <div class="inline-flex rounded-lg shadow-2xs">
           <button

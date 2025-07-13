@@ -147,6 +147,7 @@ async function changeEditable() {
     });
     if (response.ok) {
       getSubject();
+      toast.success('Edited your notes!');
     } else {
       const data = await response.json();
       console.log(data.message);
@@ -399,7 +400,7 @@ onMounted(() => {
           Exams
           <hr :style="`background-color: ${subject?.color};`" />
         </h1>
-        <div class="mt-2 pb-2 space-y-2 flex-1">Exams?</div>
+        <div class="mt-2 pb-2 space-y-2 flex-1">Maybe grades for each semester?</div>
       </div>
       <!-- Bottom right: Notes -->
       <div class="bg-white rounded-md p-2 overflowy-scrolly flex flex-col">

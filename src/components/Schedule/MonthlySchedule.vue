@@ -15,7 +15,7 @@ import Appointment from './Appointment.vue';
     <div class="h-min border-b-2">Sat</div>
 
     <div
-      class="col-span-7 grid grid-cols-[repeat(7,calc(100%/7))] grid-rows-[repeat(5,calc(100%/5))] pt-3 h-full"
+      class="col-span-7 grid grid-cols-[repeat(7,calc(100%/7))] min-h-[repeat(5,calc(100%/5))] pt-3 h-full"
     >
       <div class="text-gray-400">28</div>
       <div class="text-gray-400">29</div>
@@ -44,6 +44,7 @@ import Appointment from './Appointment.vue';
       </div>
       <div class="">
         14
+        <Appointment title="Test" color="#db7d76" module="single" />
         <Appointment title="Test" color="#db7d76" module="single" />
         <Appointment title="Test" color="#c46fe3" module="single" />
       </div>

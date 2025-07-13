@@ -34,6 +34,7 @@ function selectSubject(subject) {
 function toggleDropdownVisibleSubject() {
   dropdownVisibleSubject.value = !dropdownVisibleSubject.value;
   selectedSubject.value = '';
+  selectedSubjectName.value = '';
 }
 
 //Dropdown days

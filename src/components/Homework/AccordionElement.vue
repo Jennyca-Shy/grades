@@ -8,7 +8,7 @@ const props = defineProps({
   active: String,
 });
 
-const emit = defineEmits(['select', 'update']);
+const emit = defineEmits(['select', 'updated']);
 function select() {
   if (props.active == props.title) {
     emit('select', 'none');
@@ -23,7 +23,7 @@ const toast = useToast();
 function finishedHomework() {
   if (props.title != 'Finished') toast.success('Wohooo, finished homework!');
   else toast.info('Changed homework to due');
-  emit('update');
+  emit('updated');
 }
 
 function errorMessage() {
@@ -32,6 +32,7 @@ function errorMessage() {
 
 function editedHomework() {
   toast.success('Edited homework!');
+  emit('updated');
 }
 </script>
 
@@ -56,12 +57,7 @@ function editedHomework() {
       :homework="elem"
       @finished="finishedHomework"
       @error="errorMessage"
-      @updated="
-        () => {
-          editedHomework();
-          emit('updated');
-        }
-      "
+      @updated="editedHomework()"
     />
   </div>
 </template>

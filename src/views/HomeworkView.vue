@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AccordionElement from '@/components/Homework/AccordionElement.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 import { useToast } from 'vue-toastification';
@@ -7,79 +7,73 @@ import { useToast } from 'vue-toastification';
 let activeAccordion = ref('Today');
 const homeworkOpen = ref(false);
 
-let overdueHomework = ref([]);
-let todayHomework = ref([]);
-let tomorrowHomework = ref([]);
-let thisWeekHomework = ref([]);
-let laterHomework = ref([]);
-let finishedHomework = ref([]);
+const allHomework = ref([]);
+const today = new Date().toISOString().split('T')[0];
+let tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+tomorrow = tomorrow.toISOString().split('T')[0];
+let thisWeek = new Date();
+thisWeek.setDate(thisWeek.getDate() + 7);
+thisWeek = thisWeek.toISOString().split('T')[0];
+const splitDueOverdue = new Date().setHours(0, 0, 0, 0);
 
-async function getData() {
-  //Today and tomorrow and this week
-  const today = new Date().toISOString().split('T')[0];
-  let tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow = tomorrow.toISOString().split('T')[0];
-  let thisWeek = new Date();
-  thisWeek.setDate(thisWeek.getDate() + 7);
-  thisWeek = thisWeek.toISOString().split('T')[0];
-
-  //Fetch all homework
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-
-  if (!response.ok) console.log(response);
-
-  //Get different homework
-  const splitDueOverdue = new Date().setHours(0, 0, 0, 0);
-  overdueHomework.value = data
+let overdueHomework = computed(() => {
+  return allHomework.value
     .filter((hw) => {
       return hw.status != 'finished' && new Date(hw.dueDate) < splitDueOverdue;
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-  todayHomework.value = data.filter((hw) => {
+});
+let todayHomework = computed(() => {
+  return allHomework.value.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
     return hw.status != 'finished' && dueTo === today;
   });
-
-  tomorrowHomework.value = data.filter((hw) => {
+});
+let tomorrowHomework = computed(() => {
+  return allHomework.value.filter((hw) => {
     const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
     return hw.status != 'finished' && dueTo === tomorrow;
   });
-
-  thisWeekHomework.value = data
+});
+let thisWeekHomework = computed(() => {
+  return allHomework.value
     .filter((hw) => {
       const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
       return dueTo > tomorrow && dueTo <= thisWeek && hw.status != 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-  laterHomework.value = data
+});
+let laterHomework = computed(() => {
+  return allHomework.value
     .filter((hw) => {
       const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
       return dueTo > thisWeek && hw.status != 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-  finishedHomework.value = data
+});
+let finishedHomework = computed(() => {
+  return allHomework.value
     .filter((hw) => {
       return hw.status === 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+});
+
+async function getData() {
+  //Today and tomorrow and this week
+
+  //Fetch all homework
+  const response = await fetch('http://localhost:3000/homework');
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error(response);
+    return;
+  }
+
+  allHomework.value = data;
 }
-
-// async function updateToOverdue() {
-//   const response = await fetch('http://localhost:3000/homework/update/overdue', {
-//     method: 'PATCH',
-//   });
-
-//   if (!response.ok) {
-//     const message = await response.text();
-//     console.error('Failed to update overdue:', message);
-//     throw new Error('Update to overdue failed: ' + message);
-//   }
-// }
 
 const toast = useToast();
 function addedHomeworkToast() {

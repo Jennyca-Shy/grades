@@ -34,7 +34,7 @@ async function getExams() {
   let data = await response.json();
 
   let filtered = data.filter((exam) => {
-    return exam.result === '' && exam.date >= today;
+    return exam.result === null && exam.date >= today;
   });
 
   filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -54,9 +54,9 @@ function addedHomework() {
 function addedExam() {
   toast.success('Added exam. Now go and learn for that!');
 }
-function editExam() {
+/*function editExam() {
   toast.info('Edited Exam');
-}
+}*/
 
 onMounted(() => {
   getHomework();
@@ -125,12 +125,8 @@ onMounted(() => {
             v-if="allExam.length > 0"
             v-for="exam in allExam"
             :exam="exam"
-            @added="
-              () => {
-                getExams();
-                editExam();
-              }
-            "
+            :key="exam"
+            @added="getExams()"
           />
           <div v-else class="">Wohoo, nothing to do...yet</div>
         </div>
