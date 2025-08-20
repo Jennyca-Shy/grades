@@ -25,6 +25,7 @@ router.post('/', async (req, res) => {
     subject: req.body.subject,
     result: req.body.result,
     outOf: req.body.outOf,
+    semester: req.body.semester,
     notes: req.body.notes,
   });
   try {
@@ -54,6 +55,9 @@ router.patch('/:id', getGrade, async (req, res) => {
   }
   if (req.body.notes != null) {
     res.grade.notes = req.body.notes;
+  }
+  if (req.body.semester != null) {
+    res.grade.semester = req.body.semester;
   }
 
   try {

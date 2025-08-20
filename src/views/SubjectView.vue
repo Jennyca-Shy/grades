@@ -4,6 +4,7 @@ import { nextTick } from 'vue';
 import EditSubjectModal from '@/components/Modal/EditSubjectModal.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 import AddExamsModal from '@/components/Modal/AddExamsModal.vue';
+import Semester from '@/components/Subject/Semester.vue';
 import Exam from '@/components/Exam.vue';
 import Homework from '@/components/Homework.vue';
 import { useRoute, RouterLink } from 'vue-router';
@@ -155,6 +156,13 @@ async function changeEditable() {
     }
   }
 }
+
+//Semester overview
+const firstSemester = ref([]);
+const secondSemester = ref([]);
+const thirdSemester = ref([]);
+const fourthSemester = ref([]);
+async function getSemester() {}
 
 onMounted(() => {
   getSubject();
@@ -394,13 +402,15 @@ onMounted(() => {
           <div v-else class="">Wohoo, no Exams...yet</div>
         </div>
       </div>
-      <!-- Bottom left: Placeholder -->
+      <!-- Bottom left: Overview of grades -->
       <div class="bg-white rounded-md p-2 overflowy-scrolly">
         <h1>
-          Exams
+          Grades
           <hr :style="`background-color: ${subject?.color};`" />
         </h1>
-        <div class="mt-2 pb-2 space-y-2 flex-1">Maybe grades for each semester?</div>
+        <div class="mt-2 pb-2 space-y-1 flex-1">
+          <Semester /><Semester /><Semester /><Semester />
+        </div>
       </div>
       <!-- Bottom right: Notes -->
       <div class="bg-white rounded-md p-2 overflowy-scrolly flex flex-col">

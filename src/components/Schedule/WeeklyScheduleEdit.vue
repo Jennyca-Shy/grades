@@ -146,6 +146,7 @@ onMounted(() => {
   getSchedule();
 });
 </script>
+
 <template>
   <div class="grid grid-cols-4 h-full flex-1 overflowy-scrolly">
     <div
@@ -184,7 +185,7 @@ onMounted(() => {
     <div class="col-span-1 p-2">
       <div class="mx-2 text-lg font-semibold">Add Schedule</div>
       <form @submit.prevent="addSchedule" class="mt-4 mx-2 text-sm flex flex-col w-full">
-        <div class="relative mb-2 bg-red-300">
+        <div class="relative mb-2">
           <div class="flex items-center justify-center relative">
             <div class="pi pi-search absolute right-3 top-1/4"></div>
             <input

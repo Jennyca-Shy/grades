@@ -1,0 +1,38 @@
+GET http://localhost:3000/appointment
+
+###
+
+GET http://localhost:3000/subject
+
+###
+
+GET http://localhost:3000/homework/id/6846d9c37b61ebacb8429bc2
+
+###
+POST http://localhost:3000/appointment
+Content-Type: application/json
+
+{
+    "title": "travel 5.8",
+    "startDate": "2025-08-05",
+    "endDate": "2025-08-05",
+    "color": "#c67171",
+    "slot": 1
+}
+
+###
+PATCH http://localhost:3000/homework/684687bae2467bb7692582a5
+Content-Type: application/json
+
+{
+    "status": "due"
+}
+
+###
+DELETE http://localhost:3000/appointment/single/688f9098111f992e0a524759
+
+###
+DELETE http://localhost:3000/homework/many/6847332c9dc3396cc8c5670b
+
+###
+PATCH http://localhost:3000/homework/update/overdue

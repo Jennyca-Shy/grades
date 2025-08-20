@@ -50,9 +50,10 @@ const router = createRouter({
       component: TestView,
     },
     {
-      path: '/schedule/edit',
+      path: '/schedule/edit/:calendar',
       name: 'editSchedule',
       component: EditScheduleView,
+      props: true,
     },
     {
       path: '/:catchAll(.*)',

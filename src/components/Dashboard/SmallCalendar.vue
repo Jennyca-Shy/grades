@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import TimelineObject from './TimelineObject.vue';
 
 //listsss
@@ -24,22 +24,39 @@ let todayDate = ref(today.value.getDate());
 let firstDay = computed(() => new Date(today.value.getFullYear(), today.value.getMonth(), 1));
 let lastDay = computed(() => new Date(today.value.getFullYear(), today.value.getMonth() + 1, 0));
 let lastMonthDays = computed(() => firstDay.value.getDay());
+let lastMonthStartingDay = computed(
+  () =>
+    new Date(today.value.getFullYear(), today.value.getMonth(), 0).getDate() -
+    lastMonthDays.value +
+    1,
+);
 let nextMonthDays = computed(() => 6 - lastDay.value.getDay());
+let differenceMonth = 0;
 
 function nextMonth() {
   today.value = new Date(today.value.getFullYear(), today.value.getMonth() + 1, 4);
-  todayDate.value = -1;
+  //todayDate.value = -1;
+  differenceMonth++;
+  getLastMonthDays();
 }
 function lastMonth() {
   today.value = new Date(today.value.getFullYear(), today.value.getMonth() - 1, 4);
-  if (today.value.getMonth() === new Date().getMonth()) {
-    today.value = new Date();
-    todayDate.value = today.value.getDate();
-    console.log('Welcome back!');
-  } else {
-    todayDate.value = -1;
+  //todayDate.value = -1;
+  differenceMonth--;
+  getLastMonthDays();
+}
+
+let lastMonthList = ref([]);
+function getLastMonthDays() {
+  lastMonthList.value = [];
+  for (let i = 0; i < lastMonthDays.value; i++) {
+    lastMonthList.value.push(i + lastMonthStartingDay.value);
   }
 }
+
+onMounted(() => {
+  getLastMonthDays();
+});
 
 // console.log('First day: ', firstDay);
 // console.log('Last Day: ', lastDay);
@@ -76,10 +93,14 @@ function lastMonth() {
         <div class="text-xs">Fri</div>
         <div class="text-xs">Sat</div>
         <div class="col-span-7 grid grid-cols-7 mt-1">
-          <div v-for="lastMonth in lastMonthDays" class="text-gray-400">28</div>
+          <div v-for="day in lastMonthList" class="text-gray-400">{{ day }}</div>
           <div
             v-for="day in lastDay.getDate()"
-            :class="day === todayDate ? 'text-newWhite bg-newBlue rounded-md' : ''"
+            :class="
+              day === todayDate && differenceMonth === 0
+                ? 'text-newWhite bg-newBlue rounded-md'
+                : ''
+            "
           >
             {{ day }}
           </div>

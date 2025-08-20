@@ -13,6 +13,7 @@ Content-Type: application/json
     "date": "2025-06-30",
     "subject": "6843e0094372b1b6172ad37a",
     "result": "",
+    "semester": "12/1",
     "notes": "einsteeeeein"
 }
 

@@ -26,7 +26,7 @@ const subjectSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['LK', 'GK'],
+    enum: ['LK', 'GK', 'other'],
   },
 });
 

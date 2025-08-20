@@ -11,12 +11,12 @@ POST http://localhost:3000/subject
 Content-Type: application/json
 
 {
-    "name": "Mathssss",
-    "teacher": "Mr. Maths",
-    "room": "140",
-    "color": "#d7b1ec",
-    "notes": "new maths",
-    "type": "LK"
+    "name": "Other",
+    "teacher": "other",
+    "room": "other",
+    "color": "#808080",
+    "notes": "other",
+    "type": "other"
 }
 
 ### 

@@ -23,6 +23,11 @@ const gradeSchema = new mongoose.Schema({
     required: true,
     default: 15,
   },
+  semester: {
+    type: String,
+    required: true,
+    enum: ['12/1', '12/2', '13/1', '13/2'],
+  },
   notes: {
     type: String,
     default: '',
