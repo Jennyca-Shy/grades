@@ -33,7 +33,7 @@ textarea {
 }
 
 select {
-  @apply p-2 bg-gray-200 rounded-md border-none focus:outline-newBlue focus:bg-white block w-full mb-3;
+  @apply appearance-none p-2 bg-gray-200 rounded-md border-none focus:bg-white block w-full mb-3;
 }
 
 .custom-hover:hover {

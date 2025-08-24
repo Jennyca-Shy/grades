@@ -28,6 +28,11 @@ const gradeSchema = new mongoose.Schema({
     required: true,
     enum: ['12/1', '12/2', '13/1', '13/2'],
   },
+  type: {
+    type: String,
+    required: true,
+    enum: ['Schulaufgabe', 'Kurzarbeit', 'Stegreifaufgabe', 'Abfrage'],
+  },
   notes: {
     type: String,
     default: '',

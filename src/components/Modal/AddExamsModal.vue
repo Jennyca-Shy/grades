@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
+import { useSemesterStore } from '@/stores/semesterStore';
+import { useToast } from 'vue-toastification';
 
 const props = defineProps({
   subject: {
@@ -12,6 +14,8 @@ const props = defineProps({
     default: '#44a1a0',
   },
 });
+
+const toast = useToast();
 
 const currentSubject = ref(props.subject);
 const color = props.color;
@@ -59,7 +63,19 @@ function toggleDropdownVisible() {
   selectedSubjectName.value = '';
 }
 
-//Create new homework
+//Type of Exam
+const type = ref('Schulaufgabe');
+
+//Semester store
+const semesterStore = useSemesterStore();
+//console.log('semester store', semesterStore.currentSemester);
+
+//TOAAAAAST
+function addedExamToast() {
+  toast.success('Added exam. Now go and learn for that!');
+}
+
+//Create new exam
 const title = ref('');
 const dueDate = ref('');
 const result = ref('');
@@ -75,6 +91,8 @@ async function addExam() {
       subject: selectedSubject.value._id,
       date: dueDate.value,
       result: result.value,
+      semester: semesterStore.currentSemester,
+      type: type.value,
       notes: notes.value,
     }),
   });
@@ -85,6 +103,7 @@ async function addExam() {
   } else {
     emit('added');
     closeModal();
+    addedExamToast();
   }
 }
 </script>
@@ -135,6 +154,17 @@ async function addExam() {
           </div>
         </div>
 
+        <div class="relative w-full">
+          <select name="type" id="type" v-model="type" :style="`outline-color: ${color}`">
+            <option value="Schulaufgabe">Schulaufgabe</option>
+            <option value="Kurzarbeit">Kurzarbeit</option>
+            <option value="Stegreifaufgabe">Stegreifaufgabe</option>
+            <option value="Abfrage">Abfrage</option>
+          </select>
+          <div class="absolute inset-y-0 right-2 flex items-center mb-3">
+            <div class="pi pi-angle-down"></div>
+          </div>
+        </div>
         <input
           :style="`outline-color: ${color}`"
           id="until"

@@ -5,15 +5,20 @@ GET http://localhost:3000/grade
 GET http://localhost:3000/grade/6845da61c459203f47ec39ad
 
 ###
+
+GET http://localhost:3000/grade/subject/6843df34cfc1de52fa1ed2e6
+
+###
 POST http://localhost:3000/grade
 Content-Type: application/json
 
 {
-    "title": "Einstein Physicccc",
+    "title": "Einstein Physic",
     "date": "2025-06-30",
     "subject": "6843e0094372b1b6172ad37a",
     "result": "",
     "semester": "12/1",
+    "type": "Schulaufgabe",
     "notes": "einsteeeeein"
 }
 

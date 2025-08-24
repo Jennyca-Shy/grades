@@ -90,6 +90,8 @@ function toMinutes(time) {
   return hour * 60 + minute;
 }
 
+//doesnt work!!!
+//to-do
 function overlapping(aStart, aEnd, bStart, bEnd) {
   return Math.max(aStart, bStart) > Math.min(aEnd, bEnd);
   //return (bStart <= aEnd && bStart >= aStart) || (bEnd <= aEnd && bEnd >= aStart);

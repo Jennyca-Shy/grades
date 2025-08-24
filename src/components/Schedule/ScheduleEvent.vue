@@ -12,10 +12,6 @@ const props = defineProps({
   endTime: String,
   subjectName: String,
   subjectColor: String,
-  pause: {
-    type: Boolean,
-    default: false,
-  },
   room: {
     type: String,
     default: '140',
@@ -66,6 +62,12 @@ async function deleteEvent() {
     emit('deleted');
   }
 }
+
+let pause = false;
+if (props.subjectName == 'Break') {
+  pause = true;
+}
+console.log('Pause: ', pause);
 </script>
 
 <template>

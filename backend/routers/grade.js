@@ -17,6 +17,16 @@ router.get('/:id', getGrade, (req, res) => {
   res.send(res.grade);
 });
 
+//Get grades by subject id
+router.get('/subject/:id', async (req, res) => {
+  try {
+    const grades = await Grade.find({ subject: req.params.id }).populate('subject');
+    res.json(grades);
+  } catch (err) {
+    res.status(400).json({ message: 'Invalid subject id', error: err.message });
+  }
+});
+
 //Create one
 router.post('/', async (req, res) => {
   const grade = new Grade({
@@ -26,6 +36,7 @@ router.post('/', async (req, res) => {
     result: req.body.result,
     outOf: req.body.outOf,
     semester: req.body.semester,
+    type: req.body.type,
     notes: req.body.notes,
   });
   try {
