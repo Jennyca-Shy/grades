@@ -80,7 +80,7 @@ console.log('Pause: ', pause);
       class="rounded size-full text-left px-1 text-sm"
       :style="`background-color: ${subjectColor}`"
     >
-      <div class="flex items-center justify-between">
+      <div) class="flex items-center justify-between">
         <time class="text-xs font-normal text-gray-700 mt-1"
           >{{ props.startTime }} - {{ props.endTime }}</time
         >

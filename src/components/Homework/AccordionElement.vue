@@ -29,11 +29,6 @@ function finishedHomework() {
 function errorMessage() {
   toast.error('Ups, something went wrong');
 }
-
-function editedHomework() {
-  toast.success('Edited homework!');
-  emit('updated');
-}
 </script>
 
 <template>
@@ -57,7 +52,6 @@ function editedHomework() {
       :homework="elem"
       @finished="finishedHomework"
       @error="errorMessage"
-      @updated="editedHomework()"
     />
   </div>
 </template>
