@@ -18,7 +18,9 @@ const MONTH = [
   'Dezember',
 ];
 
-//Get first day of month
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+//Calendar logic
 let today = ref(new Date());
 let todayDate = ref(today.value.getDate());
 let firstDay = computed(() => new Date(today.value.getFullYear(), today.value.getMonth(), 1));
@@ -54,14 +56,32 @@ function getLastMonthDays() {
   }
 }
 
-onMounted(() => {
-  getLastMonthDays();
+//Display todays schedule
+let displayedDate = ref(new Date());
+let displayedDay = ref(displayedDate.value.getDay());
+console.log('Displayed Day: ', displayedDay.value);
+let schedule = ref([]);
+let displayedSchedule = computed(() => {
+  return schedule.value.filter((sched) => sched.weekday == DAYS[displayedDay.value]);
 });
 
-// console.log('First day: ', firstDay);
-// console.log('Last Day: ', lastDay);
-// console.log('First Day weekday: ', firstDay.getDate());
-// console.log('lastDay.getDay(): ', lastDay.getDate());
+console.log('displayed schedule: ', displayedSchedule.value);
+
+async function getSchedule() {
+  const response = await fetch('http://localhost:3000/schedule');
+  if (!response.ok) {
+    console.log('ERROR');
+    return;
+  }
+  const data = await response.json();
+
+  schedule.value = data;
+}
+
+onMounted(() => {
+  getLastMonthDays();
+  getSchedule();
+});
 </script>
 
 <template>
@@ -110,16 +130,18 @@ onMounted(() => {
     </section>
     <!-- Overview of the day -->
     <section class="mt-2 ml-2 flex-grow pl-1 overflowy-scrolly">
-      <ol class="relative border-s border-gray-200 mr-2">
-        <TimelineObject duration="8:30-9:15" subject="Latin" room="140" color="bg-yellow-100" />
+      <ol v-if="displayedSchedule.length > 0" class="relative border-s border-gray-200 mr-2">
+        <!-- <TimelineObject duration="8:30-9:15" subject="Latin" room="140" color="bg-yellow-100" />
         <TimelineObject duration="9:15-10:00" subject="Physics" room="026" color="bg-purple-100" />
         <TimelineObject duration="25min" color="bg-gray-200" />
         <TimelineObject duration="10:25:11:10" subject="WR" room="140" color="bg-emerald-100" />
         <TimelineObject duration="11:10-11:55" subject="Maths" room="140" color="bg-blue-100" />
         <TimelineObject duration="5min" color="bg-gray-200" />
         <TimelineObject duration="12:00-12:45" subject="German" room="140" color="bg-red-100" />
-        <TimelineObject duration="12:45-13:30" subject="English" room="140" color="bg-green-100" />
+        <TimelineObject duration="12:45-13:30" subject="English" room="140" color="bg-green-100" /> -->
+        <TimelineObject v-for="sched in displayedSchedule" :schedule="sched" />
       </ol>
+      <div v-else class="">Nothing to do today 🎉</div>
     </section>
   </div>
 </template>

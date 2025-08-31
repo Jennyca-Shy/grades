@@ -5,26 +5,34 @@ import Exam from '../Exam.vue';
 import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
 import AddExamsModal from '../Modal/AddExamsModal.vue';
 import { useToast } from 'vue-toastification';
+import { useSettingStore } from '@/stores/settingStore';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
-let allHomework = ref([]);
+let overdueHomework = ref([]);
+let dueHomework = ref([]);
+let activeNavHw = ref('due');
+
+const setting = useSettingStore();
 
 async function getHomework() {
   const today = new Date().toISOString().split('T')[0];
   const response = await fetch(`http://localhost:3000/homework`);
   let data = await response.json();
 
-  let filtered = data.filter((hw) => {
-    const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
-    return dueDate === today && hw.status === 'due';
-  });
+  overdueHomework.value = data
+    .filter((hw) => {
+      const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
+      return hw.status === 'due' && dueDate < today;
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
-  filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  allHomework.value = filtered;
-
-  console.log('All homework: ');
-  console.log(allHomework);
+  dueHomework.value = data
+    .filter((hw) => {
+      const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
+      return hw.status === 'due' && dueDate >= today;
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 }
 
 let allExam = ref([]);
@@ -79,25 +87,71 @@ onMounted(() => {
       />
       <div class="flex justify-between items-center">
         <h1 class="ml-1">
-          Todays Homework
+          Homework
           <hr class="bg-newBlue" />
         </h1>
+        <nav
+          class="flex gap-x-2 border-b justify-end"
+          :style="`border-color: ${setting.defaultColor};`"
+        >
+          <a
+            @click="activeNavHw = 'overdue'"
+            :class="[
+              'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+              activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
+            ]"
+            :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${setting.defaultColor}`};
+                border-left-color: ${setting.defaultColor};
+                border-right-color: ${setting.defaultColor};
+                border-top-color: ${setting.defaultColor};`"
+            >Overdue ({{ overdueHomework.length }})</a
+          >
+          <a
+            @click="activeNavHw = 'due'"
+            :class="[
+              'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+              activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
+            ]"
+            :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${setting.defaultColor}`};
+                border-left-color: ${setting.defaultColor};
+                border-right-color: ${setting.defaultColor};
+                border-top-color: ${setting.defaultColor};`"
+            >Due ({{ dueHomework.length }})</a
+          >
+        </nav>
         <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
       </div>
       <div class="mt-2">
-        <div class="mr-1 ml-1 h-[220px] overflowy-scrolly space-y-2">
-          <Homework
-            v-if="allHomework.length > 0"
-            v-for="homework in allHomework"
-            :homework="homework"
-            @finished="
-              () => {
-                getHomework();
-                finishedHomework();
-              }
-            "
-          />
-          <div v-else class="">Wohoo, nothing to do...yet</div>
+        <div class="mr-1 ml-1 h-[240px] overflowy-scrolly space-y-2">
+          <div v-if="activeNavHw == 'overdue'" class="flex flex-col gap-2">
+            <Homework
+              v-if="overdueHomework.length > 0"
+              v-for="homework in overdueHomework"
+              :homework="homework"
+              @finished="
+                () => {
+                  getHomework();
+                  finishedHomework();
+                }
+              "
+            />
+            <div v-else class="">Wohoo, nothing to do...yet</div>
+          </div>
+
+          <div v-if="activeNavHw == 'due'" class="flex flex-col gap-2">
+            <Homework
+              v-if="dueHomework.length > 0"
+              v-for="homework in dueHomework"
+              :homework="homework"
+              @finished="
+                () => {
+                  getHomework();
+                  finishedHomework();
+                }
+              "
+            />
+            <div v-else class="">Wohoo, nothing to do...yet</div>
+          </div>
         </div>
       </div>
     </div>
@@ -120,7 +174,7 @@ onMounted(() => {
         "
       />
       <div class="mt-2">
-        <div class="mr-1 ml-1 h-[220px] overflowy-scrolly space-y-2">
+        <div class="mr-1 ml-1 h-[240px] overflowy-scrolly space-y-2">
           <Exam
             v-if="allExam.length > 0"
             v-for="exam in allExam"

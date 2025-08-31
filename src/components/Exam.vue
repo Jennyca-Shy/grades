@@ -52,14 +52,19 @@ console.log('exam: ', props.exam);
 <template>
   <div class="bg-gray-100 p-2 rounded-md border-l-[3px]" :style="`border-color: ${color}`">
     <div class="flex items-center">
-      <div class="flex-1" @click="notesOpen ? (notesOpen = false) : (notesOpen = true)">
-        <div class="text-xs flex">
-          {{ exam?.subject.name }}
-          <div class="">, {{ calculateDays() }}</div>
+      <div class="flex-1 mr-0" @click="notesOpen ? (notesOpen = false) : (notesOpen = true)">
+        <div class="flex justify-between">
+          <div class="text-xs flex">
+            {{ exam?.subject.name }}
+            <div class="">, {{ calculateDays() }}</div>
+          </div>
+          <div class="text-xs">{{ props.exam.type }}</div>
         </div>
-        <div class="">{{ props.exam.title }}</div>
+        <div class="flex justify-between">
+          <div class="">{{ props.exam.title }}</div>
+          <div class="">{{ props.exam.result || 'tba' }}</div>
+        </div>
       </div>
-      <div class="">{{ props.exam.result || 'tba' }}</div>
     </div>
     <div v-if="notesOpen" class="mt-2">
       <hr class="bg-gray-300 mt-0 h-[2px]" :style="`background-color: ${color}`" />

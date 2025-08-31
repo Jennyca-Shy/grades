@@ -32,8 +32,8 @@ const formattedGrades = computed(() =>
 let sum = computed(() => {
   const validGrades = formattedGrades.value.filter((g) => g.result != null);
   if (validGrades.length === 0) return '...';
-  const total = validGrades.reduce((acc, g) => acc + g.result, 0);
-  return (total / validGrades.length).toFixed(1); // optional: round
+  const total = validGrades.reduce((accum, g) => accum + g.result, 0);
+  return (total / validGrades.length).toFixed(1);
 });
 </script>
 

@@ -60,34 +60,32 @@ function toggleDropdownVisible() {
   selectedSubjectName.value = '';
 }
 
+//Type of Exam
+const type = ref('Schulaufgabe');
+
 //Edit the exam
 async function editExam() {
-  if (
-    currExam.date != formattedDate.value ||
-    currExam.subject != selectedSubject.value._id ||
-    currExam.result != result.value
-  ) {
-    currExam.date = formattedDate.value;
-    currExam.subject = selectedSubject.value._id;
-    currExam.result = result.value;
+  currExam.date = formattedDate.value;
+  currExam.subject = selectedSubject.value._id;
+  currExam.result = result.value;
+  currExam.type = type.value;
 
-    console.log('Curr Exam: ', currExam);
-    const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(currExam),
-    });
+  console.log('Curr Exam: ', currExam);
+  const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(currExam),
+  });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Fehler beim Hinzufügen der Exam:', errorText);
-    } else {
-      emit('added');
-      closeModal();
-      toast.info('Edited exam!');
-    }
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Fehler beim Hinzufügen der Exam:', errorText);
+  } else {
+    emit('added');
+    closeModal();
+    toast.info('Edited exam!');
   }
 }
 
@@ -154,6 +152,18 @@ async function deleteSubject() {
             >
               {{ subject.name }}
             </div>
+          </div>
+        </div>
+
+        <div class="relative w-full">
+          <select name="type" id="type" v-model="type" :style="`outline-color: ${color}`">
+            <option value="Schulaufgabe">Schulaufgabe</option>
+            <option value="Kurzarbeit">Kurzarbeit</option>
+            <option value="Stegreifaufgabe">Stegreifaufgabe</option>
+            <option value="Abfrage">Abfrage</option>
+          </select>
+          <div class="absolute inset-y-0 right-2 flex items-center mb-3">
+            <div class="pi pi-angle-down"></div>
           </div>
         </div>
 

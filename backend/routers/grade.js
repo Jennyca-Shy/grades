@@ -70,6 +70,9 @@ router.patch('/:id', getGrade, async (req, res) => {
   if (req.body.semester != null) {
     res.grade.semester = req.body.semester;
   }
+  if (req.body.type != null) {
+    res.grade.type = req.body.type;
+  }
 
   try {
     const updatedGrade = await res.grade.save();
