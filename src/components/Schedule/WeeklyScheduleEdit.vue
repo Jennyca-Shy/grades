@@ -171,13 +171,7 @@ onMounted(() => {
       <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
       <ScheduleEvent
         v-for="sched in schedule"
-        :id="sched._id"
-        :weekday="sched.weekday"
-        :startTime="sched.startTime"
-        :endTime="sched.endTime"
-        :subjectName="sched.subject.name"
-        :subjectColor="sched.subject.color"
-        :room="sched.subject.room"
+        :schedule="sched"
         :del="true"
         @deleted="getSchedule"
       />
