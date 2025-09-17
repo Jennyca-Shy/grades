@@ -11,7 +11,7 @@ const isActiveLink = (routePath) => {
   <nav class="w-1/5 h-screen p-3 text-gray-600 bg-white">
     <!-- Logo -->
     <div class="h-12 font-bold flex items-center mb-2 text-newBlue">
-      <a href="/" class="flex justify-center w-full text-3xl">Abilon</a>
+      <a href="/" class="flex justify-center w-full text-3xl">Logo</a>
     </div>
     <hr class="my-2 bg-newBlue" />
     <div class="text-base font-semibold flex flex-col">
@@ -47,6 +47,14 @@ const isActiveLink = (routePath) => {
           'flex items-center gap-3 p-2 mb-1 rounded-md',
         ]"
         ><span class="pi pi-book text-xl"></span>Subjects</RouterLink
+      >
+      <RouterLink
+        to="/other"
+        :class="[
+          isActiveLink('/other') ? 'bg-gray-100 text-newBlue' : 'hover:bg-gray-100',
+          'flex items-center gap-3 p-2 mb-1 rounded-md',
+        ]"
+        ><span class="pi pi-gift text-xl"></span>Other</RouterLink
       >
       <!-- <RouterLink
         to="/grades"

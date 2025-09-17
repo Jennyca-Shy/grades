@@ -16,6 +16,7 @@ async function getSubjects() {
 const selectedSubject = ref('');
 let selectedSubjectName = ref('');
 const dropdownVisibleSubject = ref(false);
+const room = ref('');
 
 const filteredSubjects = computed(() =>
   subjects.value.filter((subject) =>
@@ -29,6 +30,7 @@ function selectSubject(subject) {
   selectedSubject.value = subject;
   // console.log(selectedSubject.value);
   selectedSubjectName.value = subject.name;
+  room.value = subject.room;
 }
 
 function toggleDropdownVisibleSubject() {
@@ -131,6 +133,7 @@ async function addSchedule() {
       subject: selectedSubject.value,
       startTime: selectStartTime,
       endTime: selectEndTime,
+      room: room.value,
     }),
   });
 
@@ -152,11 +155,11 @@ onMounted(() => {
 <template>
   <div class="grid grid-cols-4 h-full flex-1 overflowy-scrolly">
     <div
-      class="col-span-3 border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(108,5px)] h-full text-center flex-1 overflowy-scrolly"
+      class="col-span-3 border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(120,5px)] h-full text-center flex-1 overflowy-scrolly"
     >
       <!-- Left column with time -->
       <div class="col-start-1 row-start-1 border-b-2">Time</div>
-      <div v-for="i in 9" :class="[`col-start-1 row-start-[${(i - 1) * 12 + 2}] row-span-12`]">
+      <div v-for="i in 10" :class="[`col-start-1 row-start-[${(i - 1) * 12 + 2}] row-span-12`]">
         {{ i + 6 }}:00
       </div>
 
@@ -207,6 +210,15 @@ onMounted(() => {
             </div>
           </div>
         </div>
+
+        <input
+          id="room"
+          v-model="room"
+          type="text"
+          placeholder="Enter room"
+          :style="`outline-color: ${color}`"
+          required
+        />
 
         <div class="relative mb-2">
           <div class="flex items-center justify-center relative">

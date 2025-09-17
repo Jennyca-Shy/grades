@@ -18,6 +18,10 @@ const scheduleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  room: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model('schedule', scheduleSchema);

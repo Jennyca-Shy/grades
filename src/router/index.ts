@@ -6,6 +6,8 @@ import SubjectsView from '@/views/SubjectsView.vue';
 import HomeworkView from '@/views/HomeworkView.vue';
 import SubjectView from '@/views/SubjectView.vue';
 import EditScheduleView from '@/views/EditScheduleView.vue';
+import PomodoroView from '@/views/PomodoroView.vue';
+import OtherView from '@/views/OtherView.vue';
 import TestView from '@/views/TestView.vue';
 
 const router = createRouter({
@@ -54,6 +56,16 @@ const router = createRouter({
       name: 'editSchedule',
       component: EditScheduleView,
       props: true,
+    },
+    {
+      path: '/other',
+      name: 'other',
+      component: OtherView,
+    },
+    {
+      path: '/other/pomodoro',
+      name: 'pomodoro',
+      component: PomodoroView,
     },
     {
       path: '/:catchAll(.*)',

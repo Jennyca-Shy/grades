@@ -24,6 +24,7 @@ router.post('/', async (req, res) => {
     subject: req.body.subject,
     startTime: req.body.startTime,
     endTime: req.body.endTime,
+    room: req.body.room,
   });
   try {
     const newSchedule = await schedule.save();

@@ -41,7 +41,7 @@ const startTime = ref(props.schedule.startTime);
 const endTime = ref(props.schedule.endTime);
 const subjectName = ref(props.schedule.subject.name);
 const subjectColor = ref(props.schedule.subject.color);
-const room = ref(props.schedule.subject.room);
+const room = ref(props.schedule.room ? props.schedule.room : props.schedule.subject.room);
 
 const [hourEnd, minuteEnd] = endTime.value.split(':').map(Number);
 const [hour, minute] = startTime.value.split(':').map(Number);
@@ -106,9 +106,12 @@ console.log('Pause: ', pause);
 
     <div
       v-else
-      class="bg-gray-300 text-gray-700 rounded-md size-full text-xs flex items-center justify-center"
+      class="bg-gray-300 text-gray-700 rounded-md size-full text-xs flex items-center justify-center px-2"
     >
       {{ duration }}min
+      <div v-if="del" class="ml-auto">
+        <div class="text-red-700 font-bold cursor-pointer" @click="deleteEvent">x</div>
+      </div>
     </div>
   </div>
 </template>

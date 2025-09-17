@@ -43,6 +43,10 @@ async function getHomework() {
 }
 
 let toast = useToast();
+function addedHomeworkToast() {
+  toast.success('Added homework... more work to do');
+}
+
 function updateView(title) {
   getHomework();
   console.log('Finished func getHomework in SubjectView.vue');
