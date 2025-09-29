@@ -92,8 +92,6 @@ function toMinutes(time) {
   return hour * 60 + minute;
 }
 
-//doesnt work!!!
-//to-do
 function overlapping(aStart, aEnd, bStart, bEnd) {
   return Math.max(aStart, bStart) > Math.min(aEnd, bEnd);
   //return (bStart <= aEnd && bStart >= aStart) || (bEnd <= aEnd && bEnd >= aStart);
@@ -101,15 +99,17 @@ function overlapping(aStart, aEnd, bStart, bEnd) {
 function allowed(newStart, newEnd, day) {
   const newStartMin = toMinutes(newStart);
   const newEndMin = toMinutes(newEnd);
+  for (const sched in schedule.value) {
+    if (sched.weekday === day) {
+      const existingStart = toMinutes(sched.startTime);
+      const existingEnd = toMinutes(sched.endTime);
 
-  return !schedule.value.some((sched) => {
-    if (sched.weekday !== day) return false;
-
-    const existingStart = toMinutes(sched.startTime);
-    const existingEnd = toMinutes(sched.endTime);
-
-    return overlapping(newStartMin, newEndMin, existingStart, existingEnd);
-  });
+      if (overlapping(newStartMin, newEndMin, existingStart, existingEnd)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 async function addSchedule() {
   console.log('hourStart: ', hourStart.value);
