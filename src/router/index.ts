@@ -47,7 +47,7 @@ const router = createRouter({
       component: HomeworkView,
     },
     {
-      path: '/test/:id',
+      path: '/test',
       name: 'test',
       component: TestView,
     },

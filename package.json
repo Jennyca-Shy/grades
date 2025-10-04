@@ -17,6 +17,7 @@
     "express": "^5.1.0",
     "mysql2": "^3.14.1",
     "node-cron": "^4.1.0",
+    "open-holiday-js": "^1.0.3",
     "pinia": "^3.0.3",
     "preline": "^3.0.1",
     "primeicons": "^7.0.0",

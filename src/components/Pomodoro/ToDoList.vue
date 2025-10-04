@@ -26,11 +26,11 @@
           <td class="pt-2">More</td>
         </tr>
         <tr>
-          <td class="pt-2">Do homework</td>
-          <td class="pt-2">Physics</td>
-          <td class="pt-2">High</td>
-          <td class="pt-2">Pending</td>
-          <td class="pt-2">More</td>
+          <td class="pt-2" contenteditable="true">Do homework</td>
+          <td class="pt-2" contenteditable="true">Physics</td>
+          <td class="pt-2" contenteditable="true">High</td>
+          <td class="pt-2" contenteditable="true">Pending</td>
+          <td class="pt-2" contenteditable="true">More</td>
         </tr>
       </table>
     </div>
