@@ -14,6 +14,10 @@ import { RouterLink } from 'vue-router';
         <RouterLink to="other/pomodoro">
           <div class="bg-slate-400 p-2 rounded-md">Pomodoro Timer</div>
         </RouterLink>
+
+        <RouterLink to="other/test">
+          <div class="bg-slate-400 p-2 rounded-md">Test</div>
+        </RouterLink>
       </div>
     </div>
   </section>

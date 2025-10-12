@@ -24,14 +24,16 @@ const props = defineProps({
   <!-- Middle appointment -->
   <div class="mt-1" v-if="module === 'middle'">
     <div class="w-full text-xs" :style="`background-color: ${color};`">
-      {{ title }}
+      <div v-if="title === '_'" class="" :style="`color: ${color}`">{{ title }}</div>
+      <div v-else class="">{{ title }}</div>
     </div>
   </div>
 
   <!-- End appointment -->
   <div class="mr-2 mt-1" v-if="module === 'end'">
     <div class="rounded-r-md w-full text-xs" :style="`background-color: ${color};`">
-      {{ title }}
+      <div v-if="title === '_'" class="" :style="`color: ${color}`">{{ title }}</div>
+      <div v-else class="">{{ title }}</div>
     </div>
   </div>
 </template>

@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 //Getting one
 router.get('/id/:id', getHoliday, (req, res) => {
-  res.send(res.subject);
+  res.send(res.holiday);
 });
 
 //Create one
@@ -36,16 +36,16 @@ router.post('/', async (req, res) => {
 //Update one
 router.patch('/:id', getHoliday, async (req, res) => {
   if (req.body.name != null) {
-    res.subject.name = req.body.name;
+    res.holiday.name = req.body.name;
   }
   if (req.body.endDate != null) {
-    res.subject.endDate = req.body.endDate;
+    res.holiday.endDate = req.body.endDate;
   }
   if (req.body.startDate != null) {
-    res.subject.startDate = req.body.startDate;
+    res.holiday.startDate = req.body.startDate;
   }
   if (req.body.subdivisions != null) {
-    res.subject.subdivisions = req.body.subdivisions;
+    res.holiday.subdivisions = req.body.subdivisions;
   }
 
   try {

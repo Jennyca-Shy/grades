@@ -33,6 +33,9 @@ app.use('/schedule', scheduleRouter);
 const appointmentRouter = require('./routers/appointment');
 app.use('/appointment', appointmentRouter);
 
+const holidayRouter = require('./routers/holiday');
+app.use('/holiday', holidayRouter);
+
 //Daily updates
 // const cron = require('node-cron');
 // const Homework = require('./models/homework');

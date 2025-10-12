@@ -8,7 +8,7 @@ const holidayAPI = new Holiday();
 
 async function updateHolidays() {
   try {
-    await mongoose.connect(process.env.DATABASE_URL);
+    await mongoose.connect('mongodb://localhost/subscribers');
     console.log('Connected to database!');
 
     const year = new Date().getFullYear();
@@ -39,3 +39,6 @@ async function updateHolidays() {
 }
 
 updateHolidays();
+
+//possibly change the comments in holiday.js model
+//run with npx ts-node backend/scripts/updateHolidays.ts

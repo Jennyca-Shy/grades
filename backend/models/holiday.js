@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const holidaySchema = new mongoose.Schema({
   name: [
@@ -20,4 +21,6 @@ const holidaySchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('holiday', holidaySchema);
+//export default mongoose.model('holiday', holidaySchema);
+
+module.exports = mongoose.model('holiday', holidaySchema);

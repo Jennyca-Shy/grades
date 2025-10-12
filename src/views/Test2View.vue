@@ -94,24 +94,19 @@ function getLastHolidays() {
         return startDate <= curr && endDate >= curr;
       })
       .map((hol) => {
-        let text = '_';
         let startDate = new Date(hol.startDate).toDateString();
         let endDate = new Date(hol.endDate).toDateString();
         let type = 'middle';
-        if (curr.toDateString() === startDate && curr.toDateString() === endDate) {
+        curr = curr.toDateString();
+        if (curr === startDate && curr === endDate) {
           type = 'single';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === startDate) {
+        } else if (curr === startDate) {
           type = 'start';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === endDate) {
+        } else if (curr === endDate) {
           type = 'end';
         }
-        if (curr.getDay() === 0) {
-          text = hol.name[0].text;
-        }
         return {
-          text: text,
+          text: hol.name[0].text,
           type: type,
         };
       });
@@ -134,25 +129,19 @@ function getThisHolidays() {
         return startDate <= curr && endDate >= curr;
       })
       .map((hol) => {
-        let text = '_';
         let startDate = new Date(hol.startDate).toDateString();
         let endDate = new Date(hol.endDate).toDateString();
         let type = 'middle';
-
-        if (curr.toDateString() === startDate && curr.toDateString() === endDate) {
+        curr = curr.toDateString();
+        if (curr === startDate && curr === endDate) {
           type = 'single';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === startDate) {
+        } else if (curr === startDate) {
           type = 'start';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === endDate) {
+        } else if (curr === endDate) {
           type = 'end';
         }
-        if (curr.getDay() === 0) {
-          text = hol.name[0].text;
-        }
         return {
-          text: text,
+          text: hol.name[0].text,
           type: type,
         };
       });
@@ -175,25 +164,19 @@ function getNextHolidays() {
         return startDate <= curr && endDate >= curr;
       })
       .map((hol) => {
-        let text = '_';
         let startDate = new Date(hol.startDate).toDateString();
         let endDate = new Date(hol.endDate).toDateString();
         let type = 'middle';
-
-        if (curr.toDateString() === startDate && curr.toDateString() === endDate) {
+        curr = curr.toDateString();
+        if (curr === startDate && curr === endDate) {
           type = 'single';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === startDate) {
+        } else if (curr === startDate) {
           type = 'start';
-          text = hol.name[0].text;
-        } else if (curr.toDateString() === endDate) {
+        } else if (curr === endDate) {
           type = 'end';
         }
-        if (curr.getDay() === 0) {
-          text = hol.name[0].text;
-        }
         return {
-          text: text,
+          text: hol.name[0].text,
           type: type,
         };
       });
