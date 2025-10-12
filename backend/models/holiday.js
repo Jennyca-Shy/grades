@@ -15,6 +15,7 @@ const holidaySchema = new mongoose.Schema({
   startDate: {
     type: Date,
     required: true,
+    unique: true,
   },
   subdivisions: {
     type: String,
@@ -22,5 +23,4 @@ const holidaySchema = new mongoose.Schema({
 });
 
 //export default mongoose.model('holiday', holidaySchema);
-
 module.exports = mongoose.model('holiday', holidaySchema);
