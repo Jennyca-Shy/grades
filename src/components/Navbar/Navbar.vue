@@ -49,6 +49,14 @@ const isActiveLink = (routePath) => {
         ><span class="pi pi-book text-xl"></span>Subjects</RouterLink
       >
       <RouterLink
+        to="/abitur"
+        :class="[
+          isActiveLink('/abitur') ? 'bg-gray-100 text-newBlue' : 'hover:bg-gray-100',
+          'flex items-center gap-3 p-2 mb-1 rounded-md',
+        ]"
+        ><span class="pi pi-chart-bar text-xl"></span>Abitur</RouterLink
+      >
+      <RouterLink
         to="/other"
         :class="[
           isActiveLink('/other') ? 'bg-gray-100 text-newBlue' : 'hover:bg-gray-100',

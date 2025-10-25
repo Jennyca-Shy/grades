@@ -38,7 +38,7 @@ async function getPoints() {
       totalPoints += +grade.outOf;
       gottenPoints += grade.result;
     });
-    lkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3)]);
+    lkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3), id]);
   }
   console.log('LK points: ', lkPoints.value);
 
@@ -54,7 +54,7 @@ async function getPoints() {
       totalPoints += +grade.outOf;
       gottenPoints += grade.result;
     });
-    gkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3)]);
+    gkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3), id]);
   }
 }
 
@@ -74,21 +74,16 @@ onMounted(() => {
       </h1>
       <div class="flex flex-row gap-8">
         <!-- vertical progress bars -->
+
         <div class="flex gap-2">
-          <VerticalProgressBar
-            v-for="sub in lkPoints"
-            :progress="sub[0]"
-            :lost="sub[1]"
-            :subject="sub[2]"
-          />
+          <RouterLink v-for="sub in lkPoints" :to="`/subjects/${sub[3]}`">
+            <VerticalProgressBar :progress="sub[0]" :lost="sub[1]" :subject="sub[2]" />
+          </RouterLink>
         </div>
         <div class="flex gap-2">
-          <VerticalProgressBar
-            v-for="sub in gkPoints"
-            :progress="sub[0]"
-            :lost="sub[1]"
-            :subject="sub[2]"
-          />
+          <RouterLink v-for="sub in gkPoints" :to="`/subjects/${sub[3]}`">
+            <VerticalProgressBar :progress="sub[0]" :lost="sub[1]" :subject="sub[2]" />
+          </RouterLink>
         </div>
       </div>
     </div>

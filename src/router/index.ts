@@ -9,6 +9,7 @@ import EditScheduleView from '@/views/EditScheduleView.vue';
 import PomodoroView from '@/views/PomodoroView.vue';
 import OtherView from '@/views/OtherView.vue';
 import TestView from '@/views/TestView.vue';
+import AbiturView from '@/views/AbiturView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +67,11 @@ const router = createRouter({
       path: '/other/pomodoro',
       name: 'pomodoro',
       component: PomodoroView,
+    },
+    {
+      path: '/abitur',
+      name: 'abitur',
+      component: AbiturView,
     },
     {
       path: '/:catchAll(.*)',
