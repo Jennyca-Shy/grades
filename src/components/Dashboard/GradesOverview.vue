@@ -6,16 +6,56 @@ import { ref, onMounted } from 'vue';
 let lk = ref([]);
 let gk = ref([]);
 async function getSubjects() {
-  const response = await fetch('http:localhost:3000/subject');
+  const response = await fetch('http://localhost:3000/subject');
   const data = await response.json();
 
-  lk = data.filter((subject) => {
+  lk.value = data.filter((subject) => {
     return subject.type == 'LK';
   });
 
-  gk = data.filter((subject) => {
+  console.log('LK: ', lk.value);
+  console.log('HEYYYY');
+
+  gk.value = data.filter((subject) => {
     return subject.type == 'GK';
   });
+
+  getPoints();
+}
+
+let lkPoints = ref([]);
+let gkPoints = ref([]);
+async function getPoints() {
+  for (const sub of lk.value) {
+    let id = sub._id;
+    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    const data = await response.json();
+
+    let totalPoints = 0;
+    let gottenPoints = 0;
+
+    data.forEach((grade) => {
+      totalPoints += +grade.outOf;
+      gottenPoints += grade.result;
+    });
+    lkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3)]);
+  }
+  console.log('LK points: ', lkPoints.value);
+
+  for (const sub of gk.value) {
+    let id = sub._id;
+    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    const data = await response.json();
+
+    let totalPoints = 0;
+    let gottenPoints = 0;
+
+    data.forEach((grade) => {
+      totalPoints += +grade.outOf;
+      gottenPoints += grade.result;
+    });
+    gkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3)]);
+  }
 }
 
 onMounted(() => {
@@ -32,22 +72,23 @@ onMounted(() => {
         Overview
         <hr class="bg-newBlue" />
       </h1>
-      <div class="flex flex-row gap-12">
+      <div class="flex flex-row gap-8">
         <!-- vertical progress bars -->
-        <div class="flex gap-3">
-          <VerticalProgressBar :progress="25" :lost="25" subject="Mat" />
-          <VerticalProgressBar :progress="50" :lost="20" subject="Deu" />
-          <VerticalProgressBar :progress="45" :lost="20" subject="Phy" />
-          <VerticalProgressBar :progress="56" :lost="14" subject="WR" />
-          <VerticalProgressBar :progress="10" :lost="25" subject="Inf" />
+        <div class="flex gap-2">
+          <VerticalProgressBar
+            v-for="sub in lkPoints"
+            :progress="sub[0]"
+            :lost="sub[1]"
+            :subject="sub[2]"
+          />
         </div>
-        <div class="flex gap-3">
-          <VerticalProgressBar :progress="25" :lost="25" subject="Eth" />
-          <VerticalProgressBar :progress="50" :lost="20" subject="PuG" />
-          <VerticalProgressBar :progress="45" :lost="20" subject="Spo" />
-          <VerticalProgressBar :progress="56" :lost="14" subject="Eng" />
-          <VerticalProgressBar :progress="30" :lost="50" subject="Kun" />
-          <VerticalProgressBar :progress="34" :lost="10" subject="W-S" />
+        <div class="flex gap-2">
+          <VerticalProgressBar
+            v-for="sub in gkPoints"
+            :progress="sub[0]"
+            :lost="sub[1]"
+            :subject="sub[2]"
+          />
         </div>
       </div>
     </div>

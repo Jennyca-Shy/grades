@@ -11,6 +11,7 @@ defineProps({
     <div class="flex w-2 h-32 bg-gray-200 rounded-md">
       <div class="flex flex-col justify-end h-full w-full">
         <div
+          v-if="lost > 0"
           class="bg-blue-500/50 w-full rounded-t-full mb-[-2px]"
           role="progressbar"
           :aria-valuenow="lost"
@@ -19,6 +20,7 @@ defineProps({
           :style="`height: calc(${lost}% + 2px)`"
         ></div>
         <div
+          v-if="progress > 0"
           class="bg-blue-500 w-full rounded-b-full rounded-t-full"
           role="progressbar"
           :aria-valuenow="progress"
@@ -28,6 +30,6 @@ defineProps({
         ></div>
       </div>
     </div>
-    <p class="font-[550]">{{ subject }}</p>
+    <p class="font-[550] w-max">{{ subject }}</p>
   </div>
 </template>
