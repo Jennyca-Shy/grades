@@ -42,6 +42,7 @@ router.post('/', async (req, res) => {
       color: req.body.color,
       notes: req.body.notes,
       type: req.body.type,
+      abitur: req.body.abitur,
     });
     const newSubject = await subject.save();
     res.status(201).json(newSubject);
@@ -69,6 +70,9 @@ router.patch('/:id', getSubject, async (req, res) => {
   }
   if (req.body.type != null) {
     res.subject.type = req.body.type;
+  }
+  if (req.body.abitur != null) {
+    res.subject.abitur = req.body.abitur;
   }
 
   try {

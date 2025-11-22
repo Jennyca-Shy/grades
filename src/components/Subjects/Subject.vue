@@ -16,7 +16,7 @@ async function getAverage() {
   let data = await response.json();
 
   let allGrades = data.filter((grade) => {
-    return grade.subject._id === props.id && grade.result;
+    return grade.subject._id === props.id && grade.result && grade.type != 'Abitur';
   });
 
   console.log('All grades: ', props.subject, allGrades);

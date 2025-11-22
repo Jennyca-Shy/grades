@@ -26,12 +26,12 @@ const gradeSchema = new mongoose.Schema({
   semester: {
     type: String,
     required: true,
-    enum: ['12/1', '12/2', '13/1', '13/2'],
+    enum: ['12/1', '12/2', '13/1', '13/2', 'none'],
   },
   type: {
     type: String,
     required: true,
-    enum: ['Schulaufgabe', 'Kurzarbeit', 'Stegreifaufgabe', 'Abfrage'],
+    enum: ['Schulaufgabe', 'Kurzarbeit', 'Stegreifaufgabe', 'Abfrage', 'Abitur'],
   },
   notes: {
     type: String,

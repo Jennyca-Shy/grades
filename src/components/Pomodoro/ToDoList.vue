@@ -11,27 +11,31 @@
     </div>
     <div class="mt-2">
       <table class="mt-2 w-full text-start">
-        <tr class="border-b-2 border-gray-300">
-          <th class="text-left uppercase text-gray-500 font-normal">Title</th>
-          <th class="text-left uppercase text-gray-500 font-normal">Subject</th>
-          <th class="text-left uppercase text-gray-500 font-normal">Priority</th>
-          <th class="text-left uppercase text-gray-500 font-normal">Status</th>
-          <th class="text-left uppercase text-gray-500 font-normal">More</th>
-        </tr>
-        <tr>
-          <td class="pt-2">Do homework</td>
-          <td class="pt-2">Physics</td>
-          <td class="pt-2">High</td>
-          <td class="pt-2">Pending</td>
-          <td class="pt-2">More</td>
-        </tr>
-        <tr>
-          <td class="pt-2">Do homework</td>
-          <td class="pt-2">Physics</td>
-          <td class="pt-2">High</td>
-          <td class="pt-2">Pending</td>
-          <td class="pt-2">More</td>
-        </tr>
+        <thead>
+          <tr class="border-b-2 border-gray-300">
+            <th class="text-left uppercase text-gray-500 font-normal">Title</th>
+            <th class="text-left uppercase text-gray-500 font-normal">Subject</th>
+            <th class="text-left uppercase text-gray-500 font-normal">Priority</th>
+            <th class="text-left uppercase text-gray-500 font-normal">Status</th>
+            <th class="text-left uppercase text-gray-500 font-normal">More</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pt-2">Do homework</td>
+            <td class="pt-2">Physics</td>
+            <td class="pt-2">High</td>
+            <td class="pt-2">Pending</td>
+            <td class="pt-2">More</td>
+          </tr>
+          <tr>
+            <td class="pt-2">Do homework</td>
+            <td class="pt-2">Physics</td>
+            <td class="pt-2">High</td>
+            <td class="pt-2">Pending</td>
+            <td class="pt-2">More</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

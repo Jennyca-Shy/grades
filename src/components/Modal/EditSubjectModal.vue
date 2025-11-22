@@ -12,6 +12,8 @@ const teacherNew = ref('');
 const nameNew = ref('');
 const colorNew = ref(color);
 const roomNew = ref('');
+const type = ref(props.subject.type);
+const isAbitur = ref(subject.abitur);
 
 const emit = defineEmits(['close']);
 function closeModal() {
@@ -31,6 +33,9 @@ async function updateSubject() {
   if (nameNew.value != '') {
     subject.name = nameNew.value;
   }
+  subject.type = type.value;
+  subject.abitur = isAbitur.value;
+
   await fetch(`http://localhost:3000/subject/${subject._id}`, {
     method: 'PATCH',
     headers: {
@@ -38,9 +43,10 @@ async function updateSubject() {
     },
     body: JSON.stringify(subject),
   });
-  console.log(subject);
+  console.log('Subject: ', subject);
 
   closeModal();
+  toast.success('Successfully updated the subject!');
 }
 
 function confirmDelete() {
@@ -93,6 +99,26 @@ onMounted(() => {
           required
         />
         <input v-model="roomNew" id="room" type="text" placeholder="Change room number" required />
+        <div class="relative w-full">
+          <select name="type" id="type" v-model="type" :style="`outline-color: ${color}`">
+            <option value="LK">erhöhtes Anforderungsniveau (LK)</option>
+            <option value="GK">grundlegendes Anforderungsniveau (GK)</option>
+            <option value="seminar">Seminar</option>
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+          <div class="absolute inset-y-0 right-2 flex items-center mb-3">
+            <div class="pi pi-angle-down"></div>
+          </div>
+        </div>
+        <div class="flex w-max">
+          <label for="abitur" class="">Abiturfach:</label>
+          <input
+            v-model="isAbitur"
+            type="checkbox"
+            class="m-1 ml-3"
+            :style="`accent-color: ${color};`"
+          />
+        </div>
         <div class="flex items-center">
           <label for="color" class="block">Farbe:</label>
           <input

@@ -26,7 +26,11 @@ const subjectSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['LK', 'GK', 'other'],
+    enum: ['LK', 'GK', 'sonstiges', 'seminar'],
+  },
+  abitur: {
+    type: Boolean,
+    default: false,
   },
 });
 

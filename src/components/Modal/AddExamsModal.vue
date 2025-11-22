@@ -68,7 +68,6 @@ const type = ref('Schulaufgabe');
 
 //Semester store
 const semesterStore = useSemesterStore();
-//console.log('semester store', semesterStore.currentSemester);
 
 //TOAAAAAST
 function addedExamToast() {
@@ -80,7 +79,10 @@ const title = ref('');
 const dueDate = ref('');
 const result = ref('');
 const notes = ref('');
+const outOf = ref();
 async function addExam() {
+  //Regular exams have 0-15, Abitur has 0-60 Points
+  outOf.value = type.value == 'Abitur' ? 60 : 15;
   const response = await fetch('http://localhost:3000/grade', {
     method: 'POST',
     headers: {
@@ -91,7 +93,8 @@ async function addExam() {
       subject: selectedSubject.value._id,
       date: dueDate.value,
       result: result.value,
-      semester: semesterStore.currentSemester,
+      outOf: outOf.value,
+      semester: type.value == 'Abitur' ? 'none' : semesterStore.currentSemester,
       type: type.value,
       notes: notes.value,
     }),
@@ -160,6 +163,7 @@ async function addExam() {
             <option value="Kurzarbeit">Kurzarbeit</option>
             <option value="Stegreifaufgabe">Stegreifaufgabe</option>
             <option value="Abfrage">Abfrage</option>
+            <option value="Abitur">Abitur</option>
           </select>
           <div class="absolute inset-y-0 right-2 flex items-center mb-3">
             <div class="pi pi-angle-down"></div>
