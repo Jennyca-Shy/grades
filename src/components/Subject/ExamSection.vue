@@ -43,12 +43,21 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="bg-white rounded-md p-2 overflowy-scrolly">
-    <div class="mb-2 flex justify-between">
-      <h1>
-        Exams:
-        <hr :style="`background-color: ${subject?.color};`" />
-      </h1>
+  <div class="bg-white rounded-md p-2 flex flex-col overflowy-scrolly h-[250px] md:h-auto">
+    <div class="mb-2 flex flex-col md:flex-row justify-between">
+      <div class="flex justify-between">
+        <h1>
+          Exams
+          <hr :style="`background-color: ${subject?.color};`" />
+        </h1>
+        <button
+          class="px-1 border-2 rounded-md ml-4 md:hidden"
+          :style="`border-color: ${subject?.color}`"
+          @click="addExamsOpen = true"
+        >
+          Add
+        </button>
+      </div>
       <div class="flex">
         <AddExamsModal
           v-if="addExamsOpen"
@@ -62,7 +71,10 @@ onMounted(() => {
           :subject="subject"
         />
         <!-- Exams navbar -->
-        <nav class="flex gap-x-2 border-b justify-end" :style="`border-color: ${subject?.color};`">
+        <nav
+          class="mt-2 md:mt-0 flex gap-x-2 border-b justify-end"
+          :style="`border-color: ${subject?.color};`"
+        >
           <a
             @click="activeNavExam = 'upcoming'"
             :class="[
@@ -73,7 +85,8 @@ onMounted(() => {
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-            >Upcoming ({{ upcomingExams.length }})</a
+            >Upcoming
+            <p class="hidden xl:inline">({{ upcomingExams.length }})</p></a
           >
           <a
             @click="activeNavExam = 'past'"
@@ -85,12 +98,13 @@ onMounted(() => {
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-            >Past ({{ pastExams.length }})</a
+            >Past
+            <p class="hidden xl:inline">({{ pastExams.length }})</p></a
           >
         </nav>
 
         <button
-          class="px-1 border-2 rounded-md ml-4"
+          class="px-1 border-2 rounded-md ml-1 xl:ml-4 hidden md:block"
           :style="`border-color: ${subject?.color}`"
           @click="addExamsOpen = true"
         >

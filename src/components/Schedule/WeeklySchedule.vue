@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(120,5px)] h-full text-center flex-1 overflowy-scrolly"
+    class="border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(120,10px)] mid:grid-rows-[26px_repeat(120,5px)] h-full text-center flex-1 overflowy-scrolly"
   >
     <!-- Left column with time -->
     <div class="col-start-1 row-start-1 border-b-2">Time</div>

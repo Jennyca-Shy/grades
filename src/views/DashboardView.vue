@@ -5,13 +5,13 @@ import TaskOverview from '@/components/Dashboard/TaskOverview.vue';
 </script>
 
 <template>
-  <section class="w-4/5 m-3">
-    <div class="grid grid-flow-col grid-cols-8 gap-1">
+  <section class="m-3 overflowy-scrolly">
+    <div class="lg:grid lg:grid-flow-col lg:grid-cols-8 gap-1 flex flex-col">
       <div class="col-span-6 h-full flex flex-col">
         <GradesOverview />
         <TaskOverview />
       </div>
-      <div class="col-span-2">
+      <div class="lg:col-span-2">
         <SmallCalendar />
       </div>
     </div>

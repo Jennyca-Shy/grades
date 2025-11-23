@@ -15,6 +15,9 @@ export default {
         newBlue: '#44a1a0',
         lightBlue: '#78cdd7',
       },
+      screens: {
+        mid: '801px',
+      },
     },
   },
   variants: {

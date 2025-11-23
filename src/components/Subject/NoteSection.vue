@@ -53,10 +53,10 @@ async function getSubject() {
 </script>
 
 <template>
-  <div class="bg-white rounded-md p-2 overflowy-scrolly flex flex-col">
+  <div class="bg-white rounded-md p-2 overflowy-scrolly flex flex-col h-[250px] md:h-auto">
     <div class="flex justify-between">
       <h1>
-        Notes:
+        Notes
         <hr :style="`background-color: ${subject?.color};`" />
       </h1>
 

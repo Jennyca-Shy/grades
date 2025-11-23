@@ -36,9 +36,9 @@ onMounted(() => {
 
 <template>
   <!-- Bottom left: Overview of grades -->
-  <div class="bg-white rounded-md p-2 overflowy-scrolly">
+  <div class="bg-white rounded-md p-2 overflowy-scrolly h-[250px] md:h-auto">
     <h1>
-      Grades Overview
+      Grade Section
       <hr :style="`background-color: ${propSubject?.color};`" />
     </h1>
     <div class="mt-2 pb-2 space-y-1 flex-1">

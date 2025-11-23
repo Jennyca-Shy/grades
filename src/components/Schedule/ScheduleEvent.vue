@@ -92,11 +92,14 @@ console.log('Pause: ', pause);
       :style="`background-color: ${subjectColor}`"
     >
       <div class="flex items-center justify-between">
-        <time class="text-xs font-normal text-gray-700 mt-1">{{ startTime }} - {{ endTime }}</time>
+        <time class="text-xs font-normal text-gray-700 mt-1"
+          >{{ startTime }}
+          <p class="hidden mid:inline">- {{ endTime }}</p></time
+        >
 
         <div class="text-red-700 font-bold cursor-pointer" v-if="del" @click="deleteEvent">x</div>
       </div>
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-start mid:items-center flex-col mid:flex-row">
         <h3 class="font-semibold">
           {{ subjectName ? subjectName.slice(0, 3).toUpperCase() : 'waiting' }}
         </h3>

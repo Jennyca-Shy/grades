@@ -66,8 +66,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2">
-    <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] overflowy-scrolly">
+  <section class="md:m-3 md:p-2 m-2 p-1">
+    <div class="bg-white rounded-md p-4 h-full overflowy-scrolly">
       <div class="flex justify-between">
         <h1>
           Leistungsfächer
@@ -82,7 +82,7 @@ onMounted(() => {
           subjectLong="Leistungsfach"
         />
       </div>
-      <div class="grid grid-cols-3 mt-3 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 mt-3 gap-2">
         <Subjects
           v-for="subject in lkSubjects"
           :subject="subject.name"
@@ -106,7 +106,7 @@ onMounted(() => {
           subjectLong="Grundkurs"
         />
       </div>
-      <div class="grid grid-cols-3 mt-3 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 mt-3 gap-2">
         <Subjects
           v-for="subject in gkSubjects"
           :subject="subject.name"
@@ -131,7 +131,7 @@ onMounted(() => {
           subjectLong="Sonstiges"
         />
       </div>
-      <div class="grid grid-cols-3 mt-3 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 mt-3 gap-2">
         <Subjects
           v-for="subject in sonstiges"
           :subject="subject.name"

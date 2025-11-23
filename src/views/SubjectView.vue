@@ -30,12 +30,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2 flex flex-col">
+  <section class="md:m-3 md:p-2 m-2 p-1 flex flex-col">
     <!-- Header with subject, room and teacher -->
     <div class="p-2 bg-white rounded-md">
-      <div class="flex justify-between">
+      <div class="flex flex-col md:flex-row justify-between">
         <ol class="flex">
-          <li class="flex items-center mr-2">
+          <li class="md:flex items-center mr-2 hidden">
             <RouterLink class="mr-2" to="/subjects">Subjects</RouterLink>
             <span class="pi pi-angle-right"></span>
           </li>
@@ -45,14 +45,27 @@ onMounted(() => {
               <hr :style="`background-color: ${subject?.color};`" />
             </h1>
           </li>
-        </ol>
-
-        <div class="flex space-x-8 justify-between items-center">
-          <div class="">Room: {{ subject?.room }}</div>
-          <div class="">Teacher: {{ subject?.teacher }}</div>
           <button
             @click="editSubjectOpen = true"
-            class="mr-1 px-1 border-2 rounded-md"
+            class="ml-auto mr-1 px-1 border-2 rounded-md md:hidden"
+            :style="`border-color: ${subject?.color}`"
+          >
+            Edit
+          </button>
+        </ol>
+
+        <div class="flex space-x-8 justify-between items-center mt-2 md:mt-0">
+          <div class="flex flex-row">
+            <p class="hidden md:block mr-1">Room:</p>
+            {{ subject?.room }}
+          </div>
+          <div class="flex flex-row">
+            <p class="hidden md:block mr-1">Teacher:</p>
+            {{ subject?.teacher }}
+          </div>
+          <button
+            @click="editSubjectOpen = true"
+            class="mr-1 px-1 border-2 rounded-md hidden md:block"
             :style="`border-color: ${subject?.color}`"
           >
             Edit
@@ -71,7 +84,7 @@ onMounted(() => {
       </div>
     </div>
     <!-- Main part -->
-    <div class="grid grid-cols-2 grid-rows-2 mt-3 gap-2 flex-1 overflowy-scrolly">
+    <div class="grid md:grid-cols-2 md:grid-rows-2 mt-3 gap-2 flex-1 overflowy-scrolly">
       <!-- Top left: Homework -->
       <HomeworkSection v-if="subject" :subject="subject" />
       <!-- Top right: Exams -->

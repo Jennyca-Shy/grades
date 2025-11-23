@@ -62,12 +62,21 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="bg-white rounded-md p-2 flex flex-col">
-    <div class="mb-2 flex justify-between">
-      <h1>
-        Homework
-        <hr :style="`background-color: ${subject?.color};`" />
-      </h1>
+  <div class="bg-white rounded-md p-2 flex flex-col overflowy-scrolly h-[250px] md:h-auto">
+    <div class="mb-2 flex flex-col md:flex-row justify-between">
+      <div class="flex justify-between">
+        <h1>
+          Homework
+          <hr :style="`background-color: ${subject?.color};`" />
+        </h1>
+        <button
+          class="px-1 border-2 rounded-md ml-4 md:hidden"
+          :style="`border-color: ${subject?.color}`"
+          @click="addHomeworkOpen = true"
+        >
+          Add
+        </button>
+      </div>
       <div class="flex">
         <AddHomeworkModal
           v-if="addHomeworkOpen"
@@ -82,7 +91,10 @@ onMounted(() => {
           :subject="subject"
         />
         <!-- Homework navbar -->
-        <nav class="flex gap-x-2 border-b justify-end" :style="`border-color: ${subject?.color};`">
+        <nav
+          class="flex gap-x-2 border-b justify-end mt-2 md:mt-0"
+          :style="`border-color: ${subject?.color};`"
+        >
           <a
             @click="activeNavHw = 'overdue'"
             :class="[
@@ -93,7 +105,8 @@ onMounted(() => {
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-            >Overdue ({{ overdueHomework.length }})</a
+            >Overdue
+            <p class="hidden xl:inline">({{ overdueHomework.length }})</p></a
           >
           <a
             @click="activeNavHw = 'due'"
@@ -105,7 +118,8 @@ onMounted(() => {
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-            >Due ({{ dueHomework.length }})</a
+            >Due
+            <p class="hidden xl:inline">({{ dueHomework.length }})</p></a
           >
           <a
             @click="activeNavHw = 'finished'"
@@ -117,12 +131,13 @@ onMounted(() => {
                 border-left-color: ${subject?.color};
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
-            >Finished ({{ finishedHomework.length }})</a
+            >Finished
+            <p class="hidden xl:inline">({{ finishedHomework.length }})</p></a
           >
         </nav>
 
         <button
-          class="px-1 border-2 rounded-md ml-4"
+          class="px-1 border-2 rounded-md ml-1 xl:ml-4 hidden md:block"
           :style="`border-color: ${subject?.color}`"
           @click="addHomeworkOpen = true"
         >

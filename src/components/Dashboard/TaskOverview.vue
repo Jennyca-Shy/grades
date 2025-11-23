@@ -73,56 +73,65 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid grid-cols-5 grid-rows-2 flex-grow h-[300px]">
+  <div class="md:grid md:grid-cols-5 md:grid-rows-2 flex-grow flex flex-col">
     <div class="col-span-3 row-span-2 bg-white rounded-md m-2 p-2">
-      <AddHomeworkModal
-        v-if="homeworkOpen"
-        @close="homeworkOpen = false"
-        @added="
-          () => {
-            getHomework();
-            addedHomework();
-          }
-        "
-      />
-      <div class="flex justify-between items-center">
-        <h1 class="ml-1">
-          Homework
-          <hr class="bg-newBlue" />
-        </h1>
-        <nav
-          class="flex gap-x-2 border-b justify-end"
-          :style="`border-color: ${setting.defaultColor};`"
-        >
-          <a
-            @click="activeNavHw = 'overdue'"
-            :class="[
-              'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-              activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
-            ]"
-            :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${setting.defaultColor}`};
+      <div class="flex flex-col justify-between md:flex-row md:items-center">
+        <div class="flex justify-between">
+          <h1 class="ml-1">
+            Homework
+            <hr class="bg-newBlue" />
+          </h1>
+          <button @click="homeworkOpen = true" class="modal ml-4 md:hidden">Add</button>
+        </div>
+        <div class="flex">
+          <AddHomeworkModal
+            v-if="homeworkOpen"
+            @close="homeworkOpen = false"
+            @added="
+              () => {
+                getHomework();
+                addedHomework();
+              }
+            "
+          />
+          <nav
+            class="flex gap-x-2 border-b justify-end mt-2 md:mt-0"
+            :style="`border-color: ${setting.defaultColor};`"
+          >
+            <a
+              @click="activeNavHw = 'overdue'"
+              :class="[
+                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                activeNavHw === 'overdue' ? 'bg-white' : 'bg-gray-100',
+              ]"
+              :style="`border-bottom-color: ${activeNavHw === 'overdue' ? '#FFFFFF' : `${setting.defaultColor}`};
                 border-left-color: ${setting.defaultColor};
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
-            >Overdue ({{ overdueHomework.length }})</a
-          >
-          <a
-            @click="activeNavHw = 'due'"
-            :class="[
-              'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
-              activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
-            ]"
-            :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${setting.defaultColor}`};
+              >Overdue
+              <p class="hidden xl:inline">({{ overdueHomework.length }})</p></a
+            >
+            <a
+              @click="activeNavHw = 'due'"
+              :class="[
+                'border px-2 py-1 rounded-t-lg -mb-px hover:cursor-pointer',
+                activeNavHw === 'due' ? 'bg-white' : 'bg-gray-100',
+              ]"
+              :style="`border-bottom-color: ${activeNavHw === 'due' ? '#FFFFFF' : `${setting.defaultColor}`};
                 border-left-color: ${setting.defaultColor};
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
-            >Due ({{ dueHomework.length }})</a
-          >
-        </nav>
-        <button @click="homeworkOpen = true" class="modal mr-1">Add</button>
+              >Due
+              <p class="hidden xl:inline">({{ dueHomework.length }})</p></a
+            >
+          </nav>
+          <button @click="homeworkOpen = true" class="modal ml-1 xl:ml-4 hidden md:block">
+            Add
+          </button>
+        </div>
       </div>
       <div class="mt-2">
-        <div class="mr-1 ml-1 h-[240px] overflowy-scrolly space-y-2">
+        <div class="mr-1 ml-1 md:h-[240px] overflowy-scrolly space-y-2">
           <div v-if="activeNavHw == 'overdue'" class="flex flex-col gap-2">
             <Homework
               v-if="overdueHomework.length > 0"
@@ -174,7 +183,7 @@ onMounted(() => {
         "
       />
       <div class="mt-2">
-        <div class="mr-1 ml-1 h-[240px] overflowy-scrolly space-y-2">
+        <div class="mr-1 ml-1 md:h-[240px] overflowy-scrolly space-y-2">
           <Exam
             v-if="allExam.length > 0"
             v-for="exam in allExam"

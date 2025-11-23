@@ -46,7 +46,7 @@ function errorMessage() {
     <div v-if="active == title" class="pi pi-plus mr-1"></div>
     <div v-else class="pi pi-minus mr-1"></div>
   </button>
-  <div class="grid grid-flow-row grid-cols-2 gap-2 mt-1 mr-1" v-if="active == title">
+  <div class="grid grid-flow-row md:grid-cols-2 gap-2 mt-1 md:mr-1" v-if="active == title">
     <Homework
       v-for="elem in props.input"
       :homework="elem"

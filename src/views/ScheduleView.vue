@@ -45,8 +45,8 @@ let displayedDate = ref(new Date());
 </script>
 
 <template>
-  <section class="w-4/5 m-3 h-[calc(100vh-24px)] p-2">
-    <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col">
+  <section class="m-3 p-2 h-full w-full">
+    <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col overflowy-scrolly">
       <div class="flex justify-between">
         <h1>
           Schedule
