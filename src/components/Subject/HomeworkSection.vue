@@ -3,10 +3,13 @@ import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 import Homework from '../Homework.vue';
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const props = defineProps({
   subject: Object,
 });
+
+const homeworkStore = useHomeworkStore();
 
 const addHomeworkOpen = ref(false);
 let activeNavHw = ref('due');
@@ -14,11 +17,11 @@ let id = props.subject._id;
 
 console.log('Subjectttt: ', props.subject);
 
-let dueHomework = ref([]);
-let overdueHomework = ref([]);
-let finishedHomework = ref([]);
+const { overdueHomework, dueHomework, finishedHomework } = homeworkStore.getHomeworkBySubject(
+  props.subject._id,
+);
 let today = new Date().setHours(0, 0, 0, 0);
-async function getHomework() {
+/*async function getHomework() {
   const response = await fetch('http://localhost:3000/homework');
   let data = await response.json();
 
@@ -40,7 +43,13 @@ async function getHomework() {
   finishedHomework.value = data.filter((hw) => {
     return hw.subject && hw.subject._id === id && hw.status === 'finished';
   });
-}
+}*/
+
+// function getHomework() {
+//   dueHomework.value = homeworkStore.dueHomework;
+//   overdueHomework.value = homeworkStore.overdueHomework;
+//   finishedHomework.value = finishedHomework.dueHomework;
+// }
 
 let toast = useToast();
 function addedHomeworkToast() {
@@ -48,7 +57,7 @@ function addedHomeworkToast() {
 }
 
 function updateView(title) {
-  getHomework();
+  //getHomework();
   console.log('Finished func getHomework in SubjectView.vue');
 
   if (title === 'finished') toast.info('Updated Homework!');
@@ -58,7 +67,8 @@ function updateView(title) {
 }
 
 onMounted(() => {
-  getHomework();
+  //getHomework();
+  homeworkStore.init();
 });
 </script>
 <template>
@@ -84,7 +94,7 @@ onMounted(() => {
           @added="
             () => {
               addedHomeworkToast();
-              getHomework();
+              // getHomework();
             }
           "
           :color="subject?.color"
@@ -152,7 +162,6 @@ onMounted(() => {
         v-for="hw in overdueHomework"
         :homework="hw"
         @finished="updateView"
-        @updated="getHomework()"
       />
       <div v-else class="">Pheew, no overdue homework...yet</div>
     </div>
@@ -162,7 +171,6 @@ onMounted(() => {
         v-for="hw in dueHomework"
         :homework="hw"
         @finished="updateView"
-        @updated="getHomework()"
       />
       <div v-else class="">Wohoo, nothing to do...yet</div>
     </div>
@@ -172,7 +180,6 @@ onMounted(() => {
         v-for="hw in finishedHomework"
         :homework="hw"
         @finished="updateView('finished')"
-        @updated="getHomework()"
       />
       <div v-else class="">Hmm, no finished homework?</div>
     </div>

@@ -20,7 +20,7 @@ const homeworkSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['finished', 'due', 'overdue'],
+    enum: ['finished', 'due'],
   },
 });
 

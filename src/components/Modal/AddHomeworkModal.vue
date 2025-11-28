@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const props = defineProps({
   subject: {
@@ -12,6 +13,8 @@ const props = defineProps({
     default: '#44a1a0',
   },
 });
+
+const homeworkStore = useHomeworkStore();
 
 const currentSubject = ref(props.subject);
 const color = props.color;
@@ -55,7 +58,7 @@ function selectSubject(subject) {
 
 function toggleDropdownVisible() {
   dropdownVisible.value = !dropdownVisible.value;
-  selectedSubject.value = '';
+  //selectedSubject.value = '';
   selectedSubjectName.value = '';
 }
 
@@ -63,7 +66,7 @@ function toggleDropdownVisible() {
 const title = ref('');
 const dueDate = ref('');
 const notes = ref('');
-async function addHomework() {
+/*async function addHomework() {
   const response = await fetch('http://localhost:3000/homework', {
     method: 'POST',
     headers: {
@@ -84,6 +87,12 @@ async function addHomework() {
     emit('added');
     closeModal();
   }
+}*/
+
+function addHomework() {
+  homeworkStore.addHomework(title.value, selectedSubject.value._id, notes.value, dueDate.value);
+  emit('added');
+  closeModal();
 }
 </script>
 

@@ -2,10 +2,13 @@
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
 import { useToast } from 'vue-toastification';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const props = defineProps({
   homework: Object,
 });
+
+const homeworkStore = useHomeworkStore();
 
 const currHomework = props.homework;
 console.log('currHomework: ', currHomework);
@@ -62,23 +65,11 @@ function toggleDropdownVisible() {
 //Edit the homework
 async function editHomework() {
   currHomework.dueDate = formattedDate.value;
-  currHomework.subject = selectedSubject.value._id;
-  const response = await fetch(`http://localhost:3000/homework/${currHomework._id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(currHomework),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Hausaufgabe:', errorText);
-  } else {
-    emit('updated');
-    closeModal();
-    toast.info('Edited homework!');
-  }
+  currHomework.subject = selectedSubject.value;
+  homeworkStore.editHomework(currHomework);
+  //emit('updated');
+  closeModal();
+  toast.info('Edited homework!');
 }
 
 //Delete homework
@@ -90,16 +81,10 @@ function confirmDelete() {
 
 const toast = useToast();
 async function deleteHomework() {
-  const response = await fetch(`http://localhost:3000/homework/single/${props.homework._id}`, {
-    method: 'DELETE',
-  });
-  if (response.ok) {
-    toast.success('Successfully deleted the homework');
-    emit('updated');
-    emit('close');
-  } else {
-    toast.warning('Something went wrong');
-  }
+  homeworkStore.deleteHomework(props.homework._id);
+  toast.success('Successfully deleted the homework');
+  //emit('updated');
+  emit('close');
 }
 </script>
 

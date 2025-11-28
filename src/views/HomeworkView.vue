@@ -3,6 +3,9 @@ import { ref, onMounted, computed } from 'vue';
 import AccordionElement from '@/components/Homework/AccordionElement.vue';
 import AddHomeworkModal from '@/components/Modal/AddHomeworkModal.vue';
 import { useToast } from 'vue-toastification';
+import { useHomeworkStore } from '@/stores/homeworkStore';
+
+const homeworkStore = useHomeworkStore();
 
 let activeAccordion = ref('Today');
 const homeworkOpen = ref(false);
@@ -17,7 +20,7 @@ thisWeek.setDate(thisWeek.getDate() + 7);
 thisWeek = thisWeek.toISOString().split('T')[0];
 const splitDueOverdue = new Date().setHours(0, 0, 0, 0);
 
-let overdueHomework = computed(() => {
+/*let overdueHomework = computed(() => {
   return allHomework.value
     .filter((hw) => {
       return hw.status != 'finished' && new Date(hw.dueDate) < splitDueOverdue;
@@ -58,9 +61,9 @@ let finishedHomework = computed(() => {
       return hw.status === 'finished';
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-});
+});*/
 
-async function getData() {
+/*async function getData() {
   //Today and tomorrow and this week
 
   //Fetch all homework
@@ -73,20 +76,21 @@ async function getData() {
   }
 
   allHomework.value = data;
-}
+}*/
 
 const toast = useToast();
 function addedHomeworkToast() {
   toast.success('Added homework... more work to do');
 }
 
-function updateEverything() {
-  // updateToOverdue();
-  getData();
-}
+// function updateEverything() {
+//   // updateToOverdue();
+//   getData();
+// }
 
 onMounted(() => {
-  updateEverything();
+  // updateEverything();
+  homeworkStore.fetchHomework();
 });
 </script>
 
@@ -105,7 +109,7 @@ onMounted(() => {
             @close="homeworkOpen = false"
             @added="
               () => {
-                updateEverything();
+                // updateEverything();
                 addedHomeworkToast();
               }
             "
@@ -116,44 +120,38 @@ onMounted(() => {
           <AccordionElement
             title="Overdue!!!"
             :active="activeAccordion"
-            :input="overdueHomework"
+            :input="homeworkStore.overdueHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
           <AccordionElement
             title="Today"
             :active="activeAccordion"
-            :input="todayHomework"
+            :input="homeworkStore.todayHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
           <AccordionElement
             title="Tomorrow"
             :active="activeAccordion"
-            :input="tomorrowHomework"
+            :input="homeworkStore.tomorrowHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
           <AccordionElement
             title="This Week"
             :active="activeAccordion"
-            :input="thisWeekHomework"
+            :input="homeworkStore.thisWeekHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
           <AccordionElement
             title="Later"
             :active="activeAccordion"
-            :input="laterHomework"
+            :input="homeworkStore.laterHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
           <AccordionElement
             title="Finished"
             :active="activeAccordion"
-            :input="finishedHomework"
+            :input="homeworkStore.finishedHomework"
             @select="activeAccordion = $event"
-            @updated="updateEverything"
           />
         </div>
       </div>

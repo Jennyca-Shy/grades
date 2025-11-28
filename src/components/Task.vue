@@ -1,5 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue';
+import { useHomeworkStore } from '@/stores/homeworkStore';
+
 const props = defineProps({
   //   subject: String,
   //   task: String,
@@ -8,6 +10,8 @@ const props = defineProps({
   //   exam: Boolean,
   id: String,
 });
+
+const homeworkStore = useHomeworkStore();
 
 const emit = defineEmits(['finished', 'error']);
 
@@ -47,7 +51,7 @@ function calculateDays() {
   return output;
 }
 
-async function finishHomework() {
+/*async function finishHomework() {
   const response = await fetch(`http://localhost:3000/homework/id/${props.id}`, {
     method: 'GET',
   });
@@ -69,7 +73,7 @@ async function finishHomework() {
   // else emit('error');
 }
 
-async function updateToOverdue() {
+/*async function updateToOverdue() {
   const response = await fetch('http://localhost:3000/homework/update/overdue', {
     method: 'PATCH',
   });
@@ -79,7 +83,7 @@ async function updateToOverdue() {
     console.error('Failed to update overdue:', message);
     throw new Error('Update to overdue failed: ' + message);
   }
-}
+}*/
 
 // function finishHW() {
 //   finishHomework();
@@ -88,17 +92,22 @@ async function updateToOverdue() {
 //   console.log('Finished func updateToOverdue in Task.vue');
 // }
 
-async function finishHW() {
+/*async function finishHW() {
   try {
     await finishHomework();
     console.log('Finished func finishHomework in Task.vue');
-    await updateToOverdue();
-    console.log('Finished func updateToOverdue in Task.vue');
+    //await updateToOverdue();
+    //console.log('Finished func updateToOverdue in Task.vue');
     emit('finished');
   } catch (err) {
     console.error('Failed to finish task:', err);
     emit('error');
   }
+}*/
+
+function finishHW() {
+  homeworkStore.toggleHomeworkStatus(props.id);
+  emit('finished');
 }
 </script>
 

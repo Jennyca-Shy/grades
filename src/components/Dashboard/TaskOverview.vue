@@ -6,16 +6,18 @@ import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
 import AddExamsModal from '../Modal/AddExamsModal.vue';
 import { useToast } from 'vue-toastification';
 import { useSettingStore } from '@/stores/settingStore';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
-let overdueHomework = ref([]);
-let dueHomework = ref([]);
+// let overdueHomework = ref([]);
+// let dueHomework = ref([]);
 let activeNavHw = ref('due');
 
 const setting = useSettingStore();
+const homeworkStore = useHomeworkStore();
 
-async function getHomework() {
+/*async function getHomework() {
   const today = new Date().toISOString().split('T')[0];
   const response = await fetch(`http://localhost:3000/homework`);
   let data = await response.json();
@@ -23,17 +25,17 @@ async function getHomework() {
   overdueHomework.value = data
     .filter((hw) => {
       const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
-      return hw.status === 'due' && dueDate < today;
+      return hw.status != 'finished' && dueDate < today;
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
   dueHomework.value = data
     .filter((hw) => {
       const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
-      return hw.status === 'due' && dueDate >= today;
+      return hw.status != 'finished' && dueDate >= today;
     })
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-}
+}*/
 
 let allExam = ref([]);
 async function getExams() {
@@ -67,8 +69,9 @@ function addedExam() {
 }*/
 
 onMounted(() => {
-  getHomework();
+  //getHomework();
   getExams();
+  homeworkStore.fetchHomework();
 });
 </script>
 
@@ -89,7 +92,6 @@ onMounted(() => {
             @close="homeworkOpen = false"
             @added="
               () => {
-                getHomework();
                 addedHomework();
               }
             "
@@ -109,7 +111,7 @@ onMounted(() => {
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
               >Overdue
-              <p class="hidden xl:inline">({{ overdueHomework.length }})</p></a
+              <p class="hidden xl:inline">({{ homeworkStore.overdueHomework.length }})</p></a
             >
             <a
               @click="activeNavHw = 'due'"
@@ -122,7 +124,7 @@ onMounted(() => {
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
               >Due
-              <p class="hidden xl:inline">({{ dueHomework.length }})</p></a
+              <p class="hidden xl:inline">({{ homeworkStore.dueHomework.length }})</p></a
             >
           </nav>
           <button @click="homeworkOpen = true" class="modal ml-1 xl:ml-4 hidden md:block">
@@ -134,12 +136,11 @@ onMounted(() => {
         <div class="mr-1 ml-1 md:h-[240px] overflowy-scrolly space-y-2">
           <div v-if="activeNavHw == 'overdue'" class="flex flex-col gap-2">
             <Homework
-              v-if="overdueHomework.length > 0"
-              v-for="homework in overdueHomework"
+              v-if="homeworkStore.overdueHomework.length > 0"
+              v-for="homework in homeworkStore.overdueHomework"
               :homework="homework"
               @finished="
                 () => {
-                  getHomework();
                   finishedHomework();
                 }
               "
@@ -149,12 +150,11 @@ onMounted(() => {
 
           <div v-if="activeNavHw == 'due'" class="flex flex-col gap-2">
             <Homework
-              v-if="dueHomework.length > 0"
-              v-for="homework in dueHomework"
+              v-if="homeworkStore.dueHomework.length > 0"
+              v-for="homework in homeworkStore.dueHomework"
               :homework="homework"
               @finished="
                 () => {
-                  getHomework();
                   finishedHomework();
                 }
               "

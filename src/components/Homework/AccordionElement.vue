@@ -23,7 +23,7 @@ const toast = useToast();
 function finishedHomework() {
   if (props.title != 'Finished') toast.success('Wohooo, finished homework!');
   else toast.info('Changed homework to due');
-  emit('updated');
+  // emit('updated');
 }
 
 function errorMessage() {

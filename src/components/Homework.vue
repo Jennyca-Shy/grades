@@ -1,12 +1,15 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import EditHomeworkModal from './Modal/EditHomeworkModal.vue';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const props = defineProps({
   homework: Object,
 });
 
 const editHomeworkOpen = ref(false);
+
+const homeworkStore = useHomeworkStore();
 
 const color = props.homework.subject.color;
 const notesOpen = ref(false);
@@ -44,6 +47,7 @@ function calculateDays() {
 }
 
 //Called when finished hw
+/*
 async function finishHomework() {
   //If hw already finished, toggle to "due"
   //else hw status is "finished"
@@ -64,7 +68,7 @@ async function finishHomework() {
   });
   if (!responsePatch.ok) alert('Something went wrong: ', responsePatch);
   // else emit('error');
-}
+}*/
 
 //Update homework status to overdue
 // async function updateToOverdue() {
@@ -80,7 +84,7 @@ async function finishHomework() {
 // }
 
 const emit = defineEmits(['finished', 'error', 'updated']);
-async function finishHW() {
+/*async function finishHW() {
   try {
     await finishHomework();
     console.log('Finished func finishHomework in Task.vue');
@@ -91,6 +95,10 @@ async function finishHW() {
     console.error('Failed to finish task:', err);
     emit('error');
   }
+}*/
+async function finishHW() {
+  homeworkStore.toggleHomeworkStatus(props.homework._id);
+  emit('finished');
 }
 console.log('Homework: ', props.homework);
 </script>
@@ -131,12 +139,6 @@ console.log('Homework: ', props.homework);
             }
           "
           :homework="props.homework"
-          @updated="
-            () => {
-              // updateToOverdue();
-              emit('updated');
-            }
-          "
         />
       </div>
     </div>
