@@ -58,7 +58,8 @@ router.post('/', async (req, res) => {
   });
 
   try {
-    const newHomework = await homework.save();
+    let newHomework = await homework.save();
+    newHomework = await newHomework.populate('subject');
     res.status(201).json(newHomework);
   } catch (error) {
     res.status(500).json({ message: error.message });

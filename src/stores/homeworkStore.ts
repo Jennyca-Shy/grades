@@ -169,7 +169,7 @@ export const useHomeworkStore = defineStore('homework', () => {
     }
   }
 
-  async function addHomework(hwTitle: string, subId: string, hwNotes: string, hwDueDate: string) {
+  async function addHomework(hwTitle: string, sub: Subject, hwNotes: string, hwDueDate: string) {
     try {
       //db
       const response = await fetch(`${API_URL}/homework`, {
@@ -179,7 +179,7 @@ export const useHomeworkStore = defineStore('homework', () => {
         },
         body: JSON.stringify({
           title: hwTitle,
-          subject: subId,
+          subject: sub._id,
           notes: hwNotes,
           dueDate: hwDueDate,
           status: 'due',

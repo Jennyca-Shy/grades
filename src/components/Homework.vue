@@ -46,56 +46,7 @@ function calculateDays() {
   return output;
 }
 
-//Called when finished hw
-/*
-async function finishHomework() {
-  //If hw already finished, toggle to "due"
-  //else hw status is "finished"
-  let change = 'finished';
-  if (props.homework.status === 'finished') {
-    change = 'due';
-  }
-
-  //Change the status
-  const responsePatch = await fetch(`http://localhost:3000/homework/${props.homework._id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      status: change,
-    }),
-  });
-  if (!responsePatch.ok) alert('Something went wrong: ', responsePatch);
-  // else emit('error');
-}*/
-
-//Update homework status to overdue
-// async function updateToOverdue() {
-//   const response = await fetch('http://localhost:3000/homework/update/overdue', {
-//     method: 'PATCH',
-//   });
-
-//   if (!response.ok) {
-//     const message = await response.text();
-//     console.error('Failed to update overdue:', message);
-//     throw new Error('Update to overdue failed: ' + message);
-//   }
-// }
-
 const emit = defineEmits(['finished', 'error', 'updated']);
-/*async function finishHW() {
-  try {
-    await finishHomework();
-    console.log('Finished func finishHomework in Task.vue');
-    // await updateToOverdue();
-    // console.log('Finished func updateToOverdue in Task.vue');
-    emit('finished');
-  } catch (err) {
-    console.error('Failed to finish task:', err);
-    emit('error');
-  }
-}*/
 async function finishHW() {
   homeworkStore.toggleHomeworkStatus(props.homework._id);
   emit('finished');

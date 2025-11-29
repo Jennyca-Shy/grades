@@ -10,73 +10,12 @@ const homeworkStore = useHomeworkStore();
 let activeAccordion = ref('Today');
 const homeworkOpen = ref(false);
 
-const allHomework = ref([]);
-const today = new Date().toISOString().split('T')[0];
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
 tomorrow = tomorrow.toISOString().split('T')[0];
 let thisWeek = new Date();
 thisWeek.setDate(thisWeek.getDate() + 7);
 thisWeek = thisWeek.toISOString().split('T')[0];
-const splitDueOverdue = new Date().setHours(0, 0, 0, 0);
-
-/*let overdueHomework = computed(() => {
-  return allHomework.value
-    .filter((hw) => {
-      return hw.status != 'finished' && new Date(hw.dueDate) < splitDueOverdue;
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-});
-let todayHomework = computed(() => {
-  return allHomework.value.filter((hw) => {
-    const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return hw.status != 'finished' && dueTo === today;
-  });
-});
-let tomorrowHomework = computed(() => {
-  return allHomework.value.filter((hw) => {
-    const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-    return hw.status != 'finished' && dueTo === tomorrow;
-  });
-});
-let thisWeekHomework = computed(() => {
-  return allHomework.value
-    .filter((hw) => {
-      const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-      return dueTo > tomorrow && dueTo <= thisWeek && hw.status != 'finished';
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-});
-let laterHomework = computed(() => {
-  return allHomework.value
-    .filter((hw) => {
-      const dueTo = new Date(hw.dueDate).toISOString().split('T')[0];
-      return dueTo > thisWeek && hw.status != 'finished';
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-});
-let finishedHomework = computed(() => {
-  return allHomework.value
-    .filter((hw) => {
-      return hw.status === 'finished';
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-});*/
-
-/*async function getData() {
-  //Today and tomorrow and this week
-
-  //Fetch all homework
-  const response = await fetch('http://localhost:3000/homework');
-  const data = await response.json();
-
-  if (!response.ok) {
-    console.error(response);
-    return;
-  }
-
-  allHomework.value = data;
-}*/
 
 const toast = useToast();
 function addedHomeworkToast() {

@@ -90,7 +90,7 @@ const notes = ref('');
 }*/
 
 function addHomework() {
-  homeworkStore.addHomework(title.value, selectedSubject.value._id, notes.value, dueDate.value);
+  homeworkStore.addHomework(title.value, selectedSubject.value, notes.value, dueDate.value);
   emit('added');
   closeModal();
 }
