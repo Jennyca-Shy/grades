@@ -3,6 +3,8 @@ import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
 import { useSemesterStore } from '@/stores/semesterStore';
 import { useToast } from 'vue-toastification';
+import { useSubjectStore } from '@/stores/subjectStore';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps({
   subject: {
@@ -15,6 +17,7 @@ const props = defineProps({
   },
 });
 
+const subjectStore = useSubjectStore();
 const toast = useToast();
 
 const currentSubject = ref(props.subject);
@@ -26,17 +29,18 @@ function closeModal() {
 }
 
 //Get subjects
-let subjects = ref([]);
-async function getSubjects() {
+const { subject } = storeToRefs(subjectStore);
+/*async function getSubjects() {
   const response = await fetch('http://localhost:3000/subject');
   const data = await response.json();
 
   subjects.value = data;
   console.log('Subjects: ', subjects);
-}
+}*/
 
 onMounted(() => {
-  getSubjects();
+  //getSubjects();
+  subjectStore.init();
 });
 
 //Subject dropdown
@@ -45,16 +49,16 @@ let selectedSubjectName = ref(currentSubject?.value.name || '');
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
-  subjects.value.filter((subject) =>
-    subject.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
+  subject.value.filter((sub) =>
+    sub.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
   ),
 );
 
-function selectSubject(subject) {
+function selectSubject(sub) {
   dropdownVisible.value = false;
-  selectedSubject.value = subject;
+  selectedSubject.value = sub;
   // console.log(selectedSubject.value);
-  selectedSubjectName.value = subject.name;
+  selectedSubjectName.value = sub.name;
 }
 
 function toggleDropdownVisible() {

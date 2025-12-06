@@ -2,14 +2,15 @@
 import Modal from './Modal.vue';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useSubjectStore } from '@/stores/subjectStore';
 
 const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
 }
 
-let toast;
-toast = useToast();
+let toast = useToast();
+const subjectStore = useSubjectStore();
 
 const gk = ref('');
 const teacher = ref('');
@@ -17,24 +18,11 @@ const room = ref('');
 const color = ref('#2563eb');
 async function addGk() {
   if (gk.value && teacher.value && room.value) {
-    const response = await fetch('http://localhost:3000/subject', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: gk.value,
-        teacher: teacher.value,
-        room: room.value,
-        color: color.value,
-        type: 'GK',
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
+    const res = subjectStore.addSubject(gk, value, teacher.value, room.value, color.value, 'GK');
+    if (res == 'ok') {
       emit('added');
       closeModal();
-    } else if (data.message === 'duplicate') {
+    } else if (res === 'duplicate') {
       toast.warning('Subject already exists!');
     } else {
       toast.error('Something went wrong');

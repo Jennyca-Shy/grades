@@ -2,6 +2,7 @@
 import Modal from './Modal.vue';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useSubjectStore } from '@/stores/subjectStore';
 
 const props = defineProps({
   subjectType: String,
@@ -12,6 +13,8 @@ const emit = defineEmits(['close', 'added']);
 function closeModal() {
   emit('close');
 }
+
+const subjectStore = useSubjectStore();
 
 //Add a new subject
 const toast = useToast();
@@ -24,26 +27,33 @@ const type = ref(props.subjectType);
 
 async function addSubject() {
   if (subject.value && teacher.value && room.value) {
-    const response = await fetch('http://localhost:3000/subject', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: subject.value,
-        teacher: teacher.value,
-        room: room.value,
-        color: color.value,
-        type: type.value,
-      }),
-    });
+    // const response = await fetch('http://localhost:3000/subject', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     name: subject.value,
+    //     teacher: teacher.value,
+    //     room: room.value,
+    //     color: color.value,
+    //     type: type.value,
+    //   }),
+    // });
 
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
+    const response = await subjectStore.addSubject(
+      subject.value,
+      teacher.value,
+      room.value,
+      color.value,
+      type.value,
+    );
+
+    //console.log(data);
+    if (response == 'ok') {
       emit('added');
       closeModal();
-    } else if (data.message === 'duplicate') {
+    } else if (response === 'duplicate') {
       toast.warning('Subject already exists!');
     } else {
       toast.error('Something went wrong!');

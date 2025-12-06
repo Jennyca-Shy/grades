@@ -3,33 +3,37 @@ import Appointment from './Appointment.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import MonthlySchedule from './MonthlySchedule.vue';
+import { useSubjectStore } from '@/stores/subjectStore';
+import { storeToRefs } from 'pinia';
+
+const subjectStore = useSubjectStore();
 
 //Subject dropdown
 //selectedSubject -> Subject object
-let subjects = ref([]);
-async function getSubjects() {
-  const response = await fetch('http://localhost:3000/subject');
-  const data = await response.json();
+const { subject } = storeToRefs(subjectStore);
+// async function getSubjects() {
+//   const response = await fetch('http://localhost:3000/subject');
+//   const data = await response.json();
 
-  subjects.value = data;
-}
+//   subjects.value = data;
+// }
 
 const selectedSubject = ref('');
 let selectedSubjectName = ref('');
 const dropdownVisibleSubject = ref(false);
 
 const filteredSubjects = computed(() =>
-  subjects.value.filter((subject) =>
-    subject.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
+  subject.value.filter((sub) =>
+    sub.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
   ),
 );
 
 //Select subject
-function selectSubject(subject) {
+function selectSubject(sub) {
   dropdownVisibleSubject.value = false;
-  selectedSubject.value = subject;
+  selectedSubject.value = sub;
   // console.log(selectedSubject.value);
-  selectedSubjectName.value = subject.name;
+  selectedSubjectName.value = sub.name;
 }
 
 function toggleDropdownVisibleSubject() {
@@ -55,7 +59,7 @@ async function getAppointment() {
 const toast = useToast();
 
 onMounted(() => {
-  getSubjects();
+  // getSubjects();
   getAppointment();
 });
 </script>

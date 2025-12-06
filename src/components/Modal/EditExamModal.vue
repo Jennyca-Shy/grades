@@ -2,10 +2,14 @@
 import { ref, computed, onMounted } from 'vue';
 import Modal from './Modal.vue';
 import { useToast } from 'vue-toastification';
+import { useSubjectStore } from '@/stores/subjectStore';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps({
   exam: Object,
 });
+
+const subjectStore = useSubjectStore();
 
 const currExam = props.exam;
 console.log('currExam: ', currExam);
@@ -21,17 +25,17 @@ function closeModal() {
 }
 
 //Get subjects
-let subjects = ref([]);
-async function getSubjects() {
-  const response = await fetch('http://localhost:3000/subject');
-  const data = await response.json();
+const { subject } = storeToRefs(subjectStore);
+// async function getSubjects() {
+//   const response = await fetch('http://localhost:3000/subject');
+//   const data = await response.json();
 
-  subjects.value = data;
-  console.log('Subjects: ', subjects);
-}
+//   subjects.value = data;
+//   console.log('Subjects: ', subjects);
+// }
 
 onMounted(() => {
-  getSubjects();
+  // getSubjects();
 });
 
 //Subject dropdown
@@ -41,17 +45,17 @@ let selectedSubjectName = ref(currExam?.subject.name || '');
 const dropdownVisible = ref(false);
 
 const filteredSubjects = computed(() =>
-  subjects.value.filter((subject) =>
-    subject.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
+  subject.value.filter((sub) =>
+    sub.name.toLowerCase().includes(selectedSubjectName.value.toLowerCase()),
   ),
 );
 
 //Select
 function selectSubject(subject) {
   dropdownVisible.value = false;
-  selectedSubject.value = subject;
+  selectedSubject.value = sub;
   // console.log(selectedSubject.value);
-  selectedSubjectName.value = subject.name;
+  selectedSubjectName.value = sub.name;
 }
 
 function toggleDropdownVisible() {

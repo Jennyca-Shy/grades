@@ -3,6 +3,10 @@ import Modal from './Modal.vue';
 import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
+import { useSubjectStore } from '@/stores/subjectStore';
+import SubjectsView from '@/views/SubjectsView.vue';
+
+const subjectStore = useSubjectStore();
 
 const props = defineProps(['subject']);
 const subject = props.subject;
@@ -36,14 +40,16 @@ async function updateSubject() {
   subject.type = type.value;
   subject.abitur = isAbitur.value;
 
-  await fetch(`http://localhost:3000/subject/${subject._id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(subject),
-  });
-  console.log('Subject: ', subject);
+  // await fetch(`http://localhost:3000/subject/${subject._id}`, {
+  //   method: 'PATCH',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(subject),
+  // });
+  // console.log('Subject: ', subject);
+
+  subjectStore.editSubject(subject);
 
   closeModal();
   toast.success('Successfully updated the subject!');
@@ -58,6 +64,9 @@ function confirmDelete() {
 const toast = useToast();
 const router = useRouter();
 async function deleteSubject() {
+  /*
+  to-do: do this after all Stores in SubjectStore, with Methods in the other two stores
+  */
   const responseSubject = await fetch(`http://localhost:3000/subject/${subject._id}`, {
     method: 'DELETE',
   });
@@ -68,6 +77,11 @@ async function deleteSubject() {
     method: 'DELETE',
   });
   if (responseSubject.ok && responseHomework.ok && responseSchedule.ok) {
+    /*
+      temporarily here til all stores are finished
+    */
+    await subjectStore.fetchSubject();
+
     router.push('/subjects');
     toast.success('Successfully deleted the subject');
   } else {

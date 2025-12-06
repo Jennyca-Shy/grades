@@ -2,10 +2,10 @@
 import CircleProgressHalf from './CircleProgressHalf.vue';
 import VerticalProgressBar from './VerticalProgressBar.vue';
 import { ref, onMounted } from 'vue';
+import { useSubjectStore } from '@/stores/subjectStore';
 
-let lk = ref([]);
-let gk = ref([]);
-async function getSubjects() {
+const subjectStore = useSubjectStore();
+/*async function getSubjects() {
   const response = await fetch('http://localhost:3000/subject');
   const data = await response.json();
 
@@ -21,15 +21,16 @@ async function getSubjects() {
   });
 
   getPoints();
-}
+}*/
 
 let lkPoints = ref([]);
 let gkPoints = ref([]);
+let sonstigesPoints = ref([]);
 let maxPointsGK = 0;
 let maxPointsAbi = 0;
 let maxPointsLK = 0;
 async function getPoints() {
-  for (const sub of lk.value) {
+  for (const sub of subjectStore.lk) {
     let id = sub._id;
     const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
     const data = await response.json();
@@ -43,9 +44,8 @@ async function getPoints() {
     });
     lkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3), id]);
   }
-  console.log('LK points: ', lkPoints.value);
 
-  for (const sub of gk.value) {
+  for (const sub of subjectStore.gk) {
     let id = sub._id;
     const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
     const data = await response.json();
@@ -59,10 +59,33 @@ async function getPoints() {
     });
     gkPoints.value.push([gottenPoints, totalPoints - gottenPoints, sub.name.substr(0, 3), id]);
   }
+
+  for (const sub of subjectStore.sonstiges) {
+    let id = sub._id;
+    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    const data = await response.json();
+
+    let totalPoints = 0;
+    let gottenPoints = 0;
+
+    data.forEach((grade) => {
+      totalPoints += +grade.outOf;
+      gottenPoints += grade.result;
+    });
+    sonstigesPoints.value.push([
+      gottenPoints,
+      totalPoints - gottenPoints,
+      sub.name.substr(0, 3),
+      id,
+    ]);
+  }
+  console.log('gk points: ', gkPoints.value);
 }
 
-onMounted(() => {
-  getSubjects();
+onMounted(async () => {
+  //getSubjects();
+  await subjectStore.init();
+  getPoints();
 });
 </script>
 
@@ -85,6 +108,11 @@ onMounted(() => {
         </div>
         <div class="gap-2 hidden sm:flex">
           <RouterLink v-for="sub in gkPoints" :to="`/subjects/${sub[3]}`">
+            <VerticalProgressBar :progress="sub[0]" :lost="sub[1]" :subject="sub[2]" />
+          </RouterLink>
+        </div>
+        <div class="gap-2 hidden sm:flex">
+          <RouterLink v-for="sub in sonstigesPoints" :to="`/subjects/${sub[3]}`">
             <VerticalProgressBar :progress="sub[0]" :lost="sub[1]" :subject="sub[2]" />
           </RouterLink>
         </div>

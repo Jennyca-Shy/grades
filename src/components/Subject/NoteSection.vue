@@ -2,10 +2,13 @@
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { nextTick } from 'vue';
+import { useSubjectStore } from '@/stores/subjectStore';
 
 const props = defineProps({
   propSubject: Object,
 });
+
+const subjectStore = useSubjectStore();
 
 let subject = ref(props.propSubject);
 let editableNotes = ref(false);
@@ -22,34 +25,39 @@ async function changeEditable() {
       document.getElementById('notesEdit')?.focus();
     });
   } else {
-    const response = await fetch(`http://localhost:3000/subject/${id.value}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        notes: newNotes.value,
-      }),
-    });
-    if (response.ok) {
-      getSubject();
-      toast.success('Edited your notes!');
-    } else {
-      const data = await response.json();
-      console.log(data.message);
-      alert('Something went wrong!!!');
-    }
+    // const response = await fetch(`http://localhost:3000/subject/${id.value}`, {
+    //   method: 'PATCH',
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     notes: newNotes.value,
+    //   }),
+    // });
+
+    subject.value.notes = newNotes.value;
+    subjectStore.editSubject(subject.value);
+    toast.success('Edited your notes!');
+
+    // if (response.ok) {
+    //   getSubject();
+    //   toast.success('Edited your notes!');
+    // } else {
+    //   const data = await response.json();
+    //   console.log(data.message);
+    //   alert('Something went wrong!!!');
+    // }
   }
 }
 
-async function getSubject() {
-  const response = await fetch(`http://localhost:3000/subject/id/${id.value}`);
-  const data = await response.json();
+// async function getSubject() {
+//   const response = await fetch(`http://localhost:3000/subject/id/${id.value}`);
+//   const data = await response.json();
 
-  subject.value = data;
-  console.log(subject.value);
-  console.log('Got subject');
-}
+//   subject.value = data;
+//   console.log(subject.value);
+//   console.log('Got subject');
+// }
 </script>
 
 <template>

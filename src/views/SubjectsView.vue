@@ -3,65 +3,67 @@ import Subjects from '@/components/Subjects/Subject.vue';
 import AddLkModal from '@/components/Modal/AddLkModal.vue';
 import AddGkModal from '@/components/Modal/AddGkModal.vue';
 import AddSubjectModal from '@/components/Modal/AddSubjectModal.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useSubjectStore } from '@/stores/subjectStore';
+import { storeToRefs } from 'pinia';
+
+const subjectStore = useSubjectStore();
 
 const lkOpen = ref(false);
 const gkOpen = ref(false);
 const sonstigesOpen = ref(false);
-const lkSubjects = ref();
-const gkSubjects = ref();
-const sonstiges = ref([]);
+const { lk, gk, sonstiges } = storeToRefs(subjectStore);
+// async function getLK() {
+//   const response = await fetch('http://localhost:3000/subject/type/LK');
+//   const data = await response.json();
+//   lkSubjects.value = data;
+//   console.log(data);
+// }
 
-async function getLK() {
-  const response = await fetch('http://localhost:3000/subject/type/LK');
-  const data = await response.json();
-  lkSubjects.value = data;
-  console.log(data);
-}
+// async function getGK() {
+//   const response = await fetch('http://localhost:3000/subject/type/GK');
+//   const data = await response.json();
+//   gkSubjects.value = data;
+//   console.log(data);
+// }
 
-async function getGK() {
-  const response = await fetch('http://localhost:3000/subject/type/GK');
-  const data = await response.json();
-  gkSubjects.value = data;
-  console.log(data);
-}
+// async function getSonstiges() {
+//   let response = await fetch('http://localhost:3000/subject/type/sonstiges');
+//   let data = await response.json();
+//   sonstiges.value = data;
 
-async function getSonstiges() {
-  let response = await fetch('http://localhost:3000/subject/type/sonstiges');
-  let data = await response.json();
-  sonstiges.value = data;
-
-  response = await fetch('http://localhost:3000/subject/type/seminar');
-  data = await response.json();
-  sonstiges.value = sonstiges.value.concat(data);
-  console.log(data);
-}
+//   response = await fetch('http://localhost:3000/subject/type/seminar');
+//   data = await response.json();
+//   sonstiges.value = sonstiges.value.concat(data);
+//   console.log(data);
+// }
 
 let toast = useToast();
 function toastSuccess() {
   toast.success('Successfully added new subject');
 }
 
-function addedLK() {
-  toastSuccess();
-  getLK();
-}
+// function addedLK() {
+//   toastSuccess();
+//   // getLK();
+// }
 
-function addedGK() {
-  toastSuccess();
-  getGK();
-}
+// function addedGK() {
+//   toastSuccess();
+//   // getGK();
+// }
 
-function addedSonstiges() {
-  toastSuccess();
-  getSonstiges();
-}
+// function addedSonstiges() {
+//   toastSuccess();
+//   // getSonstiges();
+// }
 
-onMounted(() => {
-  getLK();
-  getGK();
-  getSonstiges();
+onMounted(async () => {
+  // getLK();
+  // getGK();
+  // getSonstiges();
+  await subjectStore.init();
 });
 </script>
 
@@ -77,14 +79,14 @@ onMounted(() => {
         <AddSubjectModal
           v-if="lkOpen"
           @close="lkOpen = false"
-          @added="addedLK"
+          @added="toastSuccess"
           subjectType="LK"
           subjectLong="Leistungsfach"
         />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 mt-3 gap-2">
         <Subjects
-          v-for="subject in lkSubjects"
+          v-for="subject in lk"
           :subject="subject.name"
           :teacher="subject.teacher"
           :color="subject.color"
@@ -101,14 +103,14 @@ onMounted(() => {
         <AddSubjectModal
           v-if="gkOpen"
           @close="gkOpen = false"
-          @added="addedGK"
+          @added="toastSuccess"
           subjectType="GK"
           subjectLong="Grundkurs"
         />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 mt-3 gap-2">
         <Subjects
-          v-for="subject in gkSubjects"
+          v-for="subject in gk"
           :subject="subject.name"
           :teacher="subject.teacher"
           average="14.3P"
@@ -126,7 +128,7 @@ onMounted(() => {
         <AddSubjectModal
           v-if="sonstigesOpen"
           @close="sonstigesOpen = false"
-          @added="addedSonstiges"
+          @added="toastSuccess"
           subjectType="sonstiges"
           subjectLong="Sonstiges"
         />
