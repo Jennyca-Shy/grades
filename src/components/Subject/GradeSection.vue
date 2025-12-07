@@ -1,36 +1,44 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Semester from './Semester.vue';
+import { useGradeStore } from '@/stores/gradeStore';
+import GradesOverview from '../Dashboard/GradesOverview.vue';
 
 const props = defineProps({
   propSubject: Object,
 });
 
-//Semester overview
-const firstSemester = ref([]);
-const secondSemester = ref([]);
-const thirdSemester = ref([]);
-const fourthSemester = ref([]);
-async function getSemester() {
-  const response = await fetch(`http://localhost:3000/grade/subject/${props.propSubject._id}`);
-  let data = await response.json();
+const gradeStore = useGradeStore();
 
-  firstSemester.value = data.filter((grade) => {
-    return grade.semester == '12/1';
-  });
-  secondSemester.value = data.filter((grade) => {
-    return grade.semester == '12/2';
-  });
-  thirdSemester.value = data.filter((grade) => {
-    return grade.semester == '13/1';
-  });
-  fourthSemester.value = data.filter((grade) => {
-    return grade.semester == '13/2';
-  });
-}
+//Semester overview
+
+const { firstSemester, secondSemester, thirdSemester, fourthSemester } =
+  gradeStore.getGradesSortedBySemester(props.propSubject);
+// const firstSemester = ref([]);
+// const secondSemester = ref([]);
+// const thirdSemester = ref([]);
+// const fourthSemester = ref([]);
+// async function getSemester() {
+//   const response = await fetch(`http://localhost:3000/grade/subject/${props.propSubject._id}`);
+//   let data = await response.json();
+
+//   firstSemester.value = data.filter((grade) => {
+//     return grade.semester == '12/1';
+//   });
+//   secondSemester.value = data.filter((grade) => {
+//     return grade.semester == '12/2';
+//   });
+//   thirdSemester.value = data.filter((grade) => {
+//     return grade.semester == '13/1';
+//   });
+//   fourthSemester.value = data.filter((grade) => {
+//     return grade.semester == '13/2';
+//   });
+// }
 
 onMounted(() => {
-  getSemester();
+  // getSemester();
+  gradeStore.init();
 });
 </script>
 

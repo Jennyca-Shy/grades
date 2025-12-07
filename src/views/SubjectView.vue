@@ -1,30 +1,37 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import EditSubjectModal from '@/components/Modal/EditSubjectModal.vue';
 import HomeworkSection from '@/components/Subject/HomeworkSection.vue';
 import GradeSection from '@/components/Subject/GradeSection.vue';
 import NoteSection from '@/components/Subject/NoteSection.vue';
 import ExamSection from '@/components/Subject/ExamSection.vue';
 import { useRoute, RouterLink } from 'vue-router';
+import { useGradeStore } from '@/stores/gradeStore';
+import { useSubjectStore } from '@/stores/subjectStore';
+
+const gradeStore = useGradeStore();
+const subjectStore = useSubjectStore();
 
 const editSubjectOpen = ref(false);
 
 //Get homework and subject via api
 const route = useRoute();
 const id = route.params.id;
-let subject = ref();
+let subject = computed(() => subjectStore.getSubjectById(id));
 let data;
-async function getSubject() {
-  const response = await fetch(`http://localhost:3000/subject/id/${id}`);
-  data = await response.json();
+// async function getSubject() {
+//   const response = await fetch(`http://localhost:3000/subject/id/${id}`);
+//   data = await response.json();
 
-  subject.value = data;
-  console.log(subject.value);
-  console.log('Got subject');
-}
+//   subject.value = data;
+//   console.log(subject.value);
+//   console.log('Got subject');
+// }
 
-onMounted(() => {
-  getSubject();
+onMounted(async () => {
+  await gradeStore.init();
+  await subjectStore.init();
+  // getSubject();
   //getExams();
 });
 </script>

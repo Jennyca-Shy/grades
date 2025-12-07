@@ -5,6 +5,7 @@ import { useSemesterStore } from '@/stores/semesterStore';
 import { useToast } from 'vue-toastification';
 import { useSubjectStore } from '@/stores/subjectStore';
 import { storeToRefs } from 'pinia';
+import { useGradeStore } from '@/stores/gradeStore';
 
 const props = defineProps({
   subject: {
@@ -18,6 +19,7 @@ const props = defineProps({
 });
 
 const subjectStore = useSubjectStore();
+const gradeStore = useGradeStore();
 const toast = useToast();
 
 const currentSubject = ref(props.subject);
@@ -87,31 +89,38 @@ const outOf = ref();
 async function addExam() {
   //Regular exams have 0-15, Abitur has 0-60 Points
   outOf.value = type.value == 'Abitur' ? 60 : 15;
-  const response = await fetch('http://localhost:3000/grade', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      title: title.value,
-      subject: selectedSubject.value._id,
-      date: dueDate.value,
-      result: result.value,
-      outOf: outOf.value,
-      semester: type.value == 'Abitur' ? 'none' : semesterStore.currentSemester,
-      type: type.value,
-      notes: notes.value,
-    }),
-  });
+  const semester = type.value == 'Abitur' ? 'none' : semesterStore.currentSemester;
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Schulaufgabe:', errorText);
-  } else {
-    emit('added');
-    closeModal();
-    addedExamToast();
-  }
+  // const response = await fetch('http://localhost:3000/grade', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     title: title.value,
+  //     subject: selectedSubject.value._id,
+  //     date: dueDate.value,
+  //     result: result.value,
+  //     outOf: outOf.value,
+  //     semester: type.value == 'Abitur' ? 'none' : semesterStore.currentSemester,
+  //     type: type.value,
+  //     notes: notes.value,
+  //   }),
+  // });
+
+  gradeStore.addGrade(
+    title.value,
+    selectedSubject.value,
+    dueDate.value,
+    result.value,
+    outOf.value,
+    semester,
+    type.value,
+    notes.value,
+  );
+  emit('added');
+  closeModal();
+  addedExamToast();
 }
 </script>
 

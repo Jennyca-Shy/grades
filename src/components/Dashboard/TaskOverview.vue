@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Homework from '../Homework.vue';
 import Exam from '../Exam.vue';
 import AddHomeworkModal from '../Modal/AddHomeworkModal.vue';
@@ -7,6 +7,7 @@ import AddExamsModal from '../Modal/AddExamsModal.vue';
 import { useToast } from 'vue-toastification';
 import { useSettingStore } from '@/stores/settingStore';
 import { useHomeworkStore } from '@/stores/homeworkStore';
+import { useGradeStore } from '@/stores/gradeStore';
 
 const homeworkOpen = ref(false);
 const examsOpen = ref(false);
@@ -16,6 +17,7 @@ let activeNavHw = ref('due');
 
 const setting = useSettingStore();
 const homeworkStore = useHomeworkStore();
+const gradeStore = useGradeStore();
 
 /*async function getHomework() {
   const today = new Date().toISOString().split('T')[0];
@@ -37,22 +39,22 @@ const homeworkStore = useHomeworkStore();
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 }*/
 
-let allExam = ref([]);
-async function getExams() {
-  const today = new Date().toISOString().split('T')[0];
-  const response = await fetch(`http://localhost:3000/grade`);
-  let data = await response.json();
+const allGrades = computed(() => gradeStore.upcomingGrades);
+// async function getExams() {
+//   // const today = new Date().toISOString().split('T')[0];
+//   // const response = await fetch(`http://localhost:3000/grade`);
+//   // let data = await response.json();
 
-  let filtered = data.filter((exam) => {
-    return exam.result === null && exam.date >= today;
-  });
+//   // let filtered = data.filter((exam) => {
+//   //   return exam.result === null && exam.date >= today;
+//   // });
 
-  filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-  allExam.value = filtered;
+//   // filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+//   allExam.value = gradeStore.upcomingGrades;
 
-  console.log('All exams: ');
-  console.log(allExam);
-}
+//   console.log('All exams: ');
+//   console.log(allExam);
+// }
 
 const toast = useToast();
 function finishedHomework() {
@@ -68,10 +70,12 @@ function addedExam() {
   toast.info('Edited Exam');
 }*/
 
-onMounted(() => {
+onMounted(async () => {
   //getHomework();
-  getExams();
-  homeworkStore.fetchHomework();
+  // getExams();
+
+  await gradeStore.init();
+  await homeworkStore.init();
 });
 </script>
 
@@ -172,25 +176,10 @@ onMounted(() => {
         </h1>
         <button @click="examsOpen = true" class="modal mr-1">Add</button>
       </div>
-      <AddExamsModal
-        v-if="examsOpen"
-        @close="examsOpen = false"
-        @added="
-          () => {
-            getExams();
-            addedExam();
-          }
-        "
-      />
+      <AddExamsModal v-if="examsOpen" @close="examsOpen = false" />
       <div class="mt-2">
         <div class="mr-1 ml-1 md:h-[240px] overflowy-scrolly space-y-2">
-          <Exam
-            v-if="allExam.length > 0"
-            v-for="exam in allExam"
-            :exam="exam"
-            :key="exam"
-            @added="getExams()"
-          />
+          <Exam v-if="allGrades.length > 0" v-for="grade in allGrades" :exam="grade" :key="grade" />
           <div v-else class="">Wohoo, nothing to do...yet</div>
         </div>
       </div>

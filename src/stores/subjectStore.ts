@@ -24,6 +24,10 @@ export const useSubjectStore = defineStore('subject', () => {
     });
   });
 
+  function getSubjectById(id: string) {
+    return subject.value.find((sub) => sub._id === id);
+  }
+
   //getter
   async function fetchSubject() {
     const response = await fetch(`${API_URL}/subject`);
@@ -109,6 +113,7 @@ export const useSubjectStore = defineStore('subject', () => {
     sonstiges,
     fetchSubject,
     init,
+    getSubjectById,
 
     //setter
     addSubject,

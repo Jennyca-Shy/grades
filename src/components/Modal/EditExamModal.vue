@@ -4,12 +4,14 @@ import Modal from './Modal.vue';
 import { useToast } from 'vue-toastification';
 import { useSubjectStore } from '@/stores/subjectStore';
 import { storeToRefs } from 'pinia';
+import { useGradeStore } from '@/stores/gradeStore';
 
 const props = defineProps({
   exam: Object,
 });
 
 const subjectStore = useSubjectStore();
+const gradeStore = useGradeStore();
 
 const currExam = props.exam;
 console.log('currExam: ', currExam);
@@ -74,23 +76,19 @@ async function editExam() {
   currExam.result = result.value;
   currExam.type = type.value;
 
-  console.log('Curr Exam: ', currExam);
-  const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(currExam),
-  });
+  // console.log('Curr Exam: ', currExam);
+  // const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
+  //   method: 'PATCH',
+  //   headers: {
+  //     'Content-type': 'application/json',
+  //   },
+  //   body: JSON.stringify(currExam),
+  // });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Exam:', errorText);
-  } else {
-    emit('added');
-    closeModal();
-    toast.info('Edited exam!');
-  }
+  gradeStore.editGrade(currExam);
+  emit('close');
+  closeModal();
+  toast.info('Edited exam!');
 }
 
 function confirmDelete() {
@@ -101,14 +99,17 @@ function confirmDelete() {
 
 const toast = useToast();
 async function deleteSubject() {
-  const response = await fetch(`http://localhost:3000/grade/single/${props.exam._id}`, {
-    method: 'DELETE',
-  });
-  if (response.ok) {
+  // const response = await fetch(`http://localhost:3000/grade/single/${props.exam._id}`, {
+  //   method: 'DELETE',
+  // });
+
+  const res = await gradeStore.deleteGrade(props.exam._id);
+  if (res === 'ok') {
     toast.success('Successfully deleted the exam');
-    emit('added');
+    emit('close');
   } else {
     toast.warning('Something went wrong');
+    console.log('HAAAAA!', res);
   }
 }
 </script>

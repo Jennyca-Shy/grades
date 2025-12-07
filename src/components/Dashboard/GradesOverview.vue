@@ -3,25 +3,10 @@ import CircleProgressHalf from './CircleProgressHalf.vue';
 import VerticalProgressBar from './VerticalProgressBar.vue';
 import { ref, onMounted } from 'vue';
 import { useSubjectStore } from '@/stores/subjectStore';
+import { useGradeStore } from '@/stores/gradeStore';
 
 const subjectStore = useSubjectStore();
-/*async function getSubjects() {
-  const response = await fetch('http://localhost:3000/subject');
-  const data = await response.json();
-
-  lk.value = data.filter((subject) => {
-    return subject.type == 'LK';
-  });
-
-  console.log('LK: ', lk.value);
-  console.log('HEYYYY');
-
-  gk.value = data.filter((subject) => {
-    return subject.type == 'GK';
-  });
-
-  getPoints();
-}*/
+const gradeStore = useGradeStore();
 
 let lkPoints = ref([]);
 let gkPoints = ref([]);
@@ -32,13 +17,15 @@ let maxPointsLK = 0;
 async function getPoints() {
   for (const sub of subjectStore.lk) {
     let id = sub._id;
-    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    const data = await response.json();
+    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    // const data = await response.json();
+
+    const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;
     let gottenPoints = 0;
 
-    data.forEach((grade) => {
+    grades.value.forEach((grade) => {
       totalPoints += +grade.outOf;
       gottenPoints += grade.result;
     });
@@ -47,13 +34,15 @@ async function getPoints() {
 
   for (const sub of subjectStore.gk) {
     let id = sub._id;
-    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    const data = await response.json();
+    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    // const data = await response.json();
+
+    const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;
     let gottenPoints = 0;
 
-    data.forEach((grade) => {
+    grades.value.forEach((grade) => {
       totalPoints += +grade.outOf;
       gottenPoints += grade.result;
     });
@@ -62,13 +51,15 @@ async function getPoints() {
 
   for (const sub of subjectStore.sonstiges) {
     let id = sub._id;
-    const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    const data = await response.json();
+    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
+    // const data = await response.json();
+
+    const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;
     let gottenPoints = 0;
 
-    data.forEach((grade) => {
+    grades.value.forEach((grade) => {
       totalPoints += +grade.outOf;
       gottenPoints += grade.result;
     });
@@ -85,6 +76,7 @@ async function getPoints() {
 onMounted(async () => {
   //getSubjects();
   await subjectStore.init();
+  await gradeStore.init();
   getPoints();
 });
 </script>

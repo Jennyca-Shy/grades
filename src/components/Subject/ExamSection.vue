@@ -2,10 +2,13 @@
 import { ref, onMounted } from 'vue';
 import AddExamsModal from '../Modal/AddExamsModal.vue';
 import Exam from '../Exam.vue';
+import { useGradeStore } from '@/stores/gradeStore';
 
 const props = defineProps({
   propSubject: Object,
 });
+
+const gradeStore = useGradeStore();
 
 let subject = ref(props.propSubject);
 let id = ref(subject.value._id);
@@ -15,31 +18,32 @@ const addExamsOpen = ref(false);
 let activeNavExam = ref('upcoming');
 
 //Exams in navbar
-let upcomingExams = ref([]);
-let pastExams = ref([]);
-let today = new Date();
-console.log('Today: ', today);
-async function getExams() {
-  const response = await fetch('http://localhost:3000/grade');
-  const data = await response.json();
-  upcomingExams.value = data.filter((exam) => {
-    return exam.subject._id === id.value && new Date(exam.date) >= today && exam.result === null;
-  });
+const upEx = gradeStore.getUpcomingGradesBySubject(props.propSubject._id);
+console.log('UPEXXXX:', upEx.upcomingExams.value);
+//console.log('UPCOMING EXAMS: ', upcomingExams);
+const { pastExams } = gradeStore.getPastGradesBySubject(props.propSubject._id);
+// async function getExams() {
+//   // const response = await fetch('http://localhost:3000/grade');
+//   // const data = await response.json();
+//   // upcomingExams.value = data.filter((exam) => {
+//   //   return exam.subject._id === id.value && new Date(exam.date) >= today && exam.result === null;
+//   // });
 
-  pastExams.value = data.filter((exam) => {
-    return (
-      (exam.subject._id === id.value && new Date(exam.date) < today) ||
-      (exam.subject._id === id.value && exam.result != null)
-    );
-  });
+//   pastExams.value = data.filter((exam) => {
+//     return (
+//       (exam.subject._id === id.value && new Date(exam.date) < today) ||
+//       (exam.subject._id === id.value && exam.result != null)
+//     );
+//   });
 
-  console.log('upcoming: ', upcomingExams.value);
-  console.log('past: ', pastExams.value);
-  console.log('all exams: ', data);
-}
+//   console.log('upcoming: ', upcomingExams.value);
+//   console.log('past: ', pastExams.value);
+//   console.log('all exams: ', data);
+// }
 
 onMounted(() => {
-  getExams();
+  //getExams();
+  gradeStore.init();
 });
 </script>
 <template>
@@ -62,11 +66,6 @@ onMounted(() => {
         <AddExamsModal
           v-if="addExamsOpen"
           @close="addExamsOpen = false"
-          @added="
-            () => {
-              getExams();
-            }
-          "
           :color="subject?.color"
           :subject="subject"
         />
@@ -86,7 +85,7 @@ onMounted(() => {
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
             >Upcoming
-            <p class="hidden xl:inline">({{ upcomingExams.length }})</p></a
+            <p class="hidden xl:inline">({{ upEx.upcomingExams.length }})</p></a
           >
           <a
             @click="activeNavExam = 'past'"
@@ -115,23 +114,11 @@ onMounted(() => {
 
     <!-- Exams -->
     <div v-if="activeNavExam === 'upcoming'" class="space-y-2 overflowy-scrolly">
-      <Exam
-        v-if="upcomingExams.length > 0"
-        v-for="exam in upcomingExams"
-        :exam="exam"
-        @finished="getExams"
-        @added="getExams"
-      />
+      <Exam v-if="upEx.upcomingExams.length > 0" v-for="exam in upEx.upcomingExams" :exam="exam" />
       <div v-else class="">Pheew, no upcoming exam...yet</div>
     </div>
     <div v-if="activeNavExam === 'past'" class="space-y-2 overflowy-scrolly">
-      <Exam
-        v-if="pastExams.length > 0"
-        v-for="exam in pastExams"
-        :exam="exam"
-        @finished="getExams"
-        @added="getExams"
-      />
+      <Exam v-if="pastExams.length > 0" v-for="exam in pastExams" :exam="exam" />
       <div v-else class="">Wohoo, no Exams...yet</div>
     </div>
   </div>

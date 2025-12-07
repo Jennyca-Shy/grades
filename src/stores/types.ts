@@ -17,3 +17,15 @@ export interface Homework {
   notes?: string;
   status: 'finished' | 'due' | 'overdue';
 }
+
+export interface Grade {
+  _id: string;
+  title: string;
+  subject: Subject;
+  date: string;
+  result: number;
+  outOf: number;
+  semester: '12/1' | '12/2' | '13/1' | '13/2' | 'none';
+  type: 'Schulaufgabe' | 'Kurzarbeit' | 'Stegreifaufgabe' | 'Abfrage' | 'Abitur';
+  notes: string;
+}
