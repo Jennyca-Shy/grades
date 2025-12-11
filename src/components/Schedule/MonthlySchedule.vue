@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Appointment from '@/components/Schedule/Appointment.vue';
+import { useHolidayStore } from '@/stores/holidayStore';
+
+const holidayStore = useHolidayStore();
 
 let todayDate = ref(new Date());
 let todayDay = computed(() => new Date().getDate());
@@ -56,23 +59,12 @@ function lastMonth() {
 
 //Holiday
 //get holidays
-let allHolidays = ref([]);
-async function getHolidays() {
-  let response = await fetch('http://localhost:3000/holiday');
-  let data = await response.json();
+let allHolidays = ref(holidayStore.holiday);
+// async function getHolidays() {
+//   let response = await fetch('http://localhost:3000/holiday');
+//   let data = await response.json();
 
-  allHolidays.value = data;
-}
-
-//get holiday on this day for calendar appointments
-//month 0-indexed
-// function getTodaysHoliday(date, day) {
-//   return allHolidays.value.filter((hol) => {
-//     let holStart = new Date(hol.startDate);
-//     let holEnd = new Date(hol.endDate);
-//     let search = new Date(date.getFullYear(), date.getMonth(), day);
-//     return holStart <= search && holEnd >= search;
-//   });
+//   allHolidays.value = data;
 // }
 
 //get holidays for the last month
@@ -203,8 +195,9 @@ function getNextHolidays() {
 }
 
 onMounted(async () => {
+  await holidayStore.init();
   getLastMonthDays();
-  getHolidays();
+  //getHolidays();
   getThisHolidays();
   getNextHolidays();
 });

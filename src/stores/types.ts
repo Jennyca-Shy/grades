@@ -29,3 +29,23 @@ export interface Grade {
   type: 'Schulaufgabe' | 'Kurzarbeit' | 'Stegreifaufgabe' | 'Abfrage' | 'Abitur';
   notes: string;
 }
+
+export interface Schedule {
+  _id: string;
+  weekday: string;
+  subject: Subject;
+  startTime: string;
+  endTime: string;
+  room: string;
+}
+
+export interface Holiday {
+  _id: string;
+  name: {
+    language: string;
+    text: string;
+  };
+  endDate: string;
+  startDate: string;
+  subdivisions: string;
+}

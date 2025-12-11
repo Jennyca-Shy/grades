@@ -29,16 +29,8 @@ function closeModal() {
 
 //Get subjects
 const { subject } = storeToRefs(subjectStore);
-// async function getSubjects() {
-//   const response = await fetch('http://localhost:3000/subject');
-//   const data = await response.json();
-
-//   subjects.value = data;
-//   console.log('Subjects: ', subjects);
-// }
 
 onMounted(() => {
-  //getSubjects();
   subjectStore.init();
 });
 
@@ -56,13 +48,11 @@ const filteredSubjects = computed(() =>
 function selectSubject(sub) {
   dropdownVisible.value = false;
   selectedSubject.value = sub;
-  // console.log(selectedSubject.value);
   selectedSubjectName.value = sub.name;
 }
 
 function toggleDropdownVisible() {
   dropdownVisible.value = !dropdownVisible.value;
-  //selectedSubject.value = '';
   selectedSubjectName.value = '';
 }
 
@@ -70,28 +60,6 @@ function toggleDropdownVisible() {
 const title = ref('');
 const dueDate = ref('');
 const notes = ref('');
-/*async function addHomework() {
-  const response = await fetch('http://localhost:3000/homework', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      title: title.value,
-      subject: selectedSubject.value._id,
-      notes: notes.value,
-      dueDate: dueDate.value,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Fehler beim Hinzufügen der Hausaufgabe:', errorText);
-  } else {
-    emit('added');
-    closeModal();
-  }
-}*/
 
 function addHomework() {
   homeworkStore.addHomework(title.value, selectedSubject.value, notes.value, dueDate.value);

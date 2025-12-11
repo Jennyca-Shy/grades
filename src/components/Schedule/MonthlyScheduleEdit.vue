@@ -11,12 +11,6 @@ const subjectStore = useSubjectStore();
 //Subject dropdown
 //selectedSubject -> Subject object
 const { subject } = storeToRefs(subjectStore);
-// async function getSubjects() {
-//   const response = await fetch('http://localhost:3000/subject');
-//   const data = await response.json();
-
-//   subjects.value = data;
-// }
 
 const selectedSubject = ref('');
 let selectedSubjectName = ref('');
@@ -47,20 +41,23 @@ const startDate = ref();
 const endDate = ref();
 
 //Fetch schedule
-const appointment = ref([]);
-async function getAppointment() {
-  const response = await fetch('http://localhost:3000/appointment');
-  const data = await response.json();
+/*
+  to-do: implement appointments
+*/
+// const appointment = ref([]);
+// async function getAppointment() {
+//   const response = await fetch('http://localhost:3000/appointment');
+//   const data = await response.json();
 
-  appointment.value = data;
-  console.log('Appintments: ', appointment.value);
-}
+//   appointment.value = data;
+//   console.log('Appintments: ', appointment.value);
+// }
 
 const toast = useToast();
 
 onMounted(() => {
   // getSubjects();
-  getAppointment();
+  //getAppointment();
 });
 </script>
 

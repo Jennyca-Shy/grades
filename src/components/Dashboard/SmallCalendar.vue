@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import TimelineObject from './TimelineObject.vue';
+import { useScheduleStore } from '@/stores/scheduleStore';
+
+const scheduleStore = useScheduleStore();
 
 //listsss
 const MONTH = [
@@ -65,29 +68,30 @@ function toMinutes(time) {
 let displayedDate = ref(new Date());
 let displayedDay = ref(displayedDate.value.getDay());
 console.log('Displayed Day: ', displayedDay.value);
-let schedule = ref([]);
+let schedule = scheduleStore.schedule;
 let displayedSchedule = computed(() => {
-  return schedule.value
+  return schedule
     .filter((sched) => sched.weekday === DAYS[displayedDay.value])
     .sort((a, b) => toMinutes(a.startTime) - toMinutes(b.startTime));
 });
 
-async function getSchedule() {
-  const response = await fetch('http://localhost:3000/schedule');
-  if (!response.ok) {
-    console.log('ERROR');
-    return;
-  }
-  const data = await response.json();
+// async function getSchedule() {
+//   const response = await fetch('http://localhost:3000/schedule');
+//   if (!response.ok) {
+//     console.log('ERROR');
+//     return;
+//   }
+//   const data = await response.json();
 
-  schedule.value = data;
+//   schedule.value = data;
 
-  console.log('displayed schedule: ', displayedSchedule.value);
-}
+//   console.log('displayed schedule: ', displayedSchedule.value);
+// }
 
-onMounted(() => {
+onMounted(async () => {
+  await scheduleStore.init();
   getLastMonthDays();
-  getSchedule();
+  //getSchedule();
 });
 </script>
 

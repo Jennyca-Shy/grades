@@ -32,16 +32,8 @@ function closeModal() {
 
 //Get subjects
 const { subject } = storeToRefs(subjectStore);
-/*async function getSubjects() {
-  const response = await fetch('http://localhost:3000/subject');
-  const data = await response.json();
-
-  subjects.value = data;
-  console.log('Subjects: ', subjects);
-}*/
 
 onMounted(() => {
-  //getSubjects();
   subjectStore.init();
 });
 
@@ -59,7 +51,6 @@ const filteredSubjects = computed(() =>
 function selectSubject(sub) {
   dropdownVisible.value = false;
   selectedSubject.value = sub;
-  // console.log(selectedSubject.value);
   selectedSubjectName.value = sub.name;
 }
 
@@ -90,23 +81,6 @@ async function addExam() {
   //Regular exams have 0-15, Abitur has 0-60 Points
   outOf.value = type.value == 'Abitur' ? 60 : 15;
   const semester = type.value == 'Abitur' ? 'none' : semesterStore.currentSemester;
-
-  // const response = await fetch('http://localhost:3000/grade', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     title: title.value,
-  //     subject: selectedSubject.value._id,
-  //     date: dueDate.value,
-  //     result: result.value,
-  //     outOf: outOf.value,
-  //     semester: type.value == 'Abitur' ? 'none' : semesterStore.currentSemester,
-  //     type: type.value,
-  //     notes: notes.value,
-  //   }),
-  // });
 
   gradeStore.addGrade(
     title.value,

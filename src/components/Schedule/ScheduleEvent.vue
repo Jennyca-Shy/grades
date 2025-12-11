@@ -1,6 +1,9 @@
 <script setup>
 import { useToast } from 'vue-toastification';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useScheduleStore } from '@/stores/scheduleStore';
+
+const scheduleStore = useScheduleStore();
 
 /*
 weekday in longform
@@ -62,15 +65,22 @@ const emit = defineEmits(['deleted']);
 
 const toast = useToast();
 async function deleteEvent() {
-  const response = await fetch(`http://localhost:3000/schedule/single/${id.value}`, {
-    method: 'DELETE',
-  });
+  // const response = await fetch(`http://localhost:3000/schedule/single/${id.value}`, {
+  //   method: 'DELETE',
+  // });
+  // if (!response.ok) {
+  //   console.error('Something went wrong');
+  // } else {
+  //   toast.success('Deleted');
+  //   emit('deleted');
+  // }
 
-  if (!response.ok) {
-    console.error('Something went wrong');
-  } else {
+  const res = await scheduleStore.deleteSchedule(id.value);
+  if (res === 'ok') {
     toast.success('Deleted');
     emit('deleted');
+  } else {
+    console.error('Something went wrong');
   }
 }
 
@@ -79,6 +89,10 @@ if (subjectName.value == 'Break') {
   pause = true;
 }
 console.log('Pause: ', pause);
+
+onMounted(async () => {
+  await scheduleStore.init();
+});
 </script>
 
 <template>

@@ -4,18 +4,14 @@ import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useSubjectStore } from '@/stores/subjectStore';
 import { storeToRefs } from 'pinia';
+import { useScheduleStore } from '@/stores/scheduleStore';
 
 const subjectStore = useSubjectStore();
+const scheduleStore = useScheduleStore();
 
 //Subject dropdown
 //selectedSubject -> Subject object
 const { subject } = storeToRefs(subjectStore);
-// async function getSubjects() {
-//   const response = await fetch('http://localhost:3000/subject');
-//   const data = await response.json();
-
-//   subjects.value = data;
-// }
 
 const selectedSubject = ref('');
 let selectedSubjectName = ref('');
@@ -34,7 +30,7 @@ function selectSubject(sub) {
   selectedSubject.value = sub;
   // console.log(selectedSubject.value);
   selectedSubjectName.value = sub.name;
-  room.value = subject.room;
+  room.value = sub.room;
 }
 
 function toggleDropdownVisibleSubject() {
@@ -79,14 +75,14 @@ const hourEnd = ref('7');
 const minuteEnd = ref('00');
 
 //Fetch schedule
-const schedule = ref([]);
-async function getSchedule() {
-  const response = await fetch('http://localhost:3000/schedule');
-  const data = await response.json();
+const schedule = scheduleStore.schedule;
+// async function getSchedule() {
+//   const response = await fetch('http://localhost:3000/schedule');
+//   const data = await response.json();
 
-  schedule.value = data;
-  console.log('schedule: ', schedule.value);
-}
+//   schedule.value = data;
+//   console.log('schedule: ', schedule.value);
+// }
 
 const toast = useToast();
 
@@ -109,11 +105,12 @@ function allowed(newStart, newEnd, day) {
       const existingEnd = toMinutes(sched.endTime);
 
       if (overlapping(newStartMin, newEndMin, existingStart, existingEnd)) {
-        return true;
+        console.log('HMMMM: ', newStartMin, newEndMin, existingStart, existingEnd);
+        return false;
       }
     }
   }
-  return false;
+  return true;
 }
 async function addSchedule() {
   console.log('hourStart: ', hourStart.value);
@@ -127,7 +124,22 @@ async function addSchedule() {
     toast.error('The end time should be after the start time!');
     return 0;
   }
-  const response = await fetch('http://localhost:3000/schedule', {
+
+  const res = scheduleStore.addSchedule(
+    selectedDay.value,
+    selectedSubject.value,
+    selectStartTime,
+    selectEndTime,
+    room.value,
+  );
+
+  if (res === 'ok') {
+    toast.success('Added to schedule!');
+  } else {
+    toast.error('Ups, something went wrong');
+  }
+
+  /*const response = await fetch('http://localhost:3000/schedule', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -145,14 +157,16 @@ async function addSchedule() {
     const errorText = await response.text();
     console.error('Fehler beim Hinzufügen: ', errorText);
   } else {
-    getSchedule();
+    // getSchedule();
     toast.success('Added to schedule!');
-  }
+  }*/
 }
 
-onMounted(() => {
+onMounted(async () => {
   // getSubjects();
-  getSchedule();
+  // getSchedule();
+  await subjectStore.init();
+  await scheduleStore.init();
 });
 </script>
 
@@ -176,12 +190,7 @@ onMounted(() => {
       </div>
 
       <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
-      <ScheduleEvent
-        v-for="sched in schedule"
-        :schedule="sched"
-        :del="true"
-        @deleted="getSchedule"
-      />
+      <ScheduleEvent v-for="sched in schedule" :schedule="sched" :del="true" />
 
       <!-- <div class="row-start-[11] col-start-5 row-end-[29] bg-blue-300 rounded text-xs">hello</div> -->
     </div>

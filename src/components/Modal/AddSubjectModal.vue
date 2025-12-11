@@ -27,20 +27,6 @@ const type = ref(props.subjectType);
 
 async function addSubject() {
   if (subject.value && teacher.value && room.value) {
-    // const response = await fetch('http://localhost:3000/subject', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     name: subject.value,
-    //     teacher: teacher.value,
-    //     room: room.value,
-    //     color: color.value,
-    //     type: type.value,
-    //   }),
-    // });
-
     const response = await subjectStore.addSubject(
       subject.value,
       teacher.value,

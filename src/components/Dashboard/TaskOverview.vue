@@ -19,42 +19,7 @@ const setting = useSettingStore();
 const homeworkStore = useHomeworkStore();
 const gradeStore = useGradeStore();
 
-/*async function getHomework() {
-  const today = new Date().toISOString().split('T')[0];
-  const response = await fetch(`http://localhost:3000/homework`);
-  let data = await response.json();
-
-  overdueHomework.value = data
-    .filter((hw) => {
-      const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
-      return hw.status != 'finished' && dueDate < today;
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-  dueHomework.value = data
-    .filter((hw) => {
-      const dueDate = new Date(hw.dueDate).toISOString().split('T')[0];
-      return hw.status != 'finished' && dueDate >= today;
-    })
-    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-}*/
-
 const allGrades = computed(() => gradeStore.upcomingGrades);
-// async function getExams() {
-//   // const today = new Date().toISOString().split('T')[0];
-//   // const response = await fetch(`http://localhost:3000/grade`);
-//   // let data = await response.json();
-
-//   // let filtered = data.filter((exam) => {
-//   //   return exam.result === null && exam.date >= today;
-//   // });
-
-//   // filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-//   allExam.value = gradeStore.upcomingGrades;
-
-//   console.log('All exams: ');
-//   console.log(allExam);
-// }
 
 const toast = useToast();
 function finishedHomework() {
@@ -66,14 +31,8 @@ function addedHomework() {
 function addedExam() {
   toast.success('Added exam. Now go and learn for that!');
 }
-/*function editExam() {
-  toast.info('Edited Exam');
-}*/
 
 onMounted(async () => {
-  //getHomework();
-  // getExams();
-
   await gradeStore.init();
   await homeworkStore.init();
 });

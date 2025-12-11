@@ -1,19 +1,23 @@
 <script setup>
 import ScheduleEvent from './ScheduleEvent.vue';
 import { onMounted, ref } from 'vue';
+import { useScheduleStore } from '@/stores/scheduleStore';
+
+const scheduleStore = useScheduleStore();
 
 //Fetch schedule
-const schedule = ref([]);
-async function getSchedule() {
-  const response = await fetch('http://localhost:3000/schedule');
-  const data = await response.json();
+const schedule = scheduleStore.schedule;
+// async function getSchedule() {
+//   const response = await fetch('http://localhost:3000/schedule');
+//   const data = await response.json();
 
-  schedule.value = data;
-  console.log('schedule: ', schedule.value);
-}
+//   schedule.value = data;
+//   console.log('schedule: ', schedule.value);
+// }
 
-onMounted(() => {
-  getSchedule();
+onMounted(async () => {
+  await scheduleStore.init();
+  //getSchedule();
 });
 </script>
 <template>
@@ -35,12 +39,7 @@ onMounted(() => {
     </div>
 
     <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
-    <ScheduleEvent
-      v-for="sched in schedule"
-      :schedule="sched"
-      :delete="true"
-      @deleted="getSchedule"
-    />
+    <ScheduleEvent v-for="sched in schedule" :schedule="sched" :delete="true" />
     <!-- <div class="row-start-[11] col-start-5 row-end-[29] bg-blue-300 rounded text-xs">hello</div> -->
   </div>
 </template>

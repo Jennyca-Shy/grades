@@ -28,17 +28,6 @@ function closeModal() {
 
 //Get subjects
 const { subject } = storeToRefs(subjectStore);
-// async function getSubjects() {
-//   const response = await fetch('http://localhost:3000/subject');
-//   const data = await response.json();
-
-//   subjects.value = data;
-//   console.log('Subjects: ', subjects);
-// }
-
-onMounted(() => {
-  // getSubjects();
-});
 
 //Subject dropdown
 //selectedSubject -> Subject object
@@ -56,7 +45,6 @@ const filteredSubjects = computed(() =>
 function selectSubject(subject) {
   dropdownVisible.value = false;
   selectedSubject.value = sub;
-  // console.log(selectedSubject.value);
   selectedSubjectName.value = sub.name;
 }
 
@@ -76,15 +64,6 @@ async function editExam() {
   currExam.result = result.value;
   currExam.type = type.value;
 
-  // console.log('Curr Exam: ', currExam);
-  // const response = await fetch(`http://localhost:3000/grade/${currExam._id}`, {
-  //   method: 'PATCH',
-  //   headers: {
-  //     'Content-type': 'application/json',
-  //   },
-  //   body: JSON.stringify(currExam),
-  // });
-
   gradeStore.editGrade(currExam);
   emit('close');
   closeModal();
@@ -99,10 +78,6 @@ function confirmDelete() {
 
 const toast = useToast();
 async function deleteSubject() {
-  // const response = await fetch(`http://localhost:3000/grade/single/${props.exam._id}`, {
-  //   method: 'DELETE',
-  // });
-
   const res = await gradeStore.deleteGrade(props.exam._id);
   if (res === 'ok') {
     toast.success('Successfully deleted the exam');

@@ -17,9 +17,6 @@ let maxPointsLK = 0;
 async function getPoints() {
   for (const sub of subjectStore.lk) {
     let id = sub._id;
-    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    // const data = await response.json();
-
     const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;
@@ -34,9 +31,6 @@ async function getPoints() {
 
   for (const sub of subjectStore.gk) {
     let id = sub._id;
-    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    // const data = await response.json();
-
     const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;
@@ -51,9 +45,6 @@ async function getPoints() {
 
   for (const sub of subjectStore.sonstiges) {
     let id = sub._id;
-    // const response = await fetch(`http://localhost:3000/grade/subject/${id}`);
-    // const data = await response.json();
-
     const grades = gradeStore.getGradesBySubject(sub);
 
     let totalPoints = 0;

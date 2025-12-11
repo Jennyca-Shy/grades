@@ -40,15 +40,6 @@ async function updateSubject() {
   subject.type = type.value;
   subject.abitur = isAbitur.value;
 
-  // await fetch(`http://localhost:3000/subject/${subject._id}`, {
-  //   method: 'PATCH',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(subject),
-  // });
-  // console.log('Subject: ', subject);
-
   subjectStore.editSubject(subject);
 
   closeModal();

@@ -20,26 +20,7 @@ let activeNavExam = ref('upcoming');
 //Exams in navbar
 const upEx = gradeStore.getUpcomingGradesBySubject(props.propSubject._id);
 console.log('UPEXXXX:', upEx.upcomingExams.value);
-//console.log('UPCOMING EXAMS: ', upcomingExams);
 const { pastExams } = gradeStore.getPastGradesBySubject(props.propSubject._id);
-// async function getExams() {
-//   // const response = await fetch('http://localhost:3000/grade');
-//   // const data = await response.json();
-//   // upcomingExams.value = data.filter((exam) => {
-//   //   return exam.subject._id === id.value && new Date(exam.date) >= today && exam.result === null;
-//   // });
-
-//   pastExams.value = data.filter((exam) => {
-//     return (
-//       (exam.subject._id === id.value && new Date(exam.date) < today) ||
-//       (exam.subject._id === id.value && exam.result != null)
-//     );
-//   });
-
-//   console.log('upcoming: ', upcomingExams.value);
-//   console.log('past: ', pastExams.value);
-//   console.log('all exams: ', data);
-// }
 
 onMounted(() => {
   //getExams();

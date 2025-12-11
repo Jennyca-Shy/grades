@@ -20,20 +20,6 @@ const room = ref('');
 const color = ref('#2563eb');
 async function addLK() {
   if (lk.value && teacher.value && room.value) {
-    // const response = await fetch('http://localhost:3000/subject', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     name: lk.value,
-    //     teacher: teacher.value,
-    //     room: room.value,
-    //     color: color.value,
-    //     type: 'LK',
-    //   }),
-    // });
-
     const response = subjectStore.addSubject(
       lk.value,
       teacher.value,

@@ -27,17 +27,6 @@ function closeModal() {
 
 //Get subjects
 const { subject } = storeToRefs(subjectStore);
-// async function getSubjects() {
-//   const response = await fetch('http://localhost:3000/subject');
-//   const data = await response.json();
-
-//   subjects.value = data;
-//   console.log('Subjects: ', subjects);
-// }
-
-onMounted(() => {
-  //getSubjects();
-});
 
 //Subject dropdown
 //selectedSubject -> Subject object
@@ -55,7 +44,6 @@ const filteredSubjects = computed(() =>
 function selectSubject(subject) {
   dropdownVisible.value = false;
   selectedSubject.value = sub;
-  // console.log(selectedSubject.value);
   selectedSubjectName.value = sub.name;
 }
 
@@ -70,7 +58,6 @@ async function editHomework() {
   currHomework.dueDate = formattedDate.value;
   currHomework.subject = selectedSubject.value;
   homeworkStore.editHomework(currHomework);
-  //emit('updated');
   closeModal();
   toast.info('Edited homework!');
 }
@@ -86,7 +73,6 @@ const toast = useToast();
 async function deleteHomework() {
   homeworkStore.deleteHomework(props.homework._id);
   toast.success('Successfully deleted the homework');
-  //emit('updated');
   emit('close');
 }
 </script>
