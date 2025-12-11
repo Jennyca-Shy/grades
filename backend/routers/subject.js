@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Subject = require('../models/subject');
+const Homework = require('../models/homework');
+const Grade = require('../models/grade');
+const Schedule = require('../models/schedule');
 
 //Get all
 router.get('/', async (req, res) => {
@@ -85,8 +88,12 @@ router.patch('/:id', getSubject, async (req, res) => {
 
 //Delete one
 router.delete('/:id', getSubject, async (req, res) => {
+  const id = req.params.id;
   try {
     await res.subject.deleteOne();
+    await Homework.deleteMany({ subject: id });
+    await Schedule.deleteMany({ subject: id });
+    await Grade.deleteMany({ subject: id });
     res.json({ message: 'deleted subject' });
   } catch (error) {
     res.status(500).json({ message: error.message });

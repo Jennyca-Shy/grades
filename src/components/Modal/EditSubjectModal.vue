@@ -4,14 +4,23 @@ import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
 import { useSubjectStore } from '@/stores/subjectStore';
-import SubjectsView from '@/views/SubjectsView.vue';
+import { useScheduleStore } from '@/stores/scheduleStore';
+import { useGradeStore } from '@/stores/gradeStore';
+import { useHomeworkStore } from '@/stores/homeworkStore';
 
 const subjectStore = useSubjectStore();
+const scheduleStore = useScheduleStore();
+const gradeStore = useGradeStore();
+const homeworkStore = useHomeworkStore();
 
-const props = defineProps(['subject']);
-const subject = props.subject;
-const color = props.subject.color;
-const name = props.subject.name;
+const props = defineProps({
+  subject: Object,
+});
+
+console.log('SUBJECTTTT: ', props.subject);
+const subject = ref(props.subject);
+const color = ref(props.subject.color);
+const name = ref(props.subject.name);
 const teacherNew = ref('');
 const nameNew = ref('');
 const colorNew = ref(color);
@@ -58,7 +67,8 @@ async function deleteSubject() {
   /*
   to-do: do this after all Stores in SubjectStore, with Methods in the other two stores
   */
-  const responseSubject = await fetch(`http://localhost:3000/subject/${subject._id}`, {
+
+  /*const responseSubject = await fetch(`http://localhost:3000/subject/${subject._id}`, {
     method: 'DELETE',
   });
   const responseHomework = await fetch(`http://localhost:3000/homework/many/${subject._id}`, {
@@ -66,12 +76,18 @@ async function deleteSubject() {
   });
   const responseSchedule = await fetch(`http://localhost:3000/schedule/many/${subject._id}`, {
     method: 'DELETE',
-  });
-  if (responseSubject.ok && responseHomework.ok && responseSchedule.ok) {
+  });*/
+
+  const res = await subjectStore.deleteSubject(subject.value._id);
+  //console.log('DELETING SUBJECT: ', res);
+  if (res === 'ok') {
     /*
       temporarily here til all stores are finished
     */
     await subjectStore.fetchSubject();
+    await scheduleStore.fetchSchedule();
+    await gradeStore.fetchGrade();
+    await homeworkStore.fetchHomework();
 
     router.push('/subjects');
     toast.success('Successfully deleted the subject');
@@ -80,9 +96,13 @@ async function deleteSubject() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   console.log(props.subject);
   console.log(JSON.stringify(props.subject));
+  await subjectStore.init();
+  await scheduleStore.init();
+  await homeworkStore.init();
+  await gradeStore.init();
 });
 </script>
 

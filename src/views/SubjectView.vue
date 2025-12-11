@@ -18,7 +18,6 @@ const editSubjectOpen = ref(false);
 const route = useRoute();
 const id = route.params.id;
 let subject = computed(() => subjectStore.getSubjectById(id));
-let data;
 // async function getSubject() {
 //   const response = await fetch(`http://localhost:3000/subject/id/${id}`);
 //   data = await response.json();
@@ -83,10 +82,9 @@ onMounted(async () => {
           @close="
             () => {
               editSubjectOpen = false;
-              getSubject();
             }
           "
-          :subject="data"
+          :subject="subject"
         />
       </div>
     </div>

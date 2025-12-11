@@ -50,7 +50,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     room: string,
   ) {
     try {
-      const response = await fetch('http://localhost:3000/schedule', {
+      const response = await fetch(`${API_URL}/schedule`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',

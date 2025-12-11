@@ -103,6 +103,22 @@ export const useSubjectStore = defineStore('subject', () => {
     if (index != -1) subject.value[index] = updatedSub;
   }
 
+  async function deleteSubject(subId: string) {
+    try {
+      const response = await fetch(`${API_URL}/subject/${subId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        return 'error';
+      }
+
+      subject.value = subject.value.filter((sub) => sub._id != subId);
+      return 'ok';
+    } catch (error) {
+      throw new Error("Couldn't delete subject!");
+    }
+  }
+
   return {
     //state
     subject,
@@ -118,5 +134,6 @@ export const useSubjectStore = defineStore('subject', () => {
     //setter
     addSubject,
     editSubject,
+    deleteSubject,
   };
 });
