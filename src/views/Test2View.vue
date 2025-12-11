@@ -56,13 +56,13 @@ function lastMonth() {
 
 //Holiday
 //get holidays
-let allHolidays = ref([]);
-async function getHolidays() {
-  let response = await fetch('http://localhost:3000/holiday');
-  let data = await response.json();
+// let allHolidays = ref([]);
+// async function getHolidays() {
+//   let response = await fetch('http://localhost:3000/holiday');
+//   let data = await response.json();
 
-  allHolidays.value = data;
-}
+//   allHolidays.value = data;
+// }
 
 //get holiday on this day for calendar appointments
 //month 0-indexed

@@ -51,7 +51,7 @@ export const useSubjectStore = defineStore('subject', () => {
     type: string,
   ) {
     try {
-      const response = await fetch('http://localhost:3000/subject', {
+      const response = await fetch(`${API_URL}/subject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
