@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+/*import mongoose from 'mongoose';
 import holiday from '../models/holiday.js';
 import { Holiday } from 'open-holiday-js';
 import * as dotenv from 'dotenv';
@@ -40,7 +40,7 @@ async function updateHolidays() {
   }
 }
 
-updateHolidays();
+updateHolidays();*/
 
 //possibly change the comments in holiday.js model
 //run with npx ts-node backend/scripts/updateHolidays.ts
