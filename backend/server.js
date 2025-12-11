@@ -1,4 +1,5 @@
 //require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 
 const express = require('express');
 const app = express();
@@ -15,7 +16,7 @@ db.once('open', () => console.log('connected to database'));
 
 app.use(express.json());
 
-app.listen(3000, () => console.log('Server started'));
+app.listen(PORT, () => console.log('Server started'));
 
 //ROUTER
 const homeworkRouter = require('./routers/homework');
