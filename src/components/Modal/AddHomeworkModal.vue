@@ -82,7 +82,7 @@ function addHomework() {
           id="homework"
           v-model="title"
           type="text"
-          placeholder="Enter title"
+          placeholder="Titel"
           :style="`outline-color: ${color}`"
           required
         />
@@ -94,7 +94,7 @@ function addHomework() {
               :style="`outline-color: ${color}`"
               required
               type="text"
-              placeholder="Subject"
+              placeholder="Fach"
               v-model="selectedSubjectName"
               @focus="toggleDropdownVisible()"
             />
@@ -119,7 +119,7 @@ function addHomework() {
           id="until"
           v-model="dueDate"
           type="date"
-          placeholder="Finished by"
+          placeholder="Bis wann"
           required
         />
         <textarea
@@ -127,7 +127,7 @@ function addHomework() {
           name="notes"
           v-model="notes"
           id="notes"
-          placeholder="Add your notes"
+          placeholder="Notizen"
         ></textarea>
 
         <div class="flex justify-end">
@@ -136,7 +136,7 @@ function addHomework() {
             :style="`border-color: ${color}`"
             type="submit"
           >
-            Add
+            Hinzufügen
           </button>
         </div>
       </form>

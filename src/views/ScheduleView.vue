@@ -49,14 +49,14 @@ let displayedDate = ref(new Date());
     <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col overflowy-scrolly">
       <div class="flex justify-between">
         <h1>
-          Schedule
+          Stundenplan
           <hr class="bg-newBlue" />
         </h1>
         <RouterLink v-if="activeView === 'week'" to="schedule/edit/week"
-          ><button class="modal">Edit</button></RouterLink
+          ><button class="modal">Ändern</button></RouterLink
         >
         <RouterLink v-if="activeView === 'month'" to="schedule/edit/month"
-          ><button class="modal">Edit</button></RouterLink
+          ><button class="modal">Ändern</button></RouterLink
         >
       </div>
       <!-- Header with Date and Buttons -->
@@ -82,7 +82,7 @@ let displayedDate = ref(new Date());
               activeView == view ? 'bg-gray-200/60' : 'bg-white hover:bg-gray-50',
             ]"
           >
-            {{ view.charAt(0).toUpperCase() + view.slice(1) }}
+            {{ view == 'week' ? 'Woche' : 'Monat' }}
           </button>
         </div>
       </div>

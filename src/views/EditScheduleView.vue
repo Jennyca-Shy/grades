@@ -13,10 +13,10 @@ const props = defineProps({
     <div class="bg-white rounded-md p-4 h-[calc(100vh-24px-16px)] flex flex-col">
       <div class="flex justify-between">
         <h1>
-          Edit Schedule
+          Stundenplan bearbeiten
           <hr class="bg-newBlue" />
         </h1>
-        <RouterLink to="/schedule"><button class="modal">Save</button></RouterLink>
+        <RouterLink to="/schedule"><button class="modal">Speichern</button></RouterLink>
       </div>
       <!-- Header with Date and Buttons -->
       <div class="mt-3 flex justify-between items-center mb-2">
@@ -31,7 +31,7 @@ const props = defineProps({
               calendar == view ? 'bg-gray-200/60' : 'bg-white hover:bg-gray-50',
             ]"
           >
-            <RouterLink :to="view">{{ view.charAt(0).toUpperCase() + view.slice(1) }}</RouterLink>
+            <RouterLink :to="view">{{ view == 'week' ? 'Woche' : 'Monat' }}</RouterLink>
           </button>
         </div>
       </div>

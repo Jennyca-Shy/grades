@@ -50,7 +50,7 @@ function toMinutes(time) {
         class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white"
       ></div>
       <div class="">
-        <h3 class="text-gray-900">{{ duration }}min break</h3>
+        <h3 class="text-gray-900">{{ duration }}min Pause</h3>
       </div>
     </li>
   </RouterLink>

@@ -23,13 +23,13 @@ const allGrades = computed(() => gradeStore.upcomingGrades);
 
 const toast = useToast();
 function finishedHomework() {
-  toast.success('Wohooo, finished homework!');
+  toast.success('Juhu, Hausaufgabe erledigt');
 }
 function addedHomework() {
-  toast.success('Added homework... more work to do');
+  toast.success('Hausaufgabe hinzugefügt. Noch mehr zu tun...');
 }
 function addedExam() {
-  toast.success('Added exam. Now go and learn for that!');
+  toast.success('Prüfung hinzugefügt. Geh lernen!');
 }
 
 onMounted(async () => {
@@ -44,10 +44,10 @@ onMounted(async () => {
       <div class="flex flex-col justify-between md:flex-row md:items-center">
         <div class="flex justify-between">
           <h1 class="ml-1">
-            Homework
+            Hausaufgaben
             <hr class="bg-newBlue" />
           </h1>
-          <button @click="homeworkOpen = true" class="modal ml-4 md:hidden">Add</button>
+          <button @click="homeworkOpen = true" class="modal ml-4 md:hidden">Neu</button>
         </div>
         <div class="flex">
           <AddHomeworkModal
@@ -73,7 +73,7 @@ onMounted(async () => {
                 border-left-color: ${setting.defaultColor};
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
-              >Overdue
+              >Überfällig
               <p class="hidden xl:inline">({{ homeworkStore.overdueHomework.length }})</p></a
             >
             <a
@@ -86,12 +86,12 @@ onMounted(async () => {
                 border-left-color: ${setting.defaultColor};
                 border-right-color: ${setting.defaultColor};
                 border-top-color: ${setting.defaultColor};`"
-              >Due
+              >Fällig
               <p class="hidden xl:inline">({{ homeworkStore.dueHomework.length }})</p></a
             >
           </nav>
           <button @click="homeworkOpen = true" class="modal ml-1 xl:ml-4 hidden md:block">
-            Add
+            Neu
           </button>
         </div>
       </div>
@@ -108,7 +108,7 @@ onMounted(async () => {
                 }
               "
             />
-            <div v-else class="">Wohoo, nothing to do...yet</div>
+            <div v-else class="">Juhu, noch nichts zu tun...</div>
           </div>
 
           <div v-if="activeNavHw == 'due'" class="flex flex-col gap-2">
@@ -122,7 +122,7 @@ onMounted(async () => {
                 }
               "
             />
-            <div v-else class="">Wohoo, nothing to do...yet</div>
+            <div v-else class="">Juhu, noch nichts zu tun...</div>
           </div>
         </div>
       </div>
@@ -130,16 +130,16 @@ onMounted(async () => {
     <div class="col-span-2 row-span-2 bg-white rounded-md m-2 p-2">
       <div class="flex justify-between items-center">
         <h1 class="ml-1">
-          Upcoming Exams
+          Prüfungen
           <hr class="bg-newBlue" />
         </h1>
-        <button @click="examsOpen = true" class="modal mr-1">Add</button>
+        <button @click="examsOpen = true" class="modal mr-1">Neu</button>
       </div>
       <AddExamsModal v-if="examsOpen" @close="examsOpen = false" />
       <div class="mt-2">
         <div class="mr-1 ml-1 md:h-[240px] overflowy-scrolly space-y-2">
           <Exam v-if="allGrades.length > 0" v-for="grade in allGrades" :exam="grade" :key="grade" />
-          <div v-else class="">Wohoo, nothing to do...yet</div>
+          <div v-else class="">Juhu, noch nichts zu tun...</div>
         </div>
       </div>
     </div>

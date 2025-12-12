@@ -2,7 +2,7 @@
   <section>
     <div class="w-full flex justify-center mt-2 mb-3">
       <h1>
-        Overall Grade
+        Gesamtnote
         <hr class="bg-newBlue" />
       </h1>
     </div>
@@ -38,7 +38,7 @@
         class="absolute top-1/2 start-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
       >
         <span class="text-4xl font-bold text-newBlue">700</span>
-        <span class="text-newBlue block">out of 900</span>
+        <span class="text-newBlue block">von 900</span>
       </div>
     </div>
   </section>

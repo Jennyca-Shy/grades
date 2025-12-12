@@ -32,15 +32,15 @@ function calculateDays() {
 
   let output = '';
   if (diffDays > 1) {
-    output = 'in ' + diffDays + ' days';
+    output = 'in ' + diffDays + ' Tagen';
   } else if (diffDays === 1) {
-    output = 'in ' + diffDays + ' day';
+    output = 'morgen';
   } else if (diffDays === 0) {
-    output = 'today';
+    output = 'heute';
   } else if (diffDays === -1) {
-    output = 'yesterday';
+    output = 'gestern';
   } else {
-    output = diffDays * -1 + ' days ago';
+    output = 'vor ' + diffDays * -1 + ' Tagen';
   }
 
   return output;

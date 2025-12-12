@@ -78,7 +78,7 @@ onMounted(async () => {
     <div class="self-stretch bg-gray-200 w-[3px] rounded-md mx-6 hidden sm:block"></div>
     <div class="self-stretch mt-2 mb-3 overflow-hidden hidden sm:block">
       <h1 class="mb-3">
-        Overview
+        Überblick
         <hr class="bg-newBlue" />
       </h1>
       <div class="flex flex-row gap-8">

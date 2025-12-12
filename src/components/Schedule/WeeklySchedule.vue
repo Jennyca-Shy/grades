@@ -25,14 +25,14 @@ onMounted(async () => {
     class="border-2 p-2 rounded-md grid grid-cols-[50px_repeat(7,1fr)] grid-rows-[26px_repeat(120,10px)] mid:grid-rows-[26px_repeat(120,5px)] h-full text-center flex-1 overflowy-scrolly"
   >
     <!-- Left column with time -->
-    <div class="col-start-1 row-start-1 border-b-2">Time</div>
+    <div class="col-start-1 row-start-1 border-b-2">Zeit</div>
     <div v-for="i in 10" :class="[`col-start-1 row-start-[${(i - 1) * 12 + 2}] row-span-12`]">
       {{ i + 6 }}:00
     </div>
 
     <!-- Right colums with weekdays -->
     <div
-      v-for="(value, index) in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"
+      v-for="(value, index) in ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']"
       :class="`col-start-[${index + 2}] row-start-1 row-span-1 col-span-1 border-b-2`"
     >
       {{ value }}

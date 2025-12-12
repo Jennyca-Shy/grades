@@ -1,4 +1,4 @@
-//require('dotenv').config();
+require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 const express = require('express');
@@ -16,7 +16,8 @@ db.once('open', () => console.log('connected to database'));
 const cors = require('cors');
 app.use(
   cors({
-    origin: 'https://gradetrackerq.netlify.app', // your frontend URL
+    origin: ['http://localhost:5173', 'https://gradetrackerq.netlify.app'],
+    credentials: true,
   }),
 );
 

@@ -99,7 +99,7 @@ onMounted(async () => {
   <div class="bg-white rounded-md m-2 p-2 h-[calc(100vh-40px)] flex flex-col">
     <div class="flex justify-center mt-2 mb-3">
       <h1>
-        Schedule
+        Stundenplan
         <hr class="bg-newBlue" />
       </h1>
     </div>
@@ -116,13 +116,13 @@ onMounted(async () => {
       </div>
 
       <div class="grid grid-cols-7 p-2 text-center">
-        <div class="text-xs">Sun</div>
-        <div class="text-xs">Mon</div>
-        <div class="text-xs">Tue</div>
-        <div class="text-xs">Wed</div>
-        <div class="text-xs">Thu</div>
-        <div class="text-xs">Fri</div>
-        <div class="text-xs">Sat</div>
+        <div class="text-xs">So</div>
+        <div class="text-xs">Mo</div>
+        <div class="text-xs">Di</div>
+        <div class="text-xs">Mi</div>
+        <div class="text-xs">Do</div>
+        <div class="text-xs">Fr</div>
+        <div class="text-xs">Sa</div>
         <div class="col-span-7 grid grid-cols-7 mt-1">
           <div v-for="day in lastMonthList" class="text-gray-400">{{ day }}</div>
           <div
@@ -144,7 +144,7 @@ onMounted(async () => {
       <ol v-if="displayedSchedule.length > 0" class="relative border-s border-gray-200 mr-2">
         <TimelineObject v-for="sched in displayedSchedule" :schedule="sched" />
       </ol>
-      <div v-else class="">Nothing to do today 🎉</div>
+      <div v-else class="">Nichts zu tun heute 🎉</div>
     </section>
   </div>
 </template>

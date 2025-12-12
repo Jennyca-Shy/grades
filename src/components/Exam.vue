@@ -31,15 +31,15 @@ function calculateDays() {
 
   let output = '';
   if (diffDays > 1) {
-    output = 'in ' + diffDays + ' days';
+    output = 'in ' + diffDays + ' Tagen';
   } else if (diffDays === 1) {
-    output = 'in ' + diffDays + ' day';
+    output = 'morgen';
   } else if (diffDays === 0) {
-    output = 'today';
+    output = 'heute';
   } else if (diffDays === -1) {
-    output = 'yesterday';
+    output = 'gestern';
   } else {
-    output = diffDays * -1 + ' days ago';
+    output = 'vor ' + diffDays * -1 + ' Tagen';
   }
 
   return output;
@@ -62,13 +62,13 @@ console.log('exam: ', props.exam);
         </div>
         <div class="flex justify-between">
           <div class="">{{ props.exam.title }}</div>
-          <div class="">{{ props.exam.result || 'tba' }}</div>
+          <div class="">{{ props.exam.result || 'folgt' }}</div>
         </div>
       </div>
     </div>
     <div v-if="notesOpen" class="mt-2">
       <hr class="bg-gray-300 mt-0 h-[2px]" :style="`background-color: ${color}`" />
-      <div class="mt-2">Notes:</div>
+      <div class="mt-2">Notizen:</div>
       <div class="">{{ props.exam.notes || 'No notes yet...' }}</div>
       <div class="flex ml-auto">
         <button
@@ -76,7 +76,7 @@ console.log('exam: ', props.exam);
           :style="`border-color: ${color}`"
           @click="editExamOpen = true"
         >
-          Edit
+          Ändern
         </button>
         <EditExamModal
           v-if="editExamOpen"

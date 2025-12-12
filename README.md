@@ -1,39 +1,61 @@
-# grades
+# Gradetracker
 
-This template should help get you started developing with Vue 3 in Vite.
+A web app to track subjects, grades, homework, schedules and holidays for german students.
+Built with Vue + TypeScript, TailwindCSS and a Node.js + Express + MongoDB backend.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Subjects & Grades
 
-## Type Support for `.vue` Imports in TS
+- add subjects as "Leistungsfach", "Grundkurs" or other category
+- add grades with date, category and notes
+- grade overview per subject and semester
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Homework
 
-## Customize configuration
+- create, edit and delete homework
+- automatically marks overdue homework
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Schedule
 
-## Project Setup
+- create your own weekly schedule
+- add, update or remove lessons (day, time, subject, room)
 
-```sh
-npm install
-```
+### Holidays (via API integration)
 
-### Compile and Hot-Reload for Development
+- school holidays are fetched via the Holiday API
+- Holiday view inside the web app
 
-```sh
-npm run dev
-```
+## Tech Stack
 
-### Type-Check, Compile and Minify for Production
+### Frontend
 
-```sh
-npm run build
-```
+- Vue
+- TypeScript
+- Tailwind CSS
+- Pinia for state management
 
-### Lint with [ESLint](https://eslint.org/)
+### Backend
 
-```sh
-npm run lint
-```
+- Node.js + Express
+- MongoDB
+
+## Running locally
+
+### Backend
+
+    cd backend
+    npm install
+    npm run devStart
+
+### Frontend
+
+    npm install
+    npm run dev
+
+## Deployment
+
+- Frontend deployed on Netlify
+- Backend deployed on Render
+  https://gradetrackerq.netlify.app/
+  **Note**: The hosted version currently has some issue and may not work as expected. For the best experience, please run the project locally
