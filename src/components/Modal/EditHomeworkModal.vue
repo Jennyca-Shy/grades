@@ -41,7 +41,7 @@ const filteredSubjects = computed(() =>
 );
 
 //Select
-function selectSubject(subject) {
+function selectSubject(sub) {
   dropdownVisible.value = false;
   selectedSubject.value = sub;
   selectedSubjectName.value = sub.name;

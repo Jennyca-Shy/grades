@@ -66,7 +66,9 @@ onMounted(() => {
                 border-right-color: ${subject?.color};
                 border-top-color: ${subject?.color};`"
             >Upcoming
-            <p class="hidden xl:inline">({{ upEx.upcomingExams.length }})</p></a
+            <p class="hidden xl:inline">
+              ({{ upEx.upcomingExams.length ? upEx.upcomingExams.length : 0 }})
+            </p></a
           >
           <a
             @click="activeNavExam = 'past'"
