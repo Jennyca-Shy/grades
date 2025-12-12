@@ -57,5 +57,6 @@ Built with Vue + TypeScript, TailwindCSS and a Node.js + Express + MongoDB backe
 
 - Frontend deployed on Netlify
 - Backend deployed on Render
-  https://gradetrackerq.netlify.app/
-  **Note**: The hosted version currently has some issue and may not work as expected. For the best experience, please run the project locally
+
+https://gradetrackerq.netlify.app/
+**Note**: The hosted version currently has some issue and may not work as expected. For the best experience, please run the project locally
