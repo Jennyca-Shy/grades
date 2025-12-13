@@ -35,21 +35,21 @@ function closeModal() {
 
 async function updateSubject() {
   if (colorNew.value != color) {
-    subject.color = colorNew.value;
+    subject.value.color = colorNew.value;
   }
   if (teacherNew.value != '') {
-    subject.teacher = teacherNew.value;
+    subject.value.teacher = teacherNew.value;
   }
   if (roomNew.value != '') {
-    subject.room = roomNew.value;
+    subject.value.room = roomNew.value;
   }
   if (nameNew.value != '') {
-    subject.name = nameNew.value;
+    subject.value.name = nameNew.value;
   }
-  subject.type = type.value;
-  subject.abitur = isAbitur.value;
+  subject.value.type = type.value;
+  subject.value.abitur = isAbitur.value;
 
-  subjectStore.editSubject(subject);
+  subjectStore.editSubject(subject.value);
 
   closeModal();
   toast.success('Successfully updated the subject!');

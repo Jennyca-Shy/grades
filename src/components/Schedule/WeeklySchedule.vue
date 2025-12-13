@@ -6,7 +6,7 @@ import { useScheduleStore } from '@/stores/scheduleStore';
 const scheduleStore = useScheduleStore();
 
 //Fetch schedule
-const schedule = scheduleStore.schedule;
+//const schedule = ref(scheduleStore.schedule);
 // async function getSchedule() {
 //   const response = await fetch('http://localhost:3000/schedule');
 //   const data = await response.json();
@@ -39,7 +39,12 @@ onMounted(async () => {
     </div>
 
     <!-- Schedule: every 5min is one row, Mon has col-start-2, 7:00 has row-start-2 -->
-    <ScheduleEvent v-for="sched in schedule" :schedule="sched" :delete="true" />
+    <ScheduleEvent
+      v-for="sched in scheduleStore.schedule"
+      :schedule="sched"
+      :key="sched._id"
+      :delete="true"
+    />
     <!-- <div class="row-start-[11] col-start-5 row-end-[29] bg-blue-300 rounded text-xs">hello</div> -->
   </div>
 </template>

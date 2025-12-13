@@ -82,7 +82,11 @@ export const useSubjectStore = defineStore('subject', () => {
 
   async function editSubject(sub: Subject) {
     const findSub = subject.value.find((s) => s._id === sub._id);
-    if (!findSub) throw new Error("Couldn't find subject!");
+    if (!findSub) {
+      console.log('FIND SUB', findSub);
+      console.log('Sub', sub);
+      throw new Error("Couldn't find subject!");
+    }
 
     const response = await fetch(`${API_URL}/subject/${sub._id}`, {
       method: 'PATCH',

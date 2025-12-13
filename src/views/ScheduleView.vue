@@ -3,6 +3,9 @@ import { ref, computed, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import WeeklySchedule from '@/components/Schedule/WeeklySchedule.vue';
 import MonthlySchedule from '@/components/Schedule/MonthlySchedule.vue';
+import { useScheduleStore } from '@/stores/scheduleStore';
+
+const scheduleStore = useScheduleStore();
 
 const activeView = ref('week');
 const monthlyScheduleRef = ref();
@@ -42,6 +45,10 @@ const MONTH = [
 
 let today = ref(new Date());
 let displayedDate = ref(new Date());
+
+onMounted(async () => {
+  await scheduleStore.init();
+});
 </script>
 
 <template>

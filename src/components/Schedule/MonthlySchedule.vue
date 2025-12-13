@@ -59,7 +59,7 @@ function lastMonth() {
 
 //Holiday
 //get holidays
-let allHolidays = ref(holidayStore.holiday);
+let allHolidays = computed(() => holidayStore.holiday);
 // async function getHolidays() {
 //   let response = await fetch('http://localhost:3000/holiday');
 //   let data = await response.json();

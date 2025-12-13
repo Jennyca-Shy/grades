@@ -36,10 +36,12 @@ export const useScheduleStore = defineStore('schedule', () => {
       if (!response.ok) {
         return 'error';
       } else {
-        schedule.value.filter((sch) => sch._id != id);
+        schedule.value = schedule.value.filter((sch) => sch._id != id);
         return 'ok';
       }
-    } catch (error) {}
+    } catch (error) {
+      throw new Error('Couldnt delete schedule');
+    }
   }
 
   async function addSchedule(

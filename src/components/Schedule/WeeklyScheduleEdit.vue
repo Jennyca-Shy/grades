@@ -4,10 +4,14 @@ import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useSubjectStore } from '@/stores/subjectStore';
 import { storeToRefs } from 'pinia';
+import { useSettingStore } from '@/stores/settingStore';
 import { useScheduleStore } from '@/stores/scheduleStore';
 
 const subjectStore = useSubjectStore();
 const scheduleStore = useScheduleStore();
+const settingStore = useSettingStore();
+
+const color = settingStore.defaultColor;
 
 //Subject dropdown
 //selectedSubject -> Subject object
@@ -124,10 +128,11 @@ async function addSchedule() {
     toast.error('The end time should be after the start time!');
     return 0;
   }
+  console.log('SELECTED SUBJECT: ', selectedSubject.value);
 
-  const res = scheduleStore.addSchedule(
+  const res = await scheduleStore.addSchedule(
     selectedDay.value,
-    selectedSubject.value,
+    selectedSubject.value._id,
     selectStartTime,
     selectEndTime,
     room.value,
@@ -137,6 +142,7 @@ async function addSchedule() {
     toast.success('Added to schedule!');
   } else {
     toast.error('Ups, something went wrong');
+    console.log(res);
   }
 
   /*const response = await fetch('http://localhost:3000/schedule', {
